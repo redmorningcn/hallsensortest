@@ -46,9 +46,16 @@ class ui_main(QMainWindow, Ui_MainWindow):
     def showSpeed(self):                                #显示速度值
         while True:
             time.sleep(1.5)
+            dim2 = 1250                                #机车轮径1250mm
+            dim1 = 1050                                #机车轮径1050mm
             try:
-                speed = getSpeed()                      #取速度信号，在文件zkzt2_com2中
-                self.ln_speed.display(speed)
+                rotate       = getSpeed()                      #取速度信号，在文件zkzt2_com2中
+                speed1050    = (int)((rotate*3.1415926 * dim1 * 60)/(1000*1000) )
+                speed1250    = (int)((rotate*3.1415926 * dim2 * 60)/(1000*1000) )
+                self.ln_speed.display(rotate)
+                self.ln_speed1050.display(speed1050)
+                self.ln_speed1250.display(speed1250)
+                
             except Exception as e:
                 print("速度读取错误", e)
 
