@@ -53,8 +53,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
                 speed1050    = (int)((rotate*3.1415926 * dim1 * 60)/(1000*1000) )
                 speed1250    = (int)((rotate*3.1415926 * dim2 * 60)/(1000*1000) )
                 self.ln_speed.display(rotate)
-                self.ln_speed1050.display(speed1050)
-                self.ln_speed1250.display(speed1250)
+                self.ln_speed_1050.display(speed1050)
+                self.ln_speed_1250.display(speed1250)
                 
             except Exception as e:
                 print("速度读取错误", e)
