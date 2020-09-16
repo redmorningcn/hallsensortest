@@ -11,15 +11,16 @@ from PyQt5.QtWidgets import   QMessageBox
 from PyQt5      import QtCore, QtGui, QtWidgets
 
 from Ui_hallsensortest import Ui_MainWindow
-from speedCtrol import *
-import threading
-from    zkzt2_com2  import *
-from    keyer       import *
+#from speedCtrol import *
+import  threading
+from    SetPWM             import *
+from    GetMotorSpeed      import *
+from    keyer              import *
 import  os,sys,time
 
 
-KEY_SUB    = 13                                                      #速度-   （引脚号）
-KEY_ADD    = 5                                                       #速度+   （引脚号）
+KEY_SUB    = 7                                                      #速度-   （引脚号）
+KEY_ADD    = 3                                                       #速度+   （引脚号）
 
 
 class ui_main(QMainWindow, Ui_MainWindow):
@@ -35,8 +36,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
         """
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
-        self.showFullScreen()                   #全屏显示
-        #self.show()                   #全屏显示
+        #self.showFullScreen()                   #全屏显示
+        self.show()                   #全屏显示
         
         self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         self.thread1.start()
@@ -61,7 +62,7 @@ class ui_main(QMainWindow, Ui_MainWindow):
 
     def  daemon(self):
         while True:
-            time.sleep(0.1)
+            time.sleep(0.2)
             if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):   #有按键按下
                 if getKeySta(KEY_ADD):
                     speedadd()
@@ -114,8 +115,13 @@ def initGPIO():
     Frqer.initFrq(FRQ_IN)                                               #频率检测电路引脚
 
     tfrq    = threading.Thread(target = Frqer.threadCounter)
-    tfrq.start()                                                            #启动多线程
-
+    tfrq.start()
+    
+    PWM.initPWM(12)    
+    PWM.SetPWMClock(4)    
+    #启动多线程
+    LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
+    LowThread.start()   
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
     

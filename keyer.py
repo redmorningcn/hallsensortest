@@ -20,7 +20,7 @@ def my_callback(pinnum):  #回调函数，按键按下后，
     else:
         keydict[pinnum] = 1
 '''
-
+#按键监视程序
 def   daemonKey():
     global keydict
     while True:
@@ -33,7 +33,7 @@ def   daemonKey():
             else:
                 keydict[i] += 1  #按下，每隔100ms计数值加1
         
-
+#按键初始化程序
 def   initKey(pinnum):
     global keydict
     if pinnum in keydict:
@@ -44,6 +44,7 @@ def   initKey(pinnum):
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pinnum,GPIO.IN, pull_up_down=GPIO.PUD_UP) #设为输入，上拉电阻
+        GPIO.setwarnings(False)
         #GPIO.RISING、GPIO.FALLING、GPIO.BOTH     ;bouncetime=200 去抖时间200ms
         #GPIO.add_event_detect(pinnum, GPIO.BOTH, callback = my_callback,bouncetime=200)
  
@@ -54,12 +55,14 @@ import  time
 import  threading
  
 if  __name__ == "__main__": 
-    KEY_SUB = 13
-    KEY_ADD = 5
+    KEY_SUB = 7
+    KEY_ADD = 3
+#    KEY_DIR = 13
     
     initKey(KEY_SUB)
     initKey(KEY_ADD)
-    
+#    initKey(KEY_DIR)
+
     
     KeyThread = threading.Thread(target = daemonKey)     #创建多线程，启动接收任务
     KeyThread.start()    
