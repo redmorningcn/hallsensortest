@@ -14,13 +14,25 @@ int PWM_pin = 0;
 //初始化PWM引脚
 int initPWM(int pin)
 {
-    PWM_pin = pin;					//PWM引脚号					
-	wiringPiSetupGpio();            //初始化 BCM GPIO 
+    PWM_pin = pin;				//PWM引脚号					
+	wiringPiSetupGpio();            	//初始化 BCM GPIO 
     pinMode(pin,PWM_OUTPUT);
+    //pwmSetMode (PWM_MODE_BAL);	
+    pwmSetMode (PWM_MODE_MS);			//PWM_MODE_MS（固定频率）     0  PWM_MODE_BAL 1 // 标记和空格;PWM_MODE_BAL    1   // 平衡   默认是这个模式	
+    //pwmSetClock(3048);			//wiringpi在初始化gpio时默认采用32倍分频 		 
+    //pwmSetClock(38400);		        //wiringpi在初始化gpio时默认采用32倍分频 
+    pwmSetClock(8);				//wiringpi在初始化gpio时默认采用32倍分频,电机推荐PWM频率为15～25K，设置4,频率为13.2k
+    pwmSetRange(1024);
     return 1;
 }
 
-//取频率值
+//设置PWN的时钟分频系数，值越大，产生波形频率越小（频率越大，越平稳;越小力越大）
+int SetPWMClock(int val)
+{
+    pwmSetClock(val);
+}
+
+//设置PWM值
 int SetPWM(int val)
 {
     if (val > PWM_MAX_VAL )

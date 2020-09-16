@@ -99,7 +99,7 @@ if __name__=="__main__":
     else:
         port  = "COM10"
 
-    pin     = 21
+    pin     = 19
     
     motor   = Zkzt2Data(port)
     Frqer.initFrq(pin)        #频率检测电路引脚

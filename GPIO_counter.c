@@ -10,21 +10,24 @@
 int g_frq   = 0;
 int g_count = 0;
 int g_times = 0;
-#define     ONE_SECOND   (1000*1000)
+#define     ONE_SECOND   (1000000)
 
+int g_pin_counter;
 //边沿中断函数，计数器加1
 void frqcounter(void)
 {
-    g_count++;
+    //if(digitalRead (g_pin_counter) == LOW)
+        g_count++;
 }
 
 //
 int initFrq(int pin)
 {
     wiringPiSetupGpio();            //初始化 BCM GPIO 
+    g_pin_counter = pin;
     pinMode(pin,INPUT);
     pullUpDnControl(pin,PUD_DOWN);
-    wiringPiISR (pin, INT_EDGE_RISING,  frqcounter);
+    wiringPiISR (pin, INT_EDGE_FALLING,  frqcounter);
     return 1;
 }
 
@@ -51,9 +54,10 @@ int threadCounter(void)
         //if(micros() - tim >= ONE_SECOND)        //1秒
         {   
             delayMicroseconds(ONE_SECOND);
-            tim     = micros();
+
             g_frq   = g_count;                    //取频率值
             g_count = 0;
+            //tim     = micros();        
             //g_times++;
         }
     }
