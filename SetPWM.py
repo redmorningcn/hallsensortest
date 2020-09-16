@@ -54,8 +54,10 @@ def  changedirection():
 
     if l_directionflg == 0:
         GPIO.output(PIN_DIR,GPIO.HIGH)
+        GPIO.output(PIN_DIR,GPIO.HIGH)
         l_directionflg = 1
     else:
+        GPIO.output(PIN_DIR,GPIO.LOW)
         GPIO.output(PIN_DIR,GPIO.LOW)
         l_directionflg = 0
 

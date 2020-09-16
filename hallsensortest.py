@@ -21,10 +21,8 @@ from    shutdown           import *
 
 import  os,sys,time
 
-
 KEY_SUB    = 7                                                      #速度-   （引脚号）
-KEY_ADD    = 3                                                       #速度+   （引脚号）
-
+KEY_ADD    = 3                                                      #速度+   （引脚号）
 
 class ui_main(QMainWindow, Ui_MainWindow):
     """
@@ -62,7 +60,11 @@ class ui_main(QMainWindow, Ui_MainWindow):
                 
             except Exception as e:
                 print("速度读取错误", e)
-
+    
+    #两键同时按下次数
+    doublekeydowntims = 0;
+    #按下键后方向切换次数
+    dirchangetimes = 0
     def  daemon(self):
         while True:
             time.sleep(0.2)
@@ -78,11 +80,22 @@ class ui_main(QMainWindow, Ui_MainWindow):
             else:
                 self.bt_dir.setText("逆时针转")
             
-            if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):   #有按键按下
-                if getKeySta(KEY_ADD):
+            if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):     #有按键按下
+                if getKeySta(KEY_ADD) & getKeySta(KEY_SUB) : #同时有按键按下，在低速时，切换方向
+                    doublekeydowntims+=1
+                    if getpwnvalue() < 450:
+                        if doublekeydowntims > 10:
+                            if dirchangetimes == 0:
+                                changedirection()
+                                dirchangetimes = 1
+                elif getKeySta(KEY_ADD):
+                    dirchangetimes    = 0
+                    doublekeydowntims = 0
                     speedadd()
                 else:
                     speedsub()
+                    dirchangetimes    = 0
+                    doublekeydowntims = 0                    
 
     @pyqtSlot()
     def on_bt_speedadd_clicked(self):
