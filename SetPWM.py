@@ -16,8 +16,10 @@ PWM = ctypes.cdll.LoadLibrary('./pwm.so')
     #PWM = ctypes.cdll.LoadLibrary('./pwm.so')
 #低速模式：采用短暂启动方式实现
 
-l_pwnvalue = 200
+l_pwnvalue = 0
 l_times    = 0
+
+
 #按键监视程序
 def   daemonLowSpeed():
     global      l_pwnvalue
@@ -26,27 +28,48 @@ def   daemonLowSpeed():
         l_times += 1
         if  l_times > 50:
             l_times = 0
+            #print("l_pwnvalue",l_pwnvalue)
             
         time.sleep(0.001)
         if l_pwnvalue < 500:     #低速启动
             if l_pwnvalue < 50:
                 PWM.SetPWM(0)
+                #print("l_pwnvalue 0",l_pwnvalue)
             else:
                 if   l_times < (int)(500 - l_pwnvalue)/12 :
                     PWM.SetPWM(250)
                 else:
                     PWM.SetPWM(500)
-        
-        
+                    #print("l_pwnvalue 500",l_pwnvalue)
 
 
-#PWM.SetPWMClock(64)
+#方向信号
+l_directionflg = 0
+PIN_DIR = 13
+def  changedirection():
+    global l_directionflg
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(PIN_DIR, GPIO.OUT)
+    GPIO.setwarnings(False)
+
+    if l_directionflg == 0:
+        GPIO.output(PIN_DIR,GPIO.HIGH)
+        l_directionflg = 1
+    else:
+        GPIO.output(PIN_DIR,GPIO.LOW)
+        l_directionflg = 0
+
+def getChangeDircetion():
+    global l_directionflg
+    return l_directionflg
 
 
+def getpwnvalue():
+    global      l_pwnvalue
+    return      l_pwnvalue
 
 
 l_speed = 0                            #全局变量 50-1024 //分频值
-
 #速度加，每调用一次，速度加1
 def speedadd():
     global      l_speed
@@ -63,6 +86,8 @@ def speedadd():
     l_speed = speed                     #保存设置值
     l_pwnvalue = l_speed
     PWM.SetPWM(speed)                   #设置速度值
+
+
 
 #速度减，每调用一次，速度减1
 def speedsub():
@@ -95,9 +120,7 @@ if __name__=="__main__":
     initKey(KEY_ADD)                                                    #初始化速度+按键
     KeyThread = threading.Thread(target = daemonKey)   #创建多线程，启动接收任务
     KeyThread.start() 
-    #GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(13, GPIO.OUT)
-    #GPIO.setwarnings(False)
+
     #初始化PWM端口，
     PWM.initPWM(12)    
     PWM.SetPWMClock(4)

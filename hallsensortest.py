@@ -10,12 +10,15 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import   QMessageBox
 from PyQt5      import QtCore, QtGui, QtWidgets
 
+
 from Ui_hallsensortest import Ui_MainWindow
 #from speedCtrol import *
 import  threading
 from    SetPWM             import *
 from    GetMotorSpeed      import *
 from    keyer              import *
+from    shutdown           import *
+
 import  os,sys,time
 
 
@@ -63,6 +66,18 @@ class ui_main(QMainWindow, Ui_MainWindow):
     def  daemon(self):
         while True:
             time.sleep(0.2)
+            #分频值小于500,速度方向控件可用
+            if getpwnvalue() < 450:
+                self.bt_dir.setEnabled(True)
+            else:
+                self.bt_dir.setEnabled(False)
+            
+            #速度方向显示    
+            if getChangeDircetion() == 0:
+                self.bt_dir.setText("顺时针转")
+            else:
+                self.bt_dir.setText("逆时针转")
+            
             if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):   #有按键按下
                 if getKeySta(KEY_ADD):
                     speedadd()
@@ -101,8 +116,35 @@ class ui_main(QMainWindow, Ui_MainWindow):
         #    print("取消关机")
         # TODO: not implemented yet
         #raise NotImplementedError
+    @pyqtSlot()
+    def on_bt_shutdown_2_clicked(self):           #关机查询
+        """
+        Slot documentation goes here.
+        """
+        
+        shutdown()
+        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+        #if reply == QMessageBox.Yes:
+        #    os.system('shutdown -s -t 10' )      #关机
+        #else:
+        #    print("取消关机")
+        # TODO: not implemented yet
+        #raise NotImplementedError
 
-
+    @pyqtSlot()
+    def on_bt_dir_clicked(self):           #关机查询
+        """
+        Slot documentation goes here.
+        """
+        #改变方向
+        changedirection()
+        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+        #if reply == QMessageBox.Yes:
+        #    os.system('shutdown -s -t 10' )      #关机
+        #else:
+        #    print("取消关机")
+        # TODO: not implemented yet
+        #raise NotImplementedError
 #按键及脉冲检测电路
 def initGPIO():
     

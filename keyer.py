@@ -20,6 +20,10 @@ def my_callback(pinnum):  #回调函数，按键按下后，
     else:
         keydict[pinnum] = 1
 '''
+
+
+
+
 #按键监视程序
 def   daemonKey():
     global keydict

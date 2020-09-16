@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['hallsensortest.py', 'speedCtrol.py', 'keyer.py', 'Ui_hallsensortest.py', 'SerialPort.py', 'zkzt2_com2.py'],
+a = Analysis(['hallsensortest.py', 'GetMotorSpeed.py', 'keyer.py', 'Ui_hallsensortest.py'],
              pathex=['/home/pi/pycode/hallsensortest'],
              binaries=[('/home/pi/pycode/hallsensortest/GPIO_counter.so','.'),('/home/pi/pycode/hallsensortest/CrcCheck.so','.')],
              datas=[],
