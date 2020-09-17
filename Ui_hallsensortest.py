@@ -204,7 +204,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "速\n"
 "速"))
         self.bt_shutdown_2.setText(_translate("MainWindow", "关机"))
-        self.bt_dir.setText(_translate("MainWindow", "顺时针转"))
+        self.bt_dir.setText(_translate("MainWindow", "顺时针方向"))
 
 
 if __name__ == "__main__":

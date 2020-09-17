@@ -37,8 +37,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
         """
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
-        #self.showFullScreen()                   #全屏显示
-        self.show()                   #全屏显示
+        self.showFullScreen()                   #全屏显示
+        #self.show()                   #全屏显示
         
         self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         self.thread1.start()
@@ -76,9 +76,9 @@ class ui_main(QMainWindow, Ui_MainWindow):
             
             #速度方向显示    
             if getChangeDircetion() == 0:
-                self.bt_dir.setText("顺时针转")
+                self.bt_dir.setText("顺时针方向")
             else:
-                self.bt_dir.setText("逆时针转")
+                self.bt_dir.setText("逆时针方向")
             
             if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):     #有按键按下
                 if getKeySta(KEY_ADD) & getKeySta(KEY_SUB) : #同时有按键按下，在低速时，切换方向
