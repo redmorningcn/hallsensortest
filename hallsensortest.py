@@ -22,6 +22,18 @@ import  os,sys,time
 KEY_SUB    = 7                                                      #速度-   （引脚号）
 KEY_ADD    = 3                                                      #速度+   （引脚号）
 
+class MyMessageBox : public QMessageBox
+
+{
+   protected:
+      void showEvent(QShowEvent* event)
+
+  {
+     QMessageBox::showEvent(event);
+     setFixedSize(640, 480);
+   }
+};
+
 class ui_main(QMainWindow, Ui_MainWindow):
     """
     Class documentation goes here.
@@ -132,7 +144,9 @@ class ui_main(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+		reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+		
         if reply == QMessageBox.Yes:
             shutdown()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
