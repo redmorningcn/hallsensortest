@@ -5,12 +5,10 @@
 Module implementing ui_main.
 """
 
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import   QMessageBox
-from PyQt5      import QtCore, QtGui, QtWidgets
-
-
+from PyQt5.QtCore      import pyqtSlot
+from PyQt5.QtWidgets   import QMainWindow
+from PyQt5.QtWidgets   import   QMessageBox
+from PyQt5             import QtCore, QtGui, QtWidgets
 from Ui_hallsensortest import Ui_MainWindow
 #from speedCtrol import *
 import  threading
@@ -134,8 +132,9 @@ class ui_main(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        
-        shutdown()
+        reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            shutdown()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
         #if reply == QMessageBox.Yes:
         #    os.system('shutdown -s -t 10' )      #关机

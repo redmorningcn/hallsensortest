@@ -1,4 +1,5 @@
 import os,sys
+from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox
 
 def shutdown():
     #os.system("shutdown -r -t 5 now")

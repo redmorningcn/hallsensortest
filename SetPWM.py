@@ -30,16 +30,18 @@ def   daemonLowSpeed():
             l_times = 0
             #print("l_pwnvalue",l_pwnvalue)
             
-        time.sleep(0.001)
-        if l_pwnvalue < 500:     #低速启动
+        time.sleep(0.0005)
+        if l_pwnvalue < 550:     #低速启动
             if l_pwnvalue < 50:
                 PWM.SetPWM(0)
                 #print("l_pwnvalue 0",l_pwnvalue)
             else:
-                if   l_times < (int)(500 - l_pwnvalue)/12 :
+                
+                if   l_times < (int)(550 - l_pwnvalue)/12 :
                     PWM.SetPWM(250)
+                    #print("l_pwnvalue 2500",l_pwnvalue)
                 else:
-                    PWM.SetPWM(500)
+                    PWM.SetPWM(550)
                     #print("l_pwnvalue 500",l_pwnvalue)
 
 
@@ -55,16 +57,16 @@ def  changedirection():
     if l_directionflg == 0:
         GPIO.output(PIN_DIR,GPIO.HIGH)
         GPIO.output(PIN_DIR,GPIO.HIGH)
-		if GPIO.input(PIN_DIR):
-			l_directionflg = 1
+        if GPIO.input(PIN_DIR)==1:
+            l_directionflg = 1
     else:
         GPIO.output(PIN_DIR,GPIO.LOW)
         GPIO.output(PIN_DIR,GPIO.LOW)
-		if GPIO.input(PIN_DIR) == 0:
-			l_directionflg = 0
+        if GPIO.input(PIN_DIR) == 0:
+            l_directionflg = 0
 
 def getChangeDircetion():
-	
+    
     global l_directionflg
     return l_directionflg
 
@@ -81,11 +83,17 @@ def speedadd():
     global      l_pwnvalue
     
     if l_speed > 0:                     #速度有初始值，在原值上加
-        speed = l_speed + 5
-        if speed > 1000:
-            speed = 1000                 #最大值为100
+        if l_speed < 300:
+            speed = l_speed + 25
+        elif l_speed < 400:
+            speed = l_speed + 10
+        else:
+            speed = l_speed + 5
+            
+        if speed > 850:
+            speed = 850                 #最大值为100
     else:
-        speed = 150
+        speed = 250
     print("\r\n speed add %d"%speed )
 
     l_speed = speed                     #保存设置值
@@ -98,7 +106,7 @@ def speedadd():
 def speedsub():
     global      l_speed
     global      l_pwnvalue
-    if l_speed > 50:
+    if l_speed > 250:
         speed = l_speed -5
     else:
         speed   = 0
@@ -135,8 +143,10 @@ if __name__=="__main__":
     while True:
         print("占空比X/1024：")
         ratio = int(input())
+        #ratio = 491
         PWM.SetPWM(ratio)
         l_pwnvalue = ratio
+        #ratio = int(input())
 
     
         #设置PWN的时钟分频系数，值越大，产生波形频率越小（频率越大，越平稳;越小力越大）
