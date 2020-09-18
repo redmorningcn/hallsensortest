@@ -22,17 +22,7 @@ import  os,sys,time
 KEY_SUB    = 7                                                      #速度-   （引脚号）
 KEY_ADD    = 3                                                      #速度+   （引脚号）
 
-class MyMessageBox : public QMessageBox
 
-{
-   protected:
-      void showEvent(QShowEvent* event)
-
-  {
-     QMessageBox::showEvent(event);
-     setFixedSize(640, 480);
-   }
-};
 
 class ui_main(QMainWindow, Ui_MainWindow):
     """
@@ -48,11 +38,11 @@ class ui_main(QMainWindow, Ui_MainWindow):
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
         self.showFullScreen()                   #全屏显示
-        #self.show()                   #全屏显示
+        #self.show()                   			#全屏显示
         
         self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         self.thread1.start()
-        self.thread2 = threading.Thread(target = self.daemon)             #守护线程
+        self.thread2 = threading.Thread(target = self.daemon)             							#守护线程
         self.thread2.start()
 
     def showSpeed(self):                                #显示速度值
@@ -74,10 +64,23 @@ class ui_main(QMainWindow, Ui_MainWindow):
     #两键同时按下次数
     doublekeydowntims = 0;
     #按下键后方向切换次数
-    dirchangetimes = 0
+    dirchangetimes    = 0
+	#关机到及时
+	shutdowntimeleft  = 100
+	shutdownflg 	  = 0
     def  daemon(self):
         while True:
             time.sleep(0.2)
+			
+			#关机倒计时
+			if shutdownflg == 1:
+				if shutdowntimeleft > 0:
+					shutdowntimeleft-=1
+					tmp = "倒计时 " + str(int(shutdowntimeleft/10))+"!，点击取消"
+					self.bt_shutdown_2.setText(tmp)
+				else:
+					shutdown()	#启动关机程序
+			
             #分频值小于500,速度方向控件可用
             if getpwnvalue() < 450:
                 self.bt_dir.setEnabled(True)
@@ -145,10 +148,12 @@ class ui_main(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-		reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+		#reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
 		
-        if reply == QMessageBox.Yes:
-            shutdown()
+		if shutdownflg == 1:
+			self.bt_shutdown_2.setText("关机")
+        #if reply == QMessageBox.Yes:
+        #    shutdown()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
         #if reply == QMessageBox.Yes:
         #    os.system('shutdown -s -t 10' )      #关机
