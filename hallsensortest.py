@@ -28,6 +28,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
     """
     Class documentation goes here.
     """
+
+    
     def __init__(self, parent=None):
         """
         Constructor
@@ -38,13 +40,15 @@ class ui_main(QMainWindow, Ui_MainWindow):
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
         self.showFullScreen()                   #全屏显示
-        #self.show()                   			#全屏显示
+        #self.show()                            #全屏显示
         
         self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         self.thread1.start()
-        self.thread2 = threading.Thread(target = self.daemon)             							#守护线程
+        self.thread2 = threading.Thread(target = self.daemon)                                       #守护线程
         self.thread2.start()
-
+        #关机daoji时
+        self.shutdownflg = 0
+        self.shutdowntimeleft  = 50
     def showSpeed(self):                                #显示速度值
         while True:
             time.sleep(1.5)
@@ -65,22 +69,22 @@ class ui_main(QMainWindow, Ui_MainWindow):
     doublekeydowntims = 0;
     #按下键后方向切换次数
     dirchangetimes    = 0
-	#关机到及时
-	shutdowntimeleft  = 100
-	shutdownflg 	  = 0
+
+          
     def  daemon(self):
         while True:
             time.sleep(0.2)
-			
-			#关机倒计时
-			if shutdownflg == 1:
-				if shutdowntimeleft > 0:
-					shutdowntimeleft-=1
-					tmp = "倒计时 " + str(int(shutdowntimeleft/10))+"!，点击取消"
-					self.bt_shutdown_2.setText(tmp)
-				else:
-					shutdown()	#启动关机程序
-			
+            
+            #关机倒计时
+            if self.shutdownflg == 1:
+                if self.shutdowntimeleft > 0:
+                    self.shutdowntimeleft-=1
+                    times = self.shutdowntimeleft/5
+                    tmp = "" + str(int(times))+"s关机"
+                    self.bt_shutdown_2.setText(tmp)
+                else:
+                    shutdown()  #启动关机程序
+            
             #分频值小于500,速度方向控件可用
             if getpwnvalue() < 450:
                 self.bt_dir.setEnabled(True)
@@ -96,8 +100,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
             if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):     #有按键按下
                 if getKeySta(KEY_ADD) & getKeySta(KEY_SUB) : #同时有按键按下，在低速时，切换方向
                     doublekeydowntims+=1
-                    if getpwnvalue() < 450:
-                        if doublekeydowntims > 10:
+                    if getpwnvalue() < 520:
+                        if doublekeydowntims > 5:
                             if dirchangetimes == 0:
                                 changedirection()
                                 dirchangetimes = 1
@@ -148,10 +152,14 @@ class ui_main(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-		#reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-		
-		if shutdownflg == 1:
-			self.bt_shutdown_2.setText("关机")
+        #reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+        
+        if self.shutdownflg == 1:
+            self.bt_shutdown_2.setText("关机")
+            self.shutdowntimeleft  = 50
+            self.shutdownflg = 0
+        else :
+            self.shutdownflg = 1
         #if reply == QMessageBox.Yes:
         #    shutdown()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)

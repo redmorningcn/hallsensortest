@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(280, 430, 311, 20))
+        self.label_2.setGeometry(QtCore.QRect(280, 420, 311, 20))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(10)

@@ -64,10 +64,19 @@ def  changedirection():
         GPIO.output(PIN_DIR,GPIO.LOW)
         if GPIO.input(PIN_DIR) == 0:
             l_directionflg = 0
+            
+    print("l_directionflg",l_directionflg)
 
 def getChangeDircetion():
-    
     global l_directionflg
+    
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(PIN_DIR, GPIO.OUT)
+    
+    if GPIO.input(PIN_DIR)==1:
+        l_directionflg = 1
+    else:
+        l_directionflg = 0
     return l_directionflg
 
 
