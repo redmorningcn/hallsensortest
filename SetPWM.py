@@ -93,16 +93,16 @@ def speedadd():
     
     if l_speed > 0:                     #速度有初始值，在原值上加
         if l_speed < 300:
-            speed = l_speed + 10
+            speed = l_speed + 3
         elif l_speed < 400:
-            speed = l_speed + 8
+            speed = l_speed + 4
         else:
             speed = l_speed + 5
             
         if speed > 850:
-            speed = 850                 #最大值为100
+            speed = 850             #最大值为100
     else:
-        speed = 150
+        speed = 1
     print("\r\n speed add %d"%speed )
 
     l_speed = speed                     #保存设置值

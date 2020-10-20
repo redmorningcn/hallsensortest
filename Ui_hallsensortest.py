@@ -207,7 +207,7 @@ class Ui_MainWindow(object):
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(20, 330, 761, 110))
+        self.textEdit.setGeometry(QtCore.QRect(20, 330, 751, 120))
         self.textEdit.setObjectName("textEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
