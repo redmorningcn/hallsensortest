@@ -50,6 +50,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
         self.shutdownflg = 0
         self.shutdowntimeleft  = 50
     def showSpeed(self):                                #显示速度值
+		shutdowntimes = 0
+		
         while True:
             time.sleep(1.5)
             dim2 = 1250                                #机车轮径1250mm
@@ -62,6 +64,21 @@ class ui_main(QMainWindow, Ui_MainWindow):
                 self.ln_speed_1050.display(speed1050)
                 self.ln_speed_1250.display(speed1250)
                 
+				#速度为0，且减速减按下10s，则设备准备关机
+				if rotate == 0:
+					if getKeySta(KEY_SUB):
+						shutdowntimes +=1
+						if shutdowntimes > 5:
+							self.shutdownflg = 1
+					elif getKeySta(KEY_ADD):   #按其他，取消关机
+						if self.shutdownflg == 1:
+							self.bt_shutdown_2.setText("关机")
+							self.shutdowntimeleft  = 50
+							self.shutdownflg = 0
+							shutdowntimes = 0
+					else:
+						shutdowntimes = 0
+				
             except Exception as e:
                 print("速度读取错误", e)
     
@@ -131,7 +148,7 @@ class ui_main(QMainWindow, Ui_MainWindow):
         speedsub()                                          #速度减
         # TODO: not implemented yet
         # raise NotImplementedError
-    
+		
     @pyqtSlot()
     def on_bt_shutdown_clicked(self):           #关机查询
         """

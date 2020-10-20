@@ -151,7 +151,7 @@ class Ui_MainWindow(object):
         self.label_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.label_6.setObjectName("label_6")
         self.line_3 = QtWidgets.QFrame(self.centralwidget)
-        self.line_3.setGeometry(QtCore.QRect(360, 80, 20, 231))
+        self.line_3.setGeometry(QtCore.QRect(370, 80, 20, 231))
         self.line_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.line_3.setLineWidth(2)
         self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
@@ -180,7 +180,7 @@ class Ui_MainWindow(object):
         self.bt_dir.setFlat(False)
         self.bt_dir.setObjectName("bt_dir")
         self.line_6 = QtWidgets.QFrame(self.centralwidget)
-        self.line_6.setGeometry(QtCore.QRect(370, 80, 20, 231))
+        self.line_6.setGeometry(QtCore.QRect(380, 80, 20, 231))
         self.line_6.setFrameShadow(QtWidgets.QFrame.Raised)
         self.line_6.setLineWidth(2)
         self.line_6.setFrameShape(QtWidgets.QFrame.VLine)
@@ -200,12 +200,15 @@ class Ui_MainWindow(object):
         self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
-        self.label_9.setGeometry(QtCore.QRect(310, 160, 51, 20))
+        self.label_9.setGeometry(QtCore.QRect(320, 160, 51, 20))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setGeometry(QtCore.QRect(10, 320, 781, 141))
+        self.textEdit.setObjectName("textEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -235,6 +238,15 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "Km/h"))
         self.label_8.setText(_translate("MainWindow", "Km/h"))
         self.label_9.setText(_translate("MainWindow", "r/min"))
+        self.textEdit.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Arial\'; font-size:20pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:14pt;\">操作说明：</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:14pt;\">1、按&quot;速度+&quot;，增加装置转速；</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:14pt;\">2、按&quot;速度-&quot;，降低装置转速；</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:14pt;\">3、低速时，长按&quot;速度-&quot;5秒后，再同时按&quot;速度+&quot;5秒，改变方向；</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:14pt;\">4、速度降为0后，再长按&quot;速度-&quot;5秒，装置准备关机。</span></p></body></html>"))
 
 
 if __name__ == "__main__":
