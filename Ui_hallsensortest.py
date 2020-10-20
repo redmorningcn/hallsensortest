@@ -209,6 +209,19 @@ class Ui_MainWindow(object):
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(20, 329, 751, 121))
         self.textEdit.setObjectName("textEdit")
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setGeometry(QtCore.QRect(610, 10, 54, 12))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_10.setFont(font)
+        self.label_10.setObjectName("label_10")
+        self.label_IP = QtWidgets.QLabel(self.centralwidget)
+        self.label_IP.setGeometry(QtCore.QRect(640, 10, 54, 12))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_IP.setFont(font)
+        self.label_IP.setText("")
+        self.label_IP.setObjectName("label_IP")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -247,6 +260,7 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt;\">2、按&quot;速度-&quot;，降低装置转速；</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt;\">3、低速时，长按&quot;速度-&quot;5秒后，再同时按&quot;速度+&quot;5秒，改变方向；</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt;\">4、速度降为0后，再长按&quot;速度-&quot;10秒，装置准备关机。</span></p></body></html>"))
+        self.label_10.setText(_translate("MainWindow", "IP："))
 
 
 if __name__ == "__main__":
