@@ -208,11 +208,11 @@ def initGPIO():
     
     initKey(KEY_SUB)                                                    #初始化速度-按键
     initKey(KEY_ADD)                                                    #初始化速度+按键
-    KeyThread = threading.Thread(target = daemonKey)   #创建多线程，启动接收任务
+    KeyThread = threading.Thread(target = daemonKey)   					#创建多线程，启动接收任务
     KeyThread.start()
     
-    FRQ_IN     = 21                                                      #频率采集    
-    Frqer.initFrq(FRQ_IN)                                               #频率检测电路引脚
+    FRQ_IN     = 21                                                   	#频率采集    
+    Frqer.initFrq(FRQ_IN)                                         		#频率检测电路引脚
 
     tfrq    = threading.Thread(target = Frqer.threadCounter)
     tfrq.start()
