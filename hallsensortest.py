@@ -16,7 +16,8 @@ from    SetPWM             import *
 from    GetMotorSpeed      import *
 from    keyer              import *
 from    shutdown           import *
-
+from    gitIP              import *
+#from    websocketserver3   import *
 import  os,sys,time
 
 KEY_SUB    = 7                                                      #速度-   （引脚号）
@@ -91,6 +92,9 @@ class ui_main(QMainWindow, Ui_MainWindow):
     def  daemon(self):
         while True:
             time.sleep(0.2)
+            
+            ip = get_host_ip()
+            self.label_IP.setText(ip)
             
             #关机倒计时
             if self.shutdownflg == 1:
@@ -207,11 +211,11 @@ def initGPIO():
     
     initKey(KEY_SUB)                                                    #初始化速度-按键
     initKey(KEY_ADD)                                                    #初始化速度+按键
-    KeyThread = threading.Thread(target = daemonKey)   					#创建多线程，启动接收任务
+    KeyThread = threading.Thread(target = daemonKey)                    #创建多线程，启动接收任务
     KeyThread.start()
     
-    FRQ_IN     = 21                                                   	#频率采集    
-    Frqer.initFrq(FRQ_IN)                                         		#频率检测电路引脚
+    FRQ_IN     = 21                                                     #频率采集    
+    Frqer.initFrq(FRQ_IN)                                               #频率检测电路引脚
 
     tfrq    = threading.Thread(target = Frqer.threadCounter)
     tfrq.start()

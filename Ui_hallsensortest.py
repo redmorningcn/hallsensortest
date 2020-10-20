@@ -216,7 +216,7 @@ class Ui_MainWindow(object):
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.label_IP = QtWidgets.QLabel(self.centralwidget)
-        self.label_IP.setGeometry(QtCore.QRect(640, 10, 54, 12))
+        self.label_IP.setGeometry(QtCore.QRect(640, 10, 131, 16))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label_IP.setFont(font)

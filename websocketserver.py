@@ -45,10 +45,10 @@ def get_data(info):
 
 
 class websocketserver:
-    def __init__(self,ip="127.0.0.1",port = 8080):
+    def __init__(self,ip="0.0.0.0",port = 8080):
         sock = socket.socket()
         sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-        sock.bind(("127.0.0.1",8080))
+        sock.bind((ip,port))
         sock.listen(5)    
         #等待用户连接
         self.conn,self.addr = sock.accept()
@@ -71,7 +71,6 @@ class websocketserver:
         response_str = response_tpl % (ac.decode('utf-8'), headers['Host'], headers['url'])
         # 响应【握手】信息
         self.conn.send(bytes(response_str, encoding='utf-8'))
-        
         
 
     def send_msg(self,msg_bytes):
@@ -106,10 +105,13 @@ class websocketserver:
             data = self.conn.recv(8096)
             data = get_data(data)
             
-            self.recv_buf = get_data(data)                      #解析数据
-            self.recv_len = strlen(self.recv_buf)
-            print(data)
-            #send_msg(conn,bytes(data+"geah",encoding="utf-8"))
+            self.recv_buf = data                      #解析数据
+            self.recv_len = len(self.recv_buf)
+            print(self.recv_len)
+            #print(data)
+            #self.send_msg(bytes(data+"geah",encoding="utf-8"))
+
+
 
 import threading
 import      time
@@ -121,3 +123,4 @@ if __name__=='__main__':
     t1.start()
     while True:
         time.sleep(1)
+        
