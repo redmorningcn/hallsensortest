@@ -1,8 +1,9 @@
 # coding:utf8
-# __author:  Administrator
-# date:      2018/6/29 0029
+# __author:  redmorningcn
+# date:      2020/10/19 
 # /usr/bin/env python
 import socket,base64,hashlib
+
 
 def get_headers(data):
     '''将请求头转换为字典'''
@@ -42,63 +43,81 @@ def get_data(info):
     body = str(bytes_list, encoding='utf-8')
     return body
 
-def send_msg(conn, msg_bytes):
-    """
-    WebSocket服务端向客户端发送消息
-    :param conn: 客户端连接到服务器端的socket对象,即： conn,address = socket.accept()
-    :param msg_bytes: 向客户端发送的字节
-    :return:
-    """
-    import struct
 
-    token = b"\x81" #接收的第一字节，一般都是x81不变
-    length = len(msg_bytes)
-    if length < 126:
-        token += struct.pack("B", length)
-    elif length <= 0xFFFF:
-        token += struct.pack("!BH", 126, length)
-    else:
-        token += struct.pack("!BQ", 127, length)
+class websocketserver:
+    def __init__(self,ip="127.0.0.1",port = 8080):
+        sock = socket.socket()
+        sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+        sock.bind(("127.0.0.1",8080))
+        sock.listen(5)    
+        #等待用户连接
+        self.conn,self.addr = sock.accept()
+        #获取握手消息，magic string ,sha1加密
+        #发送给客户端
+        #握手消息
+        data = self.conn.recv(8096)
+        headers = get_headers(data)
+        # 对请求头中的sec-websocket-key进行加密
+        response_tpl = "HTTP/1.1 101 Switching Protocols\r\n" \
+              "Upgrade:websocket\r\n" \
+              "Connection: Upgrade\r\n" \
+              "Sec-WebSocket-Accept: %s\r\n" \
+              "WebSocket-Location: ws://%s%s\r\n\r\n"
 
-    msg = token + msg_bytes
-    conn.send(msg)
-    return True
+        magic_string = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
 
-sock = socket.socket()
-sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-sock.bind(("127.0.0.1",8080))
-sock.listen(5)
+        value = headers['Sec-WebSocket-Key'] + magic_string
+        ac = base64.b64encode(hashlib.sha1(value.encode('utf-8')).digest())
+        response_str = response_tpl % (ac.decode('utf-8'), headers['Host'], headers['url'])
+        # 响应【握手】信息
+        self.conn.send(bytes(response_str, encoding='utf-8'))
+        
+        
 
-#等待用户连接
-conn,addr = sock.accept()
-#获取握手消息，magic string ,sha1加密
-#发送给客户端
-#握手消息
-data = conn.recv(8096)
+    def send_msg(self,msg_bytes):
+        """
+        WebSocket服务端向客户端发送消息
+        :param conn: 客户端连接到服务器端的socket对象,即： conn,address = socket.accept()
+        :param msg_bytes: 向客户端发送的字节
+        :return:
+        """
+        import struct
 
-headers = get_headers(data)
+        token = b"\x81" #接收的第一字节，一般都是x81不变
+        length = len(msg_bytes)
+        if length < 126:
+            token += struct.pack("B", length)
+        elif length <= 0xFFFF:
+            token += struct.pack("!BH", 126, length)
+        else:
+            token += struct.pack("!BQ", 127, length)
 
-# 对请求头中的sec-websocket-key进行加密
-response_tpl = "HTTP/1.1 101 Switching Protocols\r\n" \
-      "Upgrade:websocket\r\n" \
-      "Connection: Upgrade\r\n" \
-      "Sec-WebSocket-Accept: %s\r\n" \
-      "WebSocket-Location: ws://%s%s\r\n\r\n"
+        msg = token + msg_bytes
+        self.conn.send(msg)
+        return True
+    
+    
+    def demoRev(self):
+        #可以进行通信
+        self.recv_buf       = "test" 
+        self.recv_len       = 0                                 #接收数据长度
 
-magic_string = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+        while True:
+            data = self.conn.recv(8096)
+            data = get_data(data)
+            
+            self.recv_buf = get_data(data)                      #解析数据
+            self.recv_len = strlen(self.recv_buf)
+            print(data)
+            #send_msg(conn,bytes(data+"geah",encoding="utf-8"))
 
-value = headers['Sec-WebSocket-Key'] + magic_string
-ac = base64.b64encode(hashlib.sha1(value.encode('utf-8')).digest())
+import threading
+import      time
 
-response_str = response_tpl % (ac.decode('utf-8'), headers['Host'], headers['url'])
-
-# 响应【握手】信息
-conn.send(bytes(response_str, encoding='utf-8'))
-
-#可以进行通信
-while True:
-    data = conn.recv(8096)
-    data = get_data(data)
-    print(data)
-    send_msg(conn,bytes(data+"geah",encoding="utf-8"))
-
+if __name__=='__main__':
+    wbserver = websocketserver()
+    
+    t1=threading.Thread(target=wbserver.demoRev)
+    t1.start()
+    while True:
+        time.sleep(1)

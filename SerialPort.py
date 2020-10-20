@@ -89,7 +89,7 @@ if __name__=='__main__':
     mSerial1 = SerialPort(serialPort,baudRate)
 
     mSerial.open()
-    t1=threading.Thread(target=mSerial.recv)
+    
 
     send_buf = (c_uint8 * 5)(0x55,0xDD,0xFF,0x01,0xCE)
     crc_get = Crc.GetCheckSum(send_buf,sizeof(send_buf)-1)
