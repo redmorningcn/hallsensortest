@@ -28,8 +28,8 @@ def  getSpeed():
     global l_rotate
     frq    = Frqer.getFrq()
     rotate = (int)((60 * frq) / (g_PLUSE * g_RATIO))
-    speed  = (int)((rotate + l_rotate)/2)      #前后数据取平均，去抖
-    
+    #speed  = (int)((rotate + l_rotate)/2)      #前后数据取平均，去抖
+    speed = rotate
     l_rotate = rotate
     return speed
 

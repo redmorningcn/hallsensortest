@@ -102,7 +102,7 @@ def speedadd():
         if speed > 850:
             speed = 850             #最大值为100
     else:
-        speed = 1
+        speed = 140
     print("\r\n speed add %d"%speed )
 
     l_speed = speed                     #保存设置值
@@ -115,7 +115,7 @@ def speedadd():
 def speedsub():
     global      l_speed
     global      l_pwnvalue
-    if l_speed > 250:
+    if l_speed > 150:
         speed = l_speed -5
     else:
         speed   = 0
