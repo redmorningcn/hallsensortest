@@ -99,6 +99,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
                     times = self.shutdowntimeleft/5
                     tmp = "" + str(int(times))+"s关机"
                     self.bt_shutdown_2.setText(tmp)
+					
+					self.bt_shutdown_2.setText(tmp)
                 else:
                     shutdown()  #启动关机程序
             

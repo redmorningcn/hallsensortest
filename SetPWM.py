@@ -102,7 +102,7 @@ def speedadd():
         if speed > 850:
             speed = 850                 #最大值为100
     else:
-        speed = 200
+        speed = 150
     print("\r\n speed add %d"%speed )
 
     l_speed = speed                     #保存设置值
