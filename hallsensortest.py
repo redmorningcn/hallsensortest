@@ -7,7 +7,7 @@ Module implementing ui_main.
 
 from PyQt5.QtCore      import pyqtSlot
 from PyQt5.QtWidgets   import QMainWindow
-from PyQt5.QtWidgets   import   QMessageBox
+from PyQt5.QtWidgets   import QMessageBox
 from PyQt5             import QtCore, QtGui, QtWidgets
 from Ui_hallsensortest import Ui_MainWindow
 #from speedCtrol import *
@@ -17,7 +17,8 @@ from    GetMotorSpeed      import *
 from    keyer              import *
 from    shutdown           import *
 from    gitIP              import *
-#from    websocketserver3   import *
+from    websocketserver4   import *
+from    webprotocol        import *
 import  os,sys,time
 
 KEY_SUB    = 7                                                      #速度-   （引脚号）
@@ -227,6 +228,9 @@ def initGPIO():
     LowThread.start()   
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
+    #启动websocketserver
+    startServer()           #启动服务
+    startWebProtocol()      #启动通讯协议
     
 
 if __name__ == "__main__":

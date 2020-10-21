@@ -48,6 +48,23 @@ def   daemonLowSpeed():
 #方向信号
 l_directionflg = 0
 PIN_DIR = 13
+def  setdir(dir):
+    global l_directionflg
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(PIN_DIR, GPIO.OUT)
+    
+    if dir == 1:
+        GPIO.output(PIN_DIR,GPIO.HIGH)
+        GPIO.output(PIN_DIR,GPIO.HIGH)
+        if GPIO.input(PIN_DIR)==1:
+            l_directionflg = 1
+            
+    if dir == 0:
+        GPIO.output(PIN_DIR,GPIO.LOW)
+        GPIO.output(PIN_DIR,GPIO.LOW)
+        if GPIO.input(PIN_DIR) == 0:
+            l_directionflg = 0
+            
 def  changedirection():
     global l_directionflg
     GPIO.setmode(GPIO.BCM)

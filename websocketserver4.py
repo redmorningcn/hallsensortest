@@ -1,14 +1,18 @@
-from websocket_server import WebsocketServer
+'''
+启动websocket，发送和接收数据
+redmorningcn 2020.10.19
+'''
+from   websocket_server import WebsocketServer
 import threading
 import json
-from datetime import datetime
+from   datetime import datetime
 import threading
 
 
 def startServer():
     t = threading.Timer(0, Server.run)
     t.start()
-
+    
 def server_send(text):
     if Server.serverflg == 2:
         Server.send_message(text)
@@ -53,7 +57,7 @@ class Server:
     def new_client(cls, client, server):
         print("A new client connected and was given id %d at %s." % (client['id'], datetime.now()))
         server.send_message_to_all("Hey all, a new client has joined us at %s." % datetime.now())
-        Server.serverflg = 2
+        Server.serverflg = 2    #连接正常
     @classmethod
     def send_message(cls,text):
         #print("A new client connected and was given id %d at %s." % (client['id'], datetime.now()))
@@ -61,6 +65,7 @@ class Server:
         
     @classmethod
     def client_left(cls, client, server):
+        Server.serverflg   = 1  #连接断开
         print("Client(%d) disconnected at %s." % (client['id'], datetime.now()))
 
     @classmethod
