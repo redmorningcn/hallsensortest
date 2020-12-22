@@ -21,7 +21,9 @@ import  threading
 #脉冲常数
 g_PLUSE = 12
 #减速比
-g_RATIO = 4.5
+#g_RATIO = 4.5
+#增加减速比，调整了传送带比率
+g_RATIO = 5*4
 #返回速度值
 l_rotate = 0
 def  getSpeed():

@@ -223,9 +223,9 @@ def initGPIO():
     
     PWM.initPWM(12)    
     PWM.SetPWMClock(4)    
-    #启动多线程
-    LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
-    LowThread.start()   
+    #启动多线程（电机增加了减速比，不需要低速处理）
+    #LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
+    #LowThread.start()   
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
     #启动websocketserver
