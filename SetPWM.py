@@ -109,17 +109,17 @@ def speedadd():
     global      l_pwnvalue
     
     if l_speed > 0:                     #速度有初始值，在原值上加
-        if l_speed < 300:
+        if l_speed < 200:
+            speed = l_speed + 2
+        elif l_speed < 300:
             speed = l_speed + 3
-        elif l_speed < 400:
-            speed = l_speed + 4
         else:
             speed = l_speed + 5
             
         if speed > 850:
             speed = 850             #最大值为100
     else:
-        speed = 140
+        speed = 100
     print("\r\n speed add %d"%speed )
 
     l_speed = speed                     #保存设置值
@@ -132,7 +132,7 @@ def speedadd():
 def speedsub():
     global      l_speed
     global      l_pwnvalue
-    if l_speed > 150:
+    if l_speed > 100:
         speed = l_speed -5
     else:
         speed   = 0
@@ -162,10 +162,10 @@ if __name__=="__main__":
 
     #初始化PWM端口，
     PWM.initPWM(12)    
-    PWM.SetPWMClock(4)
+    PWM.SetPWMClock(16)
     
-    LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
-    LowThread.start()        
+   # LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
+   # LowThread.start()        
     while True:
         print("占空比X/1024：")
         ratio = int(input())
