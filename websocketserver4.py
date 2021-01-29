@@ -19,7 +19,7 @@ def server_send(text):
         
 def server_recv():
     if Server.messagelen > 0:
-        print(Server.messagelen)
+        #print(Server.messagelen)
         Server.messagelen = 0
         return Server.messagetxt
     return 0
@@ -72,13 +72,13 @@ class Server:
     def message_received(cls, client, server, message):
         event, dic = cls.getEvent(message)
         #print(event, dic)
-        if event == 1:
-            print(dic["tree"])
+        #if event == 1:
+        #    print(dic["tree"])
             
         Server.messagetxt = message
         Server.messagelen = len(message)
-        print(Server.messagelen,Server.messagetxt)
-        print("Client(%d) said: %s at %s" % (client['id'], message, datetime.now()))
+        #print(Server.messagelen,Server.messagetxt)
+        #print("Client(%d) said: %s at %s" % (client['id'], message, datetime.now()))
       
 import   time      
 if __name__=='__main__':

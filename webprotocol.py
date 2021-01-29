@@ -34,15 +34,19 @@ def webprotocol():
         if txt:
             prorecv_list = txt.split(',')
             print(prorecv_list)
+            i = 0
+            while i < 4:          #列表补齐
+                prorecv_list.append('none')
+                i += 1
             
             #接收到数据
             if HEADER == prorecv_list[0]:
                 #速度加减
                 if prorecv_list[1] == SPEED_CTL[0]:
-                    #speedadd()
+                    speedadd()
                     print('speedadd')
                 elif prorecv_list[1] == SPEED_CTL[1]:
-                    #speedsub()
+                    speedsub()
                     print('speedsub')
                 else:
                     print('speedother')
@@ -65,7 +69,7 @@ def webprotocol():
                     #setdir(0)
                     print('shutdown(1)')                    
                 else:
-                    print('shutdown')                      
+                    print('shutdown(0)')                      
         
 import   time      
 if __name__=='__main__':

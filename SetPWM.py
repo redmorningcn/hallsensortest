@@ -16,33 +16,30 @@ PWM = ctypes.cdll.LoadLibrary('./pwm.so')
     #PWM = ctypes.cdll.LoadLibrary('./pwm.so')
 #低速模式：采用短暂启动方式实现
 
-l_pwnvalue = 0
-l_times    = 0
+l_lstfrq    = 0     #上次频率值
+l_setfrq    = 0     #设置频率值
+l_times     = 0
 
-
-#按键监视程序
-def   daemonLowSpeed():
-    global      l_pwnvalue
+# 速度监视程序
+def   daemonSpeedSet():
+    daemonfrqSet()
+# 速度监视程序
+def   daemonfrqSet():
+    global      l_lstfrq
+    global      l_setfrq   
     global      l_times
-    while True:        
-        l_times += 1
-        if  l_times > 50:
-            l_times = 0
-            #print("l_pwnvalue",l_pwnvalue)
+    while True:
+        time.sleep(0.5)
+        while   l_lstfrq != l_setfrq:
+            if l_lstfrq < l_setfrq:       #设置值大，速度加
+                l_lstfrq += 1
             
-        time.sleep(0.0005)
-        if l_pwnvalue < 550:     #低速启动
-            if l_pwnvalue < 50:
-                PWM.SetPWM(0)
-                #print("l_pwnvalue 0",l_pwnvalue)
-            else:
-                
-                if   l_times < (int)(550 - l_pwnvalue)/12 :
-                    PWM.SetPWM(250)
-                    #print("l_pwnvalue 2500",l_pwnvalue)
-                else:
-                    PWM.SetPWM(550)
-                    #print("l_pwnvalue 500",l_pwnvalue)
+            if l_lstfrq > l_setfrq:       #设置值小，速度减
+                 l_lstfrq -= 1
+            
+            PWM.SetFrq(l_lstfrq)          #设置速度值
+            time.sleep(0.05)
+            print("l_lstfrq %d,l_setfrq %d"%(l_lstfrq,l_setfrq))
 
 
 #方向信号
@@ -98,58 +95,54 @@ def getChangeDircetion():
 
 
 def getpwnvalue():
-    global      l_pwnvalue
-    return      l_pwnvalue
+    global      l_lstfrq
+    return      l_lstfrq
 
 
 l_speed = 0                            #全局变量 50-1024 //分频值
 #速度加，每调用一次，速度加1
 def speedadd():
-    global      l_speed
-    global      l_pwnvalue
+    global      l_lstfrq
+    global      l_setfrq
     
-    if l_speed > 0:                     #速度有初始值，在原值上加
-        if l_speed < 200:
-            speed = l_speed + 2
-        elif l_speed < 300:
-            speed = l_speed + 3
-        else:
-            speed = l_speed + 5
-            
-        if speed > 850:
-            speed = 850             #最大值为100
+    l_setfrq = l_lstfrq + 5
+    
+    maxfrq   = 60000
+    if l_setfrq > maxfrq:
+        l_setfrq = maxfrq
+
+def speedset(value = 0):
+    global      l_setfrq
+    
+    maxfrq   = 60000
+    if value > maxfrq:
+        l_setfrq = maxfrq
+    elif value < 0:
+        l_setfrq = 0
     else:
-        speed = 100
-    print("\r\n speed add %d"%speed )
-
-    l_speed = speed                     #保存设置值
-    l_pwnvalue = l_speed
-    PWM.SetPWM(speed)                   #设置速度值
-
-
-
+        l_setfrq = value
+    
 #速度减，每调用一次，速度减1
 def speedsub():
-    global      l_speed
-    global      l_pwnvalue
-    if l_speed > 100:
-        speed = l_speed -5
-    else:
-        speed   = 0
-    print("\r\n speed sub %d %d"%(speed,l_pwnvalue ))        
-    l_speed = speed                     #保存设置值
-    l_pwnvalue = l_speed
-    PWM.SetPWM(speed)                   #设置速度值
+    global      l_lstfrq
+    global      l_setfrq
+    
+    l_setfrq = l_lstfrq - 5
+    
+    minfrq   = 100
+    if l_setfrq < minfrq:
+        l_setfrq = 0
+
 
 #速度停止，速度减0
 def speedstop():
-    global      l_speed
-    global      l_pwnvalue    
-    l_speed = 0
-    l_pwnvalue = l_speed
-    PWM.SetPWM(0)                       #设置速度值
+    global      l_lstfrq
+    global      l_setfrq
+    l_setfrq = 0
+    l_lstfrq = l_setfrq
+    PWM.SetPWM(l_setfrq)                       #设置速度值
 
-from    keyer              import *
+from    keyer              import       *
 
 KEY_SUB    = 7                                                      #速度-   （引脚号）
 KEY_ADD    = 3                                                       #速度+   （引脚号）
@@ -162,16 +155,31 @@ if __name__=="__main__":
 
     #初始化PWM端口，
     PWM.initPWM(12)    
-    PWM.SetPWMClock(16)
+    PWM.SetPWMClock(2048)
     
-   # LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
-   # LowThread.start()        
+    #LowThread = threading.Thread(target = daemonfrqSet)     #创建多线程，启动接收任务
+    #LowThread.start()        
     while True:
-        print("占空比X/1024：")
+        #print("占空比X/1024：")
+        print("设置频率")
         ratio = int(input())
+        #speedset(ratio)
+        PWM.SetFrq(ratio)
+        '''
+        for ratio in range(100,60000,1):
+            PWM.SetFrq(ratio)
+            if (ratio % 100) == 0:
+                print("设置脉冲数：%d，计算速度：%d"%(ratio,(int)(((ratio*60/1600))*3.1415*1.05*60*20/1000/72)))
+            time.sleep(0.02)
+        
+        while True:
+            time.sleep(0.5)          
+        PWM.SetFrq(20000)
+        time.sleep(0.5)
+        '''
         #ratio = 491
-        PWM.SetPWM(ratio)
-        l_pwnvalue = ratio
+        #PWM.SetPWM(ratio)
+        #l_pwnvalue = ratio
         #ratio = int(input())
 
     
