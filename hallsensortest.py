@@ -41,12 +41,12 @@ class ui_main(QMainWindow, Ui_MainWindow):
         """
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
-        self.showFullScreen()                   #全屏显示
-        #self.show()                            #全屏显示
+        #self.showFullScreen()                   #全屏显示
+        self.show()                            #全屏显示
         
         self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         self.thread1.start()
-        self.thread2 = threading.Thread(target = self.daemon)                                       #守护线程
+        self.thread2 = threading.Thread(target = self.daemon)           #守护线程
         self.thread2.start()
         #关机daoji时
         self.shutdownflg = 0
@@ -222,10 +222,10 @@ def initGPIO():
     tfrq.start()
     
     PWM.initPWM(12)    
-    PWM.SetPWMClock(4)    
-    #启动多线程（电机增加了减速比，不需要低速处理）
-    #LowThread = threading.Thread(target = daemonLowSpeed)     #创建多线程，启动接收任务
-    #LowThread.start()   
+    #PWM.SetPWMClock(4)    
+    #启动多线程
+    LowThread = threading.Thread(target = daemonSpeedSet)               #创建多线程，变化速度值
+    LowThread.start()   
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
     #启动websocketserver

@@ -32,6 +32,51 @@ int SetPWMClock(int val)
     pwmSetClock(val);
 }
 
+//PWM工作频率 Fw= 206*256*1024 = 54001664
+//pwm频率计算 f = Fw /（rang * clock）
+#define PWM_WORK_FRQ  (54001664)
+int SetFrq(unsigned int val)
+{
+    unsigned int range,divclock;
+    unsigned int tmp,i;
+    
+    //频率范围0-1000000；
+    if(val < 1 )
+      return 0;
+    if(val >1000000)
+      val = 1000000;
+    
+    //printf("val:%d\r\n",val);
+    tmp = (unsigned int)(PWM_WORK_FRQ / (val * 1000));
+    //printf("tmp1:%d,%f\r\n",tmp,tmp);
+    
+    divclock = (0x0FFF & tmp) + 1;           	 //计算分频系数
+    //printf("divclock:%d\r\n",divclock);
+    
+    tmp = 0x0100;
+    for(i = 0;i < 8;i++){
+	if( divclock & tmp){			//2的整数倍
+	    divclock &= tmp;
+	    break;
+	}
+	tmp = tmp>>1;
+	//printf("tmp:%x,divclock %x,divclock & tmp %d,%x\r\n",tmp,divclock,(divclock & tmp),(divclock & tmp));
+    }
+    //printf("divclock:%d\r\n",divclock);
+    if (divclock < 2)
+        divclock = 2;
+    
+    range    = (unsigned int)(PWM_WORK_FRQ / (val * divclock )); //计算范围
+    
+    if(range < 2)	//容错处理
+	range = 2;
+    
+    pwmSetClock(divclock);			//设置分频系数
+    pwmSetRange(range);				//设置范围
+    //printf("pwmset:divclock %d,range %d\r\n",divclock,range);
+    pwmWrite(PWM_pin,range/2);
+}
+
 //设置PWM值
 int SetPWM(int val)
 {

@@ -4,6 +4,6 @@
 协议开始标识：###
 速度加减标识：up，down,none(up:速度加;down:速度减;none:不操作)
 方向标识： right,left,none(right:正转;left:反转;none:不操作)
-关机标识： shutdown,none(shutdown:关机;none:不操作)
+其他标识： stop,shutdown,none(shutdown:关机;none:不操作)
 速度设置值：600,none(600:设置的转速值;none:不操作)
 协议结束标识：!!!

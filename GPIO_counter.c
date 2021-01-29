@@ -43,6 +43,8 @@ int getTimes(void)
     return g_times;
 }
 
+
+
 //线程函数，每秒执行1次
 int threadCounter(void)
 {
