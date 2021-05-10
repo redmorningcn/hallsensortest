@@ -231,6 +231,7 @@ class Ui_MainWindow(object):
         self.label_12.setText(_translate("MainWindow", "mm"))
         self.com_rotatedir.setItemText(0, _translate("MainWindow", "顺时针方向"))
         self.com_rotatedir.setItemText(1, _translate("MainWindow", "逆时针方向"))
+        self.com_rotatedir.setItemText(2, _translate("MainWindow", "        "))
 
 
 if __name__ == "__main__":

@@ -74,7 +74,8 @@ int SetFrq(unsigned int val)
     pwmSetClock(divclock);			//设置分频系数
     pwmSetRange(range);				//设置范围
     //printf("pwmset:divclock %d,range %d\r\n",divclock,range);
-    pwmWrite(PWM_pin,range/2);
+    pwmWrite(PWM_pin,((range*2)/3));
+    //pwmWrite(PWM_pin,(range/2);
 }
 
 //设置PWM值

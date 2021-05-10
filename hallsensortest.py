@@ -19,11 +19,12 @@ from    shutdown           import *
 from    gitIP              import *
 from    websocketserver4   import *
 from    webprotocol        import *
+from    calcspeed          import *
 import  os,sys,time
 
-KEY_SUB    = 7                                                      #速度-   （引脚号）
-KEY_ADD    = 3                                                      #速度+   （引脚号）
-
+KEY_SUB    = 7              #速度-   （引脚号）
+KEY_ADD    = 3              #速度+   （引脚号）
+KEY_SET    = 2              #设置按键 （引脚号）
 
 
 class ui_main(QMainWindow, Ui_MainWindow):
@@ -31,7 +32,6 @@ class ui_main(QMainWindow, Ui_MainWindow):
     Class documentation goes here.
     """
 
-    
     def __init__(self, parent=None):
         """
         Constructor
@@ -42,7 +42,9 @@ class ui_main(QMainWindow, Ui_MainWindow):
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
         #self.showFullScreen()                   #全屏显示
-        self.show()                            #全屏显示
+        self.show()                              #全屏显示
+        
+        speedstop()                              #速度设置为0
         
         self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         self.thread1.start()
@@ -51,75 +53,262 @@ class ui_main(QMainWindow, Ui_MainWindow):
         #关机daoji时
         self.shutdownflg = 0
         self.shutdowntimeleft  = 50
-    def showSpeed(self):                                #显示速度值
+        
+        self.setrotatespeed    = 0                     # 设置的转速（如果装置没有反馈速度值，则以该值做速度有无的判断）
+        
+        self.setobj            = 0                     # 设置对象(0,转速;1,机车轮径;2,速度;3方向)
+        self.objnum            = 4
+        
+        self.diameter          = 1050                  # 机车轮径
+        self.locospeed         = 0                     # 机车速度
+        self.dir               = 0                     # 方向
+    
+    
+    def diameterAdd(self):                             # 机车轮径增加
+        print("#机车轮径增加")
+        self.diameter += 1
+        
+        if  self.diameter > 1300:
+            self.diameter = 1300
+
+    def diameterSub(self):                             # 机车轮径减小
+        print("# 机车轮径减小")
+        self.diameter -= 1
+        
+        if  self.diameter < 800:
+            self.diameter = 800
+
+    def locospeedadd(self):                            # 机车速度增加
+        
+        self.locospeed += 0.5
+        print("# 机车速度增加",self.locospeed)
+        
+        if  self.locospeed > 100:
+            self.locospeed = 100
+        
+        self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速
+        
+    def locospeedsub(self):                            # 机车速度减少
+        print("# 机车速度减少")
+        if self.locospeed  >= 1:
+            self.locospeed -= 0.5
+            
+        if  self.locospeed < 1.5:
+            self.locospeed = 0
+        
+        self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速        
+
+
+    def rotatesspeedadd(self):                         # 转速增加
+        print("# 转速增加")
+        self.setrotatespeed += 1
+        
+        if  self.setrotatespeed > 500:
+            self.setrotatespeed = 500
+        
+        self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+        print("# 转速增加self.locospeed ",self.locospeed )
+
+    def rotatesspeedsub(self):                         # 转速减少
+        print("# 转速减少")
+        if self.setrotatespeed > 1:
+            self.setrotatespeed -= 1
+        
+        if  self.setrotatespeed < 10:
+            self.setrotatespeed = 0
+            
+        self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+        
+
+    def showSpeed(self):                               # 显示速度值
         shutdowntimes = 0
         
         while True:
-            time.sleep(1.5)
-            dim2 = 1250                                #机车轮径1250mm
-            dim1 = 1050                                #机车轮径1050mm
+            
+            time.sleep(0.5)
+            
+            dim2 = 1250                                # 机车轮径1250mm
+            dim1 = 1050                                # 机车轮径1050mm
             try:
-                rotate       = getSpeed()                      #取速度信号，在文件zkzt2_com2中
-                speed1050    = (int)((rotate*3.1415926 * dim1 * 60)/(1000*1000) )
-                speed1250    = (int)((rotate*3.1415926 * dim2 * 60)/(1000*1000) )
-                self.ln_speed.display(rotate)
-                self.ln_speed_1050.display(speed1050)
-                self.ln_speed_1250.display(speed1250)
+                self.ln_locol.display( self.diameter ) # 显示机车轮径
                 
-                #速度为0，且减速减按下10s，则设备准备关机
-                if rotate == 0:
-                    if getKeySta(KEY_SUB):
-                        shutdowntimes +=1
-                        if shutdowntimes > 5:
-                            self.shutdownflg = 1
-                    elif getKeySta(KEY_ADD):   #按其他，取消关机
-                        if self.shutdownflg == 1:
-                            self.bt_shutdown_2.setText("关机")
-                            self.shutdowntimeleft  = 50
-                            self.shutdownflg = 0
-                            shutdowntimes = 0
-                    else:
-                        shutdowntimes = 0
+                self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
+                
+                self.ln_locolspeed.display(self.locospeed )    #显示速度
+                
+                if self.dir == 0:              # 机车方向
+                    self.com_rotatedir.setCurrentIndex(0)
+                else:
+                    self.com_rotatedir.setCurrentIndex(1)
+                
+                if self.shutdownflg == 0:     #关机，用该位置显示倒计时
+                    self.label.setText("霍尔传感器便携式测试设备")
                 
             except Exception as e:
                 print("速度读取错误", e)
-    
-    #两键同时按下次数
-    doublekeydowntims = 0;
-    #按下键后方向切换次数
-    dirchangetimes    = 0
-
-          
+        
+    #daemon，多线程
     def  daemon(self):
+        #setkey按下时间
+        setkeytimes       = 0
+        setkeydowntime    = 0
+        setkeystilltime   = 0
+        
+        #时间变量
+        daemontime        = 0     
+        
+        #电机参数
+        rotaterate        = getrotaterate()           #同步轮齿数比
+        pwmrate           = getpwmrate()              #步进电机分频系数
+        
         while True:
             time.sleep(0.2)
+            daemontime +=1                                                      #时间变量
             
+            pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
+            speedset(pwmfre)  #根据设置的转速值，设置频率
+            
+            self.dir = getChangeDircetion()                                     #读取方向信号
+            
+            ### 根据要设置的参数，闪烁提醒
+            if self.setrotatespeed == 0:
+                if self.setobj == 0:       #转速
+                    if daemontime % 5 == 0:
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                
+                if self.setobj == 1:       #轮径
+                    if daemontime % 5 == 0:
+                        self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                        
+                if self.setobj == 2:       #速度
+                    if daemontime % 5 == 0:
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                        
+                if self.setobj == 3:       #方向
+                    if daemontime % 5 == 0:
+                        self.com_rotatedir.setCurrentIndex(2)
+                    else:
+                        self.com_rotatedir.setCurrentIndex(self.dir)
+            else:
+                self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                
+            ### 获取并显示IP值        
             ip = get_host_ip()
             self.label_IP.setText(ip)
             
-            #关机倒计时
+            ### 关机倒计时
             if self.shutdownflg == 1:
                 if self.shutdowntimeleft > 0:
+                    print("self.shutdowntimeleft ",self.shutdowntimeleft)
                     self.shutdowntimeleft-=1
                     times = self.shutdowntimeleft/5
-                    tmp = "" + str(int(times))+"s关机"
-                    self.bt_shutdown_2.setText(tmp)
-                    self.textEdit.setText(tmp)
+                    tmp = "" + str(int(times))+"秒后关机！"
+                    #self.bt_shutdown_2.setText(tmp)
+                    
+                    self.label.setText(tmp)
+                    #self.textEdit.setText(tmp)
                 else:
-                    shutdown()  #启动关机程序
+                    print("shutdown()")
+                    #shutdown()  #启动关机程序
             
-            #分频值小于500,速度方向控件可用
-            if getpwnvalue() < 450:
-                self.bt_dir.setEnabled(True)
-            else:
-                self.bt_dir.setEnabled(False)
+            ### 速度0时，可以选择 参数调整 功能
+            if self.setrotatespeed == 0:
+
+                if getKeySta(KEY_SET):
+                    #功能设置按键按下，进行相应的功能选择。
+                    if daemontime != setkeydowntime +1:       # 不是长按状态（连续进入则认为是长按）
+                        #setkeytimes     += 1
+                        setkeystilltime  = 0                  # 按键长按计时开始
+                        
+                        self.setobj += 1                      # 设置对象往下偏移
+                        self.setobj %= self.objnum            # 范围限制                        
+                    else:
+                        setkeystilltime += 1                  # 按键保持按下状态
+                        print("setkeystilltime",setkeystilltime)
+                        if setkeystilltime > 25:              # 5s #在速度为0情况下，长按设置按键5s，设备关机。
+                            self.shutdownflg = 1
+                            
+                    setkeydowntime = daemontime               # 记录设置按键按下时间（判断是长时间、短时间按键）。
+                    
+                keysub = getKeySta(KEY_SUB)
+                keyadd = getKeySta(KEY_ADD)
+                
+                if  keysub or keyadd:                #有按键按下
+                    
+                    #有其他按键，设置按键清零
+                    setkeytimes = 0
+                    
+                    if self.shutdownflg == 1:            #如果是在关机倒计时，则只取消关机过程
+                        self.shutdownflg = 0             #关机过程中，有其他按键按下，取消关机           
+                        self.shutdowntimeleft = 50       #重新赋值
+                    else:
+                        if keyadd:                       #按键+
+                            if   self.setobj == 0:       #转速
+                                self.rotatesspeedadd()               
+                            elif self.setobj == 1:       #轮径
+                                self.diameterAdd()
+                            elif self.setobj == 2:       #速度    
+                                self.locospeedadd()
+                            else:                        #改变方向
+                                changedirection()                        
+                        else:                            #按键-
+                            if   self.setobj == 0:       #转速
+                                self.rotatesspeedsub()               
+                            elif self.setobj == 1:       #轮径
+                                self.diameterSub()
+                            elif self.setobj == 2:       #速度    
+                                self.locospeedsub()
+                            else:                        #改变方向
+                                changedirection()
+                        
+            ###  速度不为零        
+            if self.setrotatespeed != 0:
+                
+                # 在速度不为零时，双击设置按键，紧急停机
+                if getKeySta(KEY_SET):
+                    #功能设置按键按下，进行相应的功能选择。
+                    if daemontime != setkeydowntime +1:       # 不是长按状态（连续进入则认为是长按）
+                        setkeytimes += 1
+                        
+                    setkeydowntime = daemontime               # 记录时间
+                    
+                    if setkeytimes > 1:                       # 连续按两次以上，表示急停
+                        speedstop()                           # 速度停止
+                        self.setrotatespeed = 0
+                        self.locospeed = 0
+                        
+                if getKeySta(KEY_SET) == 0:                   # 按键松开
+                    if daemontime > setkeydowntime + 10:      # 松开间隔时间大于2秒
+                        setkeytimes = 0
+                        
+                # 在速度不为零时，只能调整转速和速度值。默认设置为转速
+                if  self.setobj == 1 or self.setobj == 3:     # 轮径设置 或 方向设置
+                    self.setobj =  0
+
+                # 按加、减按键，进行速度的增减
+                if  getKeySta(KEY_ADD):
+                    if self.setobj == 0:
+                        self.rotatesspeedadd()    
+                    elif self.setobj == 2:        #速度
+                        self.locospeedadd()
+                    #else:
+                elif   getKeySta(KEY_SUB):
+                    if self.setobj == 0:
+                        self.rotatesspeedsub()               
+                    elif self.setobj == 2:       #速度
+                        self.locospeedsub()
+                    #else:                    
+                                              
             
-            #速度方向显示    
-            if getChangeDircetion() == 0:
-                self.bt_dir.setText("顺时针方向")
-            else:
-                self.bt_dir.setText("逆时针方向")
-            
+            """
             if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):     #有按键按下
                 if getKeySta(KEY_ADD) & getKeySta(KEY_SUB) : #同时有按键按下，在低速时，切换方向
                     doublekeydowntims+=1
@@ -136,32 +325,32 @@ class ui_main(QMainWindow, Ui_MainWindow):
                     speedsub()
                     dirchangetimes    = 0
                     doublekeydowntims = 0                    
-
-    @pyqtSlot()
-    def on_bt_speedadd_clicked(self):
+            """
+    #@pyqtSlot()
+    #def on_bt_speedadd_clicked(self):
         """
         Slot documentation goes here.
         """
-        speedadd()                                          #速度加
+        #speedadd()                                          #速度加
        # TODO: not implemented yet
         #  raise NotImplementedError
     
-    @pyqtSlot()
-    def on_bt_speedsub_clicked(self):
+    #@pyqtSlot()
+    #def on_bt_speedsub_clicked(self):
         """
         Slot documentation goes here.
         """
-        speedsub()                                          #速度减
+        #speedsub()                                          #速度减
         # TODO: not implemented yet
         # raise NotImplementedError
         
-    @pyqtSlot()
-    def on_bt_shutdown_clicked(self):           #关机查询
+    #@pyqtSlot()
+    #def on_bt_shutdown_clicked(self):           #关机查询
         """
         Slot documentation goes here.
         """
         
-        speedstop()
+        #speedstop()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
         #if reply == QMessageBox.Yes:
         #    os.system('shutdown -s -t 10' )      #关机
@@ -169,20 +358,21 @@ class ui_main(QMainWindow, Ui_MainWindow):
         #    print("取消关机")
         # TODO: not implemented yet
         #raise NotImplementedError
-    @pyqtSlot()
-    def on_bt_shutdown_2_clicked(self):           #关机查询
+    #@pyqtSlot()
+    #def on_bt_shutdown_2_clicked(self):           #关机查询
         """
         Slot documentation goes here.
         """
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
         #reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-        
+        '''
         if self.shutdownflg == 1:
             self.bt_shutdown_2.setText("关机")
             self.shutdowntimeleft  = 50
             self.shutdownflg = 0
         else :
             self.shutdownflg = 1
+        '''
         #if reply == QMessageBox.Yes:
         #    shutdown()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
@@ -193,13 +383,13 @@ class ui_main(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         #raise NotImplementedError
 
-    @pyqtSlot()
-    def on_bt_dir_clicked(self):           #关机查询
+    #@pyqtSlot()
+    #def on_bt_dir_clicked(self):           #关机查询
         """
         Slot documentation goes here.
         """
         #改变方向
-        changedirection()
+        #changedirection()
         #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
         #if reply == QMessageBox.Yes:
         #    os.system('shutdown -s -t 10' )      #关机
@@ -210,8 +400,10 @@ class ui_main(QMainWindow, Ui_MainWindow):
 #按键及脉冲检测电路
 def initGPIO():
     
-    initKey(KEY_SUB)                                                    #初始化速度-按键
-    initKey(KEY_ADD)                                                    #初始化速度+按键
+    initKey(KEY_SUB)                                                    #初始化 速度-按键
+    initKey(KEY_ADD)                                                    #初始化 速度+按键
+    initKey(KEY_SET)                                                    #初始化 设置按键
+    
     KeyThread = threading.Thread(target = daemonKey)                    #创建多线程，启动接收任务
     KeyThread.start()
     
@@ -221,11 +413,14 @@ def initGPIO():
     tfrq    = threading.Thread(target = Frqer.threadCounter)
     tfrq.start()
     
-    PWM.initPWM(12)    
+    PWM.initPWM(12)
+    #PWM.SetPWMClock(2048)
+    
     #PWM.SetPWMClock(4)    
     #启动多线程
     LowThread = threading.Thread(target = daemonSpeedSet)               #创建多线程，变化速度值
-    LowThread.start()   
+    LowThread.start()
+    
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
     #启动websocketserver

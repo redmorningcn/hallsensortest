@@ -29,16 +29,24 @@ def   daemonfrqSet():
     global      l_setfrq   
     global      l_times
     while True:
-        time.sleep(0.5)
-        while   l_lstfrq != l_setfrq:
+        time.sleep(0.01)
+        while   (l_lstfrq != l_setfrq):
+            print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
             if l_lstfrq < l_setfrq:       #设置值大，速度加
-                l_lstfrq += 1
+                if l_lstfrq + 20 < l_setfrq:
+                    l_lstfrq += 20
+                else:
+                    l_lstfrq += 1
             
             if l_lstfrq > l_setfrq:       #设置值小，速度减
-                 l_lstfrq -= 1
+                if l_lstfrq - 20 > l_setfrq:
+                    l_lstfrq -= 20
+                else:
+                    l_lstfrq -= 1
             
             PWM.SetFrq(l_lstfrq)          #设置速度值
-            time.sleep(0.05)
+            time.sleep(0.01)
+            
             print("l_lstfrq %d,l_setfrq %d"%(l_lstfrq,l_setfrq))
 
 
@@ -98,7 +106,6 @@ def getpwnvalue():
     global      l_lstfrq
     return      l_lstfrq
 
-
 l_speed = 0                            #全局变量 50-1024 //分频值
 #速度加，每调用一次，速度加1
 def speedadd():
@@ -120,7 +127,7 @@ def speedset(value = 0):
     elif value < 0:
         l_setfrq = 0
     else:
-        l_setfrq = value
+        l_setfrq = (int)(value)
     
 #速度减，每调用一次，速度减1
 def speedsub():
@@ -176,6 +183,7 @@ if __name__=="__main__":
             time.sleep(0.5)          
         PWM.SetFrq(20000)
         time.sleep(0.5)
+        
         '''
         #ratio = 491
         #PWM.SetPWM(ratio)
