@@ -9,7 +9,8 @@ from PyQt5.QtCore      import pyqtSlot
 from PyQt5.QtWidgets   import QMainWindow
 from PyQt5.QtWidgets   import QMessageBox
 from PyQt5             import QtCore, QtGui, QtWidgets
-from Ui_hallsensortest import Ui_MainWindow
+#from Ui_hallsensortest import Ui_MainWindow
+from Ui_hallsensortest2 import Ui_Form
 #from speedCtrol import *
 import  threading
 from    SetPWM             import *
@@ -27,7 +28,8 @@ KEY_ADD    = 3              #速度+   （引脚号）
 KEY_SET    = 2              #设置按键 （引脚号）
 
 
-class ui_main(QMainWindow, Ui_MainWindow):
+#class ui_main(QMainWindow, Ui_MainWindow):
+class ui_main(QMainWindow, Ui_Form):
     """
     Class documentation goes here.
     """
@@ -437,4 +439,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     ui = ui_main()
     sys.exit(app.exec_())
+	
+	
 
