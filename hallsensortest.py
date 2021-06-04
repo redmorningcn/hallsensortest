@@ -41,13 +41,13 @@ class ui_main(QMainWindow, Ui_MainWindow):
         """
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
-        #self.showFullScreen()                   #全屏显示
-        self.show()                              #全屏显示
+        self.showFullScreen()                   #全屏显示
+        #self.show()                              #全屏显示
         
         speedstop()                              #速度设置为0
         
-        self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
-        self.thread1.start()
+        #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
+        #self.thread1.start()
         self.thread2 = threading.Thread(target = self.daemon)           #守护线程
         self.thread2.start()
         #关机daoji时
@@ -121,31 +121,31 @@ class ui_main(QMainWindow, Ui_MainWindow):
         
 
     def showSpeed(self):                               # 显示速度值
-        shutdowntimes = 0
+        #shutdowntimes = 0
         
-        while True:
+        #while True:
             
-            time.sleep(0.5)
+        #    time.sleep(0.5)
             
-            dim2 = 1250                                # 机车轮径1250mm
-            dim1 = 1050                                # 机车轮径1050mm
-            try:
-                self.ln_locol.display( self.diameter ) # 显示机车轮径
-                
-                self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
-                
-                self.ln_locolspeed.display(self.locospeed )    #显示速度
-                
-                if self.dir == 0:              # 机车方向
-                    self.com_rotatedir.setCurrentIndex(0)
-                else:
-                    self.com_rotatedir.setCurrentIndex(1)
-                
-                if self.shutdownflg == 0:     #关机，用该位置显示倒计时
-                    self.label.setText("霍尔传感器便携式测试设备")
-                
-            except Exception as e:
-                print("速度读取错误", e)
+        dim2 = 1250                                # 机车轮径1250mm
+        dim1 = 1050                                # 机车轮径1050mm
+        try:
+            self.ln_locol.display( self.diameter ) # 显示机车轮径
+            
+            self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
+            
+            self.ln_locolspeed.display(self.locospeed )    #显示速度
+            
+            if self.dir == 0:              # 机车方向
+                self.com_rotatedir.setCurrentIndex(0)
+            else:
+                self.com_rotatedir.setCurrentIndex(1)
+            
+            if self.shutdownflg == 0:     #关机，用该位置显示倒计时
+                self.label.setText("霍尔传感器便携式测试设备")
+            
+        except Exception as e:
+            print("速度读取错误", e)
         
     #daemon，多线程
     def  daemon(self):
@@ -164,6 +164,8 @@ class ui_main(QMainWindow, Ui_MainWindow):
         while True:
             time.sleep(0.2)
             daemontime +=1                                                      #时间变量
+            
+            self.showSpeed()           #参数显示
             
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
@@ -429,6 +431,7 @@ def initGPIO():
     
 
 if __name__ == "__main__":
+    time.sleep(2)
     initGPIO()              #脉冲检测及按键端口初始化
 
     app = QtWidgets.QApplication(sys.argv)
