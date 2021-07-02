@@ -43,10 +43,12 @@ class ui_main(QMainWindow, Ui_Form):
         """
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
-        self.showFullScreen()                   #全屏显示
-        #self.show()                              #全屏显示
+        self.showFullScreen()                  	#全屏显示
+        #self.show()                            #全屏显示
         
-        speedstop()                              #速度设置为0
+		time.sleep(3)							#等3秒		
+
+        speedstop()                             #速度设置为0
         
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
@@ -164,7 +166,7 @@ class ui_main(QMainWindow, Ui_Form):
         pwmrate           = getpwmrate()              #步进电机分频系数
         
         while True:
-            time.sleep(0.2)
+            time.sleep(0.25)
             daemontime +=1                                                      #时间变量
             
             self.showSpeed()           #参数显示
@@ -433,7 +435,7 @@ def initGPIO():
     
 
 if __name__ == "__main__":
-    time.sleep(2)
+    time.sleep(1)
     initGPIO()              #脉冲检测及按键端口初始化
 
     app = QtWidgets.QApplication(sys.argv)

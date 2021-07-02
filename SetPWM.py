@@ -52,7 +52,7 @@ def   daemonfrqSet():
 
 #方向信号
 l_directionflg = 0
-PIN_DIR = 13
+PIN_DIR = 16
 def  setdir(dir):
     global l_directionflg
     GPIO.setmode(GPIO.BCM)
