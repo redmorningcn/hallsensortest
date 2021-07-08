@@ -28,12 +28,20 @@ KEY_ADD    = 3              #速度+   （引脚号）
 KEY_SET    = 2              #设置按键 （引脚号）
 
 
+#displaylocospeed = 0
+
+def getdisplaylocospeed():
+    print("ui_main.displaylocospeed22  =",ui_main.getSpeed())
+    #ui_main.getSpeed()
+    return ui_main.d_speed
+
 #class ui_main(QMainWindow, Ui_MainWindow):
 class ui_main(QMainWindow, Ui_Form):
     """
     Class documentation goes here.
     """
-
+    d_speed = 10
+    
     def __init__(self, parent=None):
         """
         Constructor
@@ -43,8 +51,10 @@ class ui_main(QMainWindow, Ui_Form):
         """
         super(ui_main, self).__init__(parent)
         self.setupUi(self)
-        self.showFullScreen()                   #全屏显示
-        #self.show()                              #全屏显示
+        #self.showFullScreen()                   #全屏显示
+        self.show()                              #全屏显示
+        
+        time.sleep(3.5)                          #
         
         speedstop()                              #速度设置为0
         
@@ -64,7 +74,6 @@ class ui_main(QMainWindow, Ui_Form):
         self.diameter          = 1050                  # 机车轮径
         self.locospeed         = 0                     # 机车速度
         self.dir               = 0                     # 方向
-    
     
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
@@ -100,7 +109,6 @@ class ui_main(QMainWindow, Ui_Form):
         
         self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速        
 
-
     def rotatesspeedadd(self):                         # 转速增加
         print("# 转速增加")
         self.setrotatespeed += 1
@@ -120,8 +128,11 @@ class ui_main(QMainWindow, Ui_Form):
             self.setrotatespeed = 0
             
         self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+    
+    @classmethod
+    def getSpeed(cls):
+        return cls.d_speed
         
-
     def showSpeed(self):                               # 显示速度值
         #shutdowntimes = 0
         
@@ -137,6 +148,10 @@ class ui_main(QMainWindow, Ui_Form):
             self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
             
             self.ln_locolspeed.display(self.locospeed )    #显示速度
+            
+            webSendMessage(str(self.locospeed))
+            #ui_main.d_speed = self.locospeed
+            #print("ui_main.displaylocospeed",ui_main.d_speed)
             
             if self.dir == 0:              # 机车方向
                 self.com_rotatedir.setCurrentIndex(0)
@@ -221,7 +236,7 @@ class ui_main(QMainWindow, Ui_Form):
                     #self.textEdit.setText(tmp)
                 else:
                     print("shutdown()")
-                    #shutdown()  #启动关机程序
+                    shutdown()  #启动关机程序
             
             ### 速度0时，可以选择 参数调整 功能
             if self.setrotatespeed == 0:
@@ -242,8 +257,8 @@ class ui_main(QMainWindow, Ui_Form):
                             
                     setkeydowntime = daemontime               # 记录设置按键按下时间（判断是长时间、短时间按键）。
                     
-                keysub = getKeySta(KEY_SUB)
-                keyadd = getKeySta(KEY_ADD)
+                keysub = getKeySta(KEY_SUB) or getwebspeedsubflg()
+                keyadd = getKeySta(KEY_ADD) or getwebspeedaddflg()
                 
                 if  keysub or keyadd:                #有按键按下
                     
@@ -298,13 +313,13 @@ class ui_main(QMainWindow, Ui_Form):
                     self.setobj =  0
 
                 # 按加、减按键，进行速度的增减
-                if  getKeySta(KEY_ADD):
+                if  getKeySta(KEY_ADD ) or getwebspeedaddflg():
                     if self.setobj == 0:
                         self.rotatesspeedadd()    
                     elif self.setobj == 2:        #速度
                         self.locospeedadd()
                     #else:
-                elif   getKeySta(KEY_SUB):
+                elif   getKeySta(KEY_SUB) or getwebspeedsubflg():
                     if self.setobj == 0:
                         self.rotatesspeedsub()               
                     elif self.setobj == 2:       #速度
@@ -433,7 +448,7 @@ def initGPIO():
     
 
 if __name__ == "__main__":
-    time.sleep(2)
+    time.sleep(0.5)
     initGPIO()              #脉冲检测及按键端口初始化
 
     app = QtWidgets.QApplication(sys.argv)

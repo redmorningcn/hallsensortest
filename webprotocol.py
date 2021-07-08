@@ -12,24 +12,48 @@ from    websocketserver4   import *
 from    SetPWM             import *
 from    GetMotorSpeed      import *
 from    keyer              import *
+from    hallsensortest     import *
 
 def startWebProtocol():
     t = threading.Timer(0, webprotocol)
     t.start()
 
+def webSendMessage(text):
+    message = ("%s,%s,%s")%(HEADER,text,ENDER)
+    server_send(message)  #服务器主动发送消息
+    
+webspeedaddflg = 0
+webspeedsubflg = 0
+
+def getwebspeedaddflg():
+    global webspeedaddflg
+    key = webspeedaddflg
+    webspeedaddflg = 0
+    return key
+
+def getwebspeedsubflg():
+    global webspeedsubflg
+    key = webspeedsubflg
+    webspeedsubflg = 0
+    return key
+
 def webprotocol():
+    global webspeedaddflg
+    global webspeedsubflg    
+    
     times = 0
     while True:
         time.sleep(0.01)
-        
+        '''
         times+=1
         if times > 100:     #1s
             times = 0
             #message = ("%s,%s,%s")%(HEADER,str(getval()),ENDER)
-            message = ("%s,%s,%s")%(HEADER,str(getSpeed()),ENDER)
+            message = ("%s,%s,%s")%(HEADER,str(getdisplaylocospeed()),ENDER)
             #print(message)
+            print(getdisplaylocospeed())
             server_send(message)  #服务器主动发送消息
-        
+        '''
         txt =  server_recv()
         if txt:
             prorecv_list = txt.split(',')
@@ -43,12 +67,16 @@ def webprotocol():
             if HEADER == prorecv_list[0]:
                 #速度加减
                 if prorecv_list[1] == SPEED_CTL[0]:
-                    speedadd()
-                    print('speedadd')
+                    #speedadd()
+                    webspeedaddflg = 1
+                    webspeedsubflg = 0
                 elif prorecv_list[1] == SPEED_CTL[1]:
-                    speedsub()
+                    webspeedaddflg = 0
+                    webspeedsubflg = 1
                     print('speedsub')
                 else:
+                    webspeedaddflg = 0
+                    webspeedsubflg = 0                    
                     print('speedother')
                     
                 #速度加减
@@ -69,10 +97,15 @@ def webprotocol():
                     #setdir(0)
                     print('shutdown(1)')                    
                 else:
-                    print('shutdown(0)')                      
+                    print('shutdown(0)')
+        #else:
+            #webspeedaddflg = 0
+            #webspeedsubflg = 0   
         
 import   time      
 if __name__=='__main__':
     startServer()           #启动服务
     startWebProtocol()      #启动通讯协议
     
+
+

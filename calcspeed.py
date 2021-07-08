@@ -2,7 +2,7 @@ import  ctypes
 from    SetPWM             import *
 
 l_pwmrate       = 1600            # 步进电机分频系数 
-l_rotaterate    = 4               # 设置齿轮传动比
+l_rotaterate    = 4.5               # 设置齿轮传动比(4)
 
 
 # 取步进点击的分频系数
