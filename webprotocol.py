@@ -59,7 +59,7 @@ def webprotocol():
             prorecv_list = txt.split(',')
             print(prorecv_list)
             i = 0
-            while i < 4:          #列表补齐
+            while i < 7:          #列表补齐
                 prorecv_list.append('none')
                 i += 1
             
@@ -98,6 +98,8 @@ def webprotocol():
                     print('shutdown(1)')                    
                 else:
                     print('shutdown(0)')
+					
+				print('速度，转速，轮径',prorecv_list[4],prorecv_list[5],prorecv_list[6])	
         #else:
             #webspeedaddflg = 0
             #webspeedsubflg = 0   
