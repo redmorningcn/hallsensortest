@@ -250,7 +250,7 @@ class ui_main(QMainWindow, Ui_Form):
             webdim    = getwebsetdim()
 
             #轮径800到1500
-            if webdim <= 1500 and  webdim >= 800
+            if webdim <= 1500 and  webdim >= 800:
                 self.diameter = webdim
 
             #速度为零，设置方向

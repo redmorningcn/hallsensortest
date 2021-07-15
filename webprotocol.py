@@ -144,17 +144,18 @@ def webprotocol():
                     
                 print('速度，转速，轮径',prorecv_list[4],prorecv_list[5],prorecv_list[6])
                 #速度
-                if prorecv_list[4] != 'none':
+                if prorecv_list[4] != 'none' and prorecv_list[4].isdigit():
+                    
                     websetspeed = int(prorecv_list[4])
                 else:
                     websetspeed = 0
                 #转速
-                if prorecv_list[5] != 'none':
+                if prorecv_list[5] != 'none'and prorecv_list[5].isdigit():
                     websetrotate = int(prorecv_list[5])
                 else:
                     websetrotate = 0
                 #轮径
-                if prorecv_list[6] != 'none':
+                if prorecv_list[6] != 'none' and prorecv_list[6].isdigit():
                     websetdim = int(prorecv_list[6])
                 else:
                     websetdim = 0
