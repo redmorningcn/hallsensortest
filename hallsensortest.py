@@ -150,11 +150,11 @@ class ui_main(QMainWindow, Ui_Form):
             
             self.ln_locolspeed.display(self.locospeed )    #显示速度
             
-			if self.dir == 0:
-			    dir = "right"
-			else:
-			    dir = "left"
-			text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
+            if self.dir == 0:
+                dir = "right"
+            else:
+                dir = "left"
+            text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
             webSendMessage(str(self.locospeed))
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)

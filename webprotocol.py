@@ -98,8 +98,8 @@ def webprotocol():
                     print('shutdown(1)')                    
                 else:
                     print('shutdown(0)')
-					
-				print('速度，转速，轮径',prorecv_list[4],prorecv_list[5],prorecv_list[6])	
+                    
+                print('速度，转速，轮径',prorecv_list[4],prorecv_list[5],prorecv_list[6])	
         #else:
             #webspeedaddflg = 0
             #webspeedsubflg = 0   
