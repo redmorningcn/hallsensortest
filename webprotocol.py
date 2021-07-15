@@ -20,7 +20,18 @@ def startWebProtocol():
 
 def webSendMessage(text):
     message = ("%s,%s,%s")%(HEADER,text,ENDER)
+    print(message)
     server_send(message)  #服务器主动发送消息
+
+
+#远程设置速度
+websetspeed  = 0
+#远程设置转速
+websetrotate = 0
+#远程设置方向
+websetdir    = 0
+#远程设置轮径
+websetdim    = 0
     
 webspeedaddflg = 0
 webspeedsubflg = 0
@@ -37,9 +48,38 @@ def getwebspeedsubflg():
     webspeedsubflg = 0
     return key
 
+def getwebsetspeed():
+    global websetspeed
+    key = websetspeed
+    websetspeed = 0
+    return key
+
+def getwebsetrotate():
+    global websetrotate
+    key = websetrotate
+    websetrotate = 0
+    return key
+
+def getwebsetdim():
+    global websetdim
+    key = websetdim
+    websetdim = 0
+    return key
+
+def getwebsetdir():
+    global websetdir
+    key = websetdir
+    websetdir = 0
+    return key
+
+
 def webprotocol():
     global webspeedaddflg
     global webspeedsubflg    
+    global websetspeed
+    global websetrotate
+    global websetdir
+    global websetdim
     
     times = 0
     while True:
@@ -59,7 +99,7 @@ def webprotocol():
             prorecv_list = txt.split(',')
             print(prorecv_list)
             i = 0
-            while i < 7:          #列表补齐
+            while i < 9:          #列表补齐
                 prorecv_list.append('none')
                 i += 1
             
@@ -82,11 +122,14 @@ def webprotocol():
                 #速度加减
                 if prorecv_list[2] == SPEED_DIR[0]:
                     #setdir(1)
+                    websetdir = 0
                     print('setdir(1)')
                 elif prorecv_list[2] == SPEED_DIR[1]:
                     #setdir(0)
+                    websetdir = 1
                     print('setdir(0)')
                 else:
+                    websetdir = 2
                     print('setdir')
                     
                 #关机
@@ -99,7 +142,22 @@ def webprotocol():
                 else:
                     print('shutdown(0)')
                     
-                print('速度，转速，轮径',prorecv_list[4],prorecv_list[5],prorecv_list[6])	
+                print('速度，转速，轮径',prorecv_list[4],prorecv_list[5],prorecv_list[6])
+                #速度
+                if prorecv_list[4] != 'none':
+                    websetspeed = int(prorecv_list[4])
+                else:
+                    websetspeed = 0
+                #转速
+                if prorecv_list[5] != 'none':
+                    websetrotate = int(prorecv_list[5])
+                else:
+                    websetrotate = 0
+                #轮径
+                if prorecv_list[6] != 'none':
+                    websetdim = int(prorecv_list[6])
+                else:
+                    websetdim = 0
         #else:
             #webspeedaddflg = 0
             #webspeedsubflg = 0   

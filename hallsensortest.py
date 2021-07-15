@@ -179,7 +179,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         #时间变量
         daemontime        = 0     
-        
+        lstrotate         = 0                         #设定转速
         #电机参数
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
@@ -243,6 +243,47 @@ class ui_main(QMainWindow, Ui_Form):
                 else:
                     print("shutdown()")
                     shutdown()  #启动关机程序
+
+            ###web设置值（）速度、轮径、转速、方向等
+            webspeed  = getwebsetspeed()
+            webrotate = getwebsetrotate()
+            webdim    = getwebsetdim()
+
+            #轮径800到1500
+            if webdim <= 1500 and  webdim >= 800
+                self.diameter = webdim
+
+            #速度为零，设置方向
+            webdir    = getwebsetdir()
+            if self.locospeed < 2:
+                if webdir == 0:
+                    self.dir == webdir
+            else:
+                webdir = 0
+                
+            #速度和转速设置，互斥只能设置一个，且需要控制调整速率
+            if webspeed != 0:
+                lstrotate = calclocorotate(webspeed,self.diameter)
+                webrotate   = 0
+            
+            if webrotate != 0:
+                lstrotate = webrotate
+                webspeed =0
+
+            #缓慢加减速度
+            if lstrotate > 0 and lstrotate <=500:
+                if  lstrotate > self.setrotatespeed:
+                    #速度+
+                    self.rotatesspeedadd()
+                    time.sleep(0.1)
+                elif lstrotate < self.setrotatespeed:
+                    #速度-
+                    self.rotatesspeedsub()
+                    time.sleep(0.1)
+            else:
+                lstrotate = 0
+            
+
             
             ### 速度0时，可以选择 参数调整 功能
             if self.setrotatespeed == 0:
