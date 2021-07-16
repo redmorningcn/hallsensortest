@@ -264,6 +264,7 @@ class ui_main(QMainWindow, Ui_Form):
             #速度和转速设置，互斥只能设置一个，且需要控制调整速率
             if webspeed != 0:
                 lstrotate = calclocorotate(webspeed,self.diameter)
+                print("lstrotate",lstrotate)
                 webrotate   = 0
             
             if webrotate != 0:
@@ -275,10 +276,14 @@ class ui_main(QMainWindow, Ui_Form):
                 if  lstrotate > self.setrotatespeed:
                     #速度+
                     self.rotatesspeedadd()
+                    print("lstrotate add",lstrotate)
+                    print("lstrotate add",self.setrotatespeed)
                     time.sleep(0.1)
                 elif lstrotate < self.setrotatespeed:
                     #速度-
                     self.rotatesspeedsub()
+                    print("lstrotate sub",lstrotate)
+                    print("lstrotate add",self.setrotatespeed)
                     time.sleep(0.1)
             else:
                 lstrotate = 0
