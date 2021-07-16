@@ -226,8 +226,8 @@ class ui_main(QMainWindow, Ui_Form):
                 self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 
             ### 获取并显示IP值        
-            ip = get_host_ip()
-            self.label_IP.setText(ip)
+            #ip = get_host_ip()
+            #self.label_IP.setText(ip)
             
             ### 关机倒计时
             if self.shutdownflg == 1:
