@@ -155,7 +155,7 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 dir = "left"
             text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
-            webSendMessage(str(self.locospeed))
+            webSendMessage(text)
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
