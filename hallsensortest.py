@@ -155,7 +155,7 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 dir = "left"
             text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
-            #webSendMessage(text)
+            webSendMessage(text)
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
@@ -226,8 +226,8 @@ class ui_main(QMainWindow, Ui_Form):
                 self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 
             ### 获取并显示IP值        
-            #ip = get_host_ip()
-            #self.label_IP.setText(ip)
+            ip = get_host_ip()
+            self.label_IP.setText(ip)
             
             ### 关机倒计时
             if self.shutdownflg == 1:
@@ -248,7 +248,7 @@ class ui_main(QMainWindow, Ui_Form):
             webspeed  = getwebsetspeed()
             webrotate = getwebsetrotate()
             webdim    = getwebsetdim()
-            
+
             #轮径800到1500
             if webdim <= 1500 and  webdim >= 800:
                 self.diameter = webdim
@@ -283,7 +283,6 @@ class ui_main(QMainWindow, Ui_Form):
                     #速度-
                     self.rotatesspeedsub()
                     print("lstrotate sub",lstrotate)
-                    print("lstrotate add",self.setrotatespeed)
                     time.sleep(0.1)
             else:
                 lstrotate = 0
@@ -495,8 +494,8 @@ def initGPIO():
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
     #启动websocketserver
-    #startServer()           #启动服务
-    #startWebProtocol()      #启动通讯协议
+    startServer()           #启动服务
+    startWebProtocol()      #启动通讯协议
     
 
 if __name__ == "__main__":

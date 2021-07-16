@@ -11,18 +11,17 @@ import threading
 
 def startServer():
     t = threading.Timer(10, Server.run)
-    #t.start()
+    t.start()
     
 def server_send(text):
-    #if Server.serverflg == 2:
-    #    Server.send_message(text)
-    return 0
+    if Server.serverflg == 2:
+        Server.send_message(text)
         
 def server_recv():
-   # if Server.messagelen > 0:
-   #     #print(Server.messagelen)
-   #     Server.messagelen = 0
-   #     return Server.messagetxt
+    if Server.messagelen > 0:
+        #print(Server.messagelen)
+        Server.messagelen = 0
+        return Server.messagetxt
     return 0
 
 class Server:

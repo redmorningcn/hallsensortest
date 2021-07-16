@@ -15,12 +15,12 @@ from    keyer              import *
 from    hallsensortest     import *
 
 def startWebProtocol():
-    t = threading.Timer(2, webprotocol)
-    #t.start()
+    t = threading.Timer(0, webprotocol)
+    t.start()
 
 def webSendMessage(text):
     message = ("%s,%s,%s")%(HEADER,text,ENDER)
-    #print(message)
+    print(message)
     server_send(message)  #服务器主动发送消息
 
 
