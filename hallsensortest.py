@@ -495,8 +495,8 @@ def initGPIO():
     #tsec    = threading.Thread(target = taskSecond)
     #tsec.start()
     #启动websocketserver
-    startServer()           #启动服务
-    startWebProtocol()      #启动通讯协议
+    #startServer()           #启动服务
+    #startWebProtocol()      #启动通讯协议
     
 
 if __name__ == "__main__":
