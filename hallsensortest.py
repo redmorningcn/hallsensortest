@@ -284,6 +284,8 @@ class ui_main(QMainWindow, Ui_Form):
                     self.rotatesspeedsub()
                     print("lstrotate sub",lstrotate)
                     time.sleep(0.1)
+                else:
+                    lstrotate = 0
             else:
                 lstrotate = 0
             
