@@ -20,7 +20,7 @@ def startWebProtocol():
 
 def webSendMessage(text):
     message = ("%s,%s,%s")%(HEADER,text,ENDER)
-    print(message)
+    #print(message)
     server_send(message)  #服务器主动发送消息
 
 
