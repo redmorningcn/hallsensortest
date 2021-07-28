@@ -134,7 +134,7 @@ class ui_main(QMainWindow, Ui_Form):
     def getSpeed(cls):
         return cls.d_speed
     
-	showtimes = 0
+    showtimes = 0
     def showSpeed(self):                               # 显示速度值
         #shutdowntimes = 0
         
