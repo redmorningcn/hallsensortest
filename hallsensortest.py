@@ -161,7 +161,6 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 dir = "left"
 
-            
 
             if (self.showtimes %2) == 0:
                 text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
@@ -266,7 +265,7 @@ class ui_main(QMainWindow, Ui_Form):
             #轮径800到1500
             if webdim <= 1500 and  webdim >= 800:
                 self.diameter = webdim
-
+                self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
             #速度为零，设置方向
             webdir    = getwebsetdir()
             if self.locospeed < 2:
@@ -277,7 +276,7 @@ class ui_main(QMainWindow, Ui_Form):
                 
             #速度和转速设置，互斥只能设置一个，且需要控制调整速率
             if webspeed != 0:
-                lstrotate = calclocorotate(webspeed,self.diameter)
+                lstrotate = calclocorotate(webspeed,self.diameter)+1
                 print("lstrotate",lstrotate)
                 webrotate   = 0
             
