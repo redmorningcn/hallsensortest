@@ -61,7 +61,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
-        time.sleep(2.5)                          #
+        #time.sleep(2.5)                          #
         self.thread2 = threading.Thread(target = self.daemon)           #守护线程
         self.thread2.start()
         #关机daoji时
@@ -194,7 +194,7 @@ class ui_main(QMainWindow, Ui_Form):
         pwmrate           = getpwmrate()              #步进电机分频系数
         
         while True:
-            time.sleep(0.2)
+            time.sleep(0.25)
             daemontime +=1                                                      #时间变量
             
             self.showSpeed()           #参数显示
@@ -514,7 +514,7 @@ def initGPIO():
     
 
 if __name__ == "__main__":
-    time.sleep(0.5)
+    #time.sleep(0.5)
     initGPIO()              #脉冲检测及按键端口初始化
 
     app = QtWidgets.QApplication(sys.argv)
