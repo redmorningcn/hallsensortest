@@ -41,7 +41,7 @@ class ui_main(QMainWindow, Ui_Form):
     Class documentation goes here.
     """
     d_speed = 10
-    showtimes = 0
+    
     
     def __init__(self, parent=None):
         """
@@ -76,6 +76,8 @@ class ui_main(QMainWindow, Ui_Form):
         self.diameter          = 1050                  # 机车轮径
         self.locospeed         = 0                     # 机车速度
         self.dir               = 0                     # 方向
+
+        self.showtims          = 0
     
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
@@ -143,7 +145,7 @@ class ui_main(QMainWindow, Ui_Form):
         #while True:
             
         #    time.sleep(0.5)
-        showtimes+=1
+        self.showtimes+=1
 		
         dim2 = 1250                                # 机车轮径1250mm
         dim1 = 1050                                # 机车轮径1050mm
@@ -159,8 +161,9 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 dir = "left"
 
+            
 
-            if (showtimes %2) == 0:
+            if (self.showtimes %2) == 0:
                 text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
                 webSendMessage(text)
             #ui_main.d_speed = self.locospeed
@@ -232,9 +235,13 @@ class ui_main(QMainWindow, Ui_Form):
                 self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 
-            ### 获取并显示IP值        
-            ip = get_host_ip()
-            self.label_IP.setText(ip)
+            ### 获取并显示IP值
+            try:
+                if daemontime % 5 == 0:
+                    ip = get_host_ip()
+                    self.label_IP.setText(ip)
+            except:
+                print("wifi 未连接")
             
             ### 关机倒计时
             if self.shutdownflg == 1:
