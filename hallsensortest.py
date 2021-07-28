@@ -77,7 +77,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.locospeed         = 0                     # 机车速度
         self.dir               = 0                     # 方向
 
-        self.showtims          = 0
+        self.showtimes          = 0
     
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
