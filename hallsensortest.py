@@ -41,6 +41,7 @@ class ui_main(QMainWindow, Ui_Form):
     Class documentation goes here.
     """
     d_speed = 10
+    showtimes = 0
     
     def __init__(self, parent=None):
         """
@@ -134,7 +135,8 @@ class ui_main(QMainWindow, Ui_Form):
     def getSpeed(cls):
         return cls.d_speed
     
-    showtimes = 0
+
+    
     def showSpeed(self):                               # 显示速度值
         #shutdowntimes = 0
         
@@ -158,8 +160,8 @@ class ui_main(QMainWindow, Ui_Form):
                 dir = "left"
             text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
 			
-			if(showtimes %2 == 0):
-				webSendMessage(text)
+	    if(showtimes %2 == 0):
+		webSendMessage(text)
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
