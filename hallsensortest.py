@@ -55,7 +55,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.showFullScreen()                   #全屏显示
         #self.show()                              #全屏显示
         
-        time.sleep(1.5)                          #
+        #time.sleep(1.5)                          #
         
         speedstop()                              #速度设置为0
         
