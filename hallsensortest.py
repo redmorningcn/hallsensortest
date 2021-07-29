@@ -171,7 +171,6 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 dir = "left"
 
-
             if (self.showtimes %2) == 0:
                 text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
                 webSendMessage(text)
@@ -290,7 +289,7 @@ class ui_main(QMainWindow, Ui_Form):
                 lstrotate = calclocorotate(webspeed,self.diameter)+1  #转速值偏小，加1后速度值相同
                 if lstrotate == 1:     #消除要求设置为0的情况
                     lstrotate = 0
-                print("lstrotate",lstrotate,webspeed)
+                #print("lstrotate",lstrotate,webspeed)
                 webrotate   = -1
             
             if webrotate != -1:
