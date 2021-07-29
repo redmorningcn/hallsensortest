@@ -49,7 +49,7 @@ def   daemonfrqSet():
             except:
                 print("PWM.SetFrq(l_lstfrq) ERR!")
                 
-            time.sleep(0.01)
+            time.sleep(0.05)
             
             #print("l_lstfrq %d,l_setfrq %d"%(l_lstfrq,l_setfrq))
 
