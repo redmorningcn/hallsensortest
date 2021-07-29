@@ -284,10 +284,12 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 webdir = 0
 
-            print("webspeed",webspeed)
+            #print("webspeed",webspeed)
             #速度和转速设置，互斥只能设置一个，且需要控制调整速率
             if webspeed != -1:
-                lstrotate = calclocorotate(webspeed,self.diameter)+1
+                lstrotate = calclocorotate(webspeed,self.diameter)+1  #转速值偏小，加1后速度值相同
+                if lstrotate == 1:     #消除要求设置为0的情况
+                    lstrotate = 0
                 print("lstrotate",lstrotate)
                 webrotate   = -1
             
