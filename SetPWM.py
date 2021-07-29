@@ -31,7 +31,7 @@ def   daemonfrqSet():
     while True:
         time.sleep(0.01)
         while   (l_lstfrq != l_setfrq):
-            print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
+            #print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
             if l_lstfrq < l_setfrq:       #设置值大，速度加
                 if l_lstfrq + 20 < l_setfrq:
                     l_lstfrq += 20
@@ -47,7 +47,7 @@ def   daemonfrqSet():
             PWM.SetFrq(l_lstfrq)          #设置速度值
             time.sleep(0.01)
             
-            print("l_lstfrq %d,l_setfrq %d"%(l_lstfrq,l_setfrq))
+            #print("l_lstfrq %d,l_setfrq %d"%(l_lstfrq,l_setfrq))
 
 
 #方向信号
