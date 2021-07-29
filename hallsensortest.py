@@ -278,7 +278,7 @@ class ui_main(QMainWindow, Ui_Form):
                 self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
             #速度为零，设置方向
             webdir    = getwebsetdir()
-            if self.locospeed < 2 and webdir !=-1:
+            if self.locospeed <= 2 and webdir !=-1:
                 if self.dir != webdir:      #方向不同，设置方向
                     changedirection()
             else:
