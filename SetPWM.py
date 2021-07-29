@@ -28,19 +28,20 @@ def   daemonfrqSet():
     global      l_lstfrq
     global      l_setfrq   
     global      l_times
+    stepum = 50
     while True:
         time.sleep(0.5)
         while   (l_lstfrq != l_setfrq):
             #print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
             if l_lstfrq < l_setfrq:       #设置值大，速度加
-                if l_lstfrq + 20 < l_setfrq:
-                    l_lstfrq += 20
+                if l_lstfrq + stepum < l_setfrq:
+                    l_lstfrq += stepum
                 else:
                     l_lstfrq += 1
             
             if l_lstfrq > l_setfrq:       #设置值小，速度减
-                if l_lstfrq - 20 > l_setfrq:
-                    l_lstfrq -= 20
+                if l_lstfrq - stepum > l_setfrq:
+                    l_lstfrq -= stepum
                 else:
                     l_lstfrq -= 1
 

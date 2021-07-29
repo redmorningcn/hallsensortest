@@ -173,7 +173,10 @@ class ui_main(QMainWindow, Ui_Form):
 
             if (self.showtimes %2) == 0:
                 text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
-                webSendMessage(text)
+                try:
+                    webSendMessage(text)
+                except:
+                    print("webSendMessage(text):err!")
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
@@ -301,13 +304,13 @@ class ui_main(QMainWindow, Ui_Form):
                 if  lstrotate > self.setrotatespeed:
                     #速度+
                     self.rotatesspeedadd()
-                    print("lstrotate add",lstrotate)
-                    print("lstrotate add",self.setrotatespeed)
+                    #print("lstrotate add",lstrotate)
+                    #print("lstrotate add",self.setrotatespeed)
                     time.sleep(0.1)
                 elif lstrotate < self.setrotatespeed:
                     #速度-
                     self.rotatesspeedsub()
-                    print("lstrotate sub",lstrotate)
+                    #print("lstrotate sub",lstrotate)
                     time.sleep(0.1)
                 else:
                     lstrotate = -1
