@@ -29,7 +29,7 @@ def   daemonfrqSet():
     global      l_setfrq   
     global      l_times
     while True:
-        time.sleep(0.01)
+        time.sleep(0.005)
         while   (l_lstfrq != l_setfrq):
             #print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
             if l_lstfrq < l_setfrq:       #设置值大，速度加
