@@ -34,13 +34,13 @@ def   daemonfrqSet():
             #print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
             if l_lstfrq < l_setfrq:       #设置值大，速度加
                 if l_lstfrq + 5 < l_setfrq:
-                    l_lstfrq += 5
+                    l_lstfrq += 10
                 else:
                     l_lstfrq += 1
             
             if l_lstfrq > l_setfrq:       #设置值小，速度减
                 if l_lstfrq - 5 > l_setfrq:
-                    l_lstfrq -= 5
+                    l_lstfrq -= 10
                 else:
                     l_lstfrq -= 1
 
@@ -49,7 +49,7 @@ def   daemonfrqSet():
             except:
                 print("PWM.SetFrq(l_lstfrq) ERR!")
                 
-            time.sleep(0.005)
+            time.sleep(0.001)
             
             #print("l_lstfrq %d,l_setfrq %d"%(l_lstfrq,l_setfrq))
 
