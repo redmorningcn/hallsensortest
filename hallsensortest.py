@@ -94,50 +94,60 @@ class ui_main(QMainWindow, Ui_Form):
             self.diameter = 800
 
     def locospeedadd(self):                            # 机车速度增加
-        
-        self.locospeed += 0.5
-        print("# 机车速度增加",self.locospeed)
-        
-        if  self.locospeed > 100:
-            self.locospeed = 100
-        
-        self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速
+        try:
+            self.locospeed += 0.5
+            print("# 机车速度增加",self.locospeed)
+            
+            if  self.locospeed > 100:
+                self.locospeed = 100
+            
+            self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速
+        except:
+            print("# 机车速度减少add")
+
         
     def locospeedsub(self):                            # 机车速度减少
-        print("# 机车速度减少")
-        if self.locospeed  >= 1:
-            self.locospeed -= 0.5
+        try:
+            print("# 机车速度减少")
+            if self.locospeed  >= 1:
+                self.locospeed -= 0.5
+                
+            if  self.locospeed < 1.5:
+                self.locospeed = 0
             
-        if  self.locospeed < 1.5:
-            self.locospeed = 0
-        
-        self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速        
+            self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速
+        except:
+            print("# 机车速度减少sub")
 
     def rotatesspeedadd(self):                         # 转速增加
-        print("# 转速增加")
-        self.setrotatespeed += 1
-        
-        if  self.setrotatespeed > 500:
-            self.setrotatespeed = 500
-        
-        self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
-        print("# 转速增加self.locospeed ",self.locospeed )
+        try:
+            print("# 转速增加")
+            self.setrotatespeed += 1
+            
+            if  self.setrotatespeed > 500:
+                self.setrotatespeed = 500
+            
+            self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+            #print("# 转速增加self.locospeed ",self.locospeed )
+        except:
+            print("转速计算错误add！")
 
     def rotatesspeedsub(self):                         # 转速减少
-        print("# 转速减少")
-        if self.setrotatespeed > 1:
-            self.setrotatespeed -= 1
-        
-        if  self.setrotatespeed < 10:
-            self.setrotatespeed = 0
+        try:
+            print("# 转速减少")
+            if self.setrotatespeed > 1:
+                self.setrotatespeed -= 1
             
-        self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+            if  self.setrotatespeed < 10:
+                self.setrotatespeed = 0
+                
+            self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+        except:
+            print("转速计算错误sub！")
     
     @classmethod
     def getSpeed(cls):
         return cls.d_speed
-    
-
     
     def showSpeed(self):                               # 显示速度值
         #shutdowntimes = 0
@@ -188,7 +198,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         #时间变量
         daemontime        = 0     
-        lstrotate         = 0                         #设定转速
+        lstrotate         = -1                         #设定转速
         #电机参数
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
@@ -275,17 +285,17 @@ class ui_main(QMainWindow, Ui_Form):
                 webdir = 0
                 
             #速度和转速设置，互斥只能设置一个，且需要控制调整速率
-            if webspeed != 0:
+            if webspeed != -1:
                 lstrotate = calclocorotate(webspeed,self.diameter)+1
                 print("lstrotate",lstrotate)
-                webrotate   = 0
+                webrotate   = -1
             
-            if webrotate != 0:
+            if webrotate != -1:
                 lstrotate = webrotate
-                webspeed =0
+                webspeed = -1
 
             #缓慢加减速度
-            if lstrotate > 0 and lstrotate <=500:
+            if lstrotate >= 0 and lstrotate <=500:
                 if  lstrotate > self.setrotatespeed:
                     #速度+
                     self.rotatesspeedadd()
@@ -298,9 +308,9 @@ class ui_main(QMainWindow, Ui_Form):
                     print("lstrotate sub",lstrotate)
                     time.sleep(0.1)
                 else:
-                    lstrotate = 0
+                    lstrotate = -1
             else:
-                lstrotate = 0
+                lstrotate = -1
             
 
             

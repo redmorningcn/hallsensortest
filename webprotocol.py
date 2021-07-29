@@ -51,19 +51,19 @@ def getwebspeedsubflg():
 def getwebsetspeed():
     global websetspeed
     key = websetspeed
-    websetspeed = 0
+    websetspeed = -1
     return key
 
 def getwebsetrotate():
     global websetrotate
     key = websetrotate
-    websetrotate = 0
+    websetrotate = -1
     return key
 
 def getwebsetdim():
     global websetdim
     key = websetdim
-    websetdim = 0
+    websetdim = -1
     return key
 
 def getwebsetdir():
