@@ -20,16 +20,16 @@ def startWebProtocol():
 
 def webSendMessage(text):
     message = ("%s,%s,%s")%(HEADER,text,ENDER)
-    print(message)
+    #print(message)
     server_send(message)  #服务器主动发送消息
 
 
 #远程设置速度
-websetspeed  = 0
+websetspeed  = -1
 #远程设置转速
-websetrotate = 0
+websetrotate = -1
 #远程设置方向
-websetdir    = 0
+websetdir    = -1
 #远程设置轮径
 websetdim    = 0
     
@@ -51,13 +51,13 @@ def getwebspeedsubflg():
 def getwebsetspeed():
     global websetspeed
     key = websetspeed
-    websetspeed = 0
+    websetspeed = -1
     return key
 
 def getwebsetrotate():
     global websetrotate
     key = websetrotate
-    websetrotate = 0
+    websetrotate = -1
     return key
 
 def getwebsetdim():
@@ -69,7 +69,7 @@ def getwebsetdim():
 def getwebsetdir():
     global websetdir
     key = websetdir
-    websetdir = 0
+    websetdir = -1
     return key
 
 
@@ -129,7 +129,7 @@ def webprotocol():
                     websetdir = 1
                     print('setdir(0)')
                 else:
-                    websetdir = 2
+                    websetdir = -1
                     print('setdir')
                     
                 #关机
@@ -148,12 +148,12 @@ def webprotocol():
                     
                     websetspeed = int(prorecv_list[4])
                 else:
-                    websetspeed = 0
+                    websetspeed = -1
                 #转速
                 if prorecv_list[5] != 'none'and prorecv_list[5].isdigit():
                     websetrotate = int(prorecv_list[5])
                 else:
-                    websetrotate = 0
+                    websetrotate = -1
                 #轮径
                 if prorecv_list[6] != 'none' and prorecv_list[6].isdigit():
                     websetdim = int(prorecv_list[6])
