@@ -355,6 +355,8 @@ class ui_main(QMainWindow, Ui_Form):
                             elif self.setobj == 2:       #速度    
                                 self.locospeedadd()
                             else:                        #改变方向
+
+                                print("keysub,keyadd1",keyadd,keysub)
                                 changedirection()                        
                         else:                            #按键-
                             if   self.setobj == 0:       #转速
@@ -364,6 +366,7 @@ class ui_main(QMainWindow, Ui_Form):
                             elif self.setobj == 2:       #速度    
                                 self.locospeedsub()
                             else:                        #改变方向
+                                print("keysub,keyadd2",keyadd,keysub)
                                 changedirection()
                         
             ###  速度不为零        
