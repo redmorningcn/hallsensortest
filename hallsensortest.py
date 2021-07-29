@@ -282,7 +282,7 @@ class ui_main(QMainWindow, Ui_Form):
                 if self.dir != webdir:      #方向不同，设置方向
                     changedirection()
             else:
-                webdir = 0
+                webdir = -1
 
             #print("webspeed",webspeed)
             #速度和转速设置，互斥只能设置一个，且需要控制调整速率

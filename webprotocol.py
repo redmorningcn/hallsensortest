@@ -29,7 +29,7 @@ websetspeed  = -1
 #远程设置转速
 websetrotate = -1
 #远程设置方向
-websetdir    = 0
+websetdir    = -1
 #远程设置轮径
 websetdim    = 0
     
@@ -69,7 +69,7 @@ def getwebsetdim():
 def getwebsetdir():
     global websetdir
     key = websetdir
-    websetdir = 0
+    websetdir = -1
     return key
 
 
@@ -129,7 +129,7 @@ def webprotocol():
                     websetdir = 1
                     print('setdir(0)')
                 else:
-                    websetdir = 2
+                    websetdir = -1
                     print('setdir')
                     
                 #关机
