@@ -25,9 +25,9 @@ def webSendMessage(text):
 
 
 #远程设置速度
-websetspeed  = 0
+websetspeed  = -1
 #远程设置转速
-websetrotate = 0
+websetrotate = -1
 #远程设置方向
 websetdir    = 0
 #远程设置轮径
@@ -63,7 +63,7 @@ def getwebsetrotate():
 def getwebsetdim():
     global websetdim
     key = websetdim
-    websetdim = -1
+    websetdim = 0
     return key
 
 def getwebsetdir():
