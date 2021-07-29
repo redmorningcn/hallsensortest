@@ -33,14 +33,14 @@ def   daemonfrqSet():
         while   (l_lstfrq != l_setfrq):
             #print("l_lstfrq != l_setfrq",l_lstfrq,l_setfrq,(l_lstfrq != l_setfrq),l_lstfrq == l_setfrq)
             if l_lstfrq < l_setfrq:       #设置值大，速度加
-                if l_lstfrq + 20 < l_setfrq:
-                    l_lstfrq += 10
+                if l_lstfrq + 5 < l_setfrq:
+                    l_lstfrq += 5
                 else:
                     l_lstfrq += 1
             
             if l_lstfrq > l_setfrq:       #设置值小，速度减
-                if l_lstfrq - 20 > l_setfrq:
-                    l_lstfrq -= 10
+                if l_lstfrq - 5 > l_setfrq:
+                    l_lstfrq -= 5
                 else:
                     l_lstfrq -= 1
             
