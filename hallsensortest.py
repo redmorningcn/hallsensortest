@@ -279,8 +279,8 @@ class ui_main(QMainWindow, Ui_Form):
             #速度为零，设置方向
             webdir    = getwebsetdir()
             if self.locospeed < 2:
-                if webdir == 0:
-                    self.dir == webdir
+                if self.dir != webdir:      #方向不同，设置方向
+                    changedirection()
             else:
                 webdir = 0
 
@@ -315,7 +315,6 @@ class ui_main(QMainWindow, Ui_Form):
             else:
                 lstrotate = -1
             
-
             
             ### 速度0时，可以选择 参数调整 功能
             if self.setrotatespeed == 0:
