@@ -15,7 +15,6 @@ def getrotaterate():
     global      l_rotaterate
     return      l_rotaterate
 
-
     
 # 速度计算
 def calclocospeed(rotate,diameter = 1050):

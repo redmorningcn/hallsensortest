@@ -180,7 +180,7 @@ class ui_main(QMainWindow, Ui_Form):
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
-            if self.dir == 0:              # 机车方向
+            if sef.dir == 0:              # 机车方向
                 self.com_rotatedir.setCurrentIndex(0)
             else:
                 self.com_rotatedir.setCurrentIndex(1)
@@ -206,7 +206,7 @@ class ui_main(QMainWindow, Ui_Form):
         pwmrate           = getpwmrate()              #步进电机分频系数
         
         while True:
-            time.sleep(0.25)
+            time.sleep(0.2)
             daemontime +=1                                                      #时间变量
             
             self.showSpeed()           #参数显示
