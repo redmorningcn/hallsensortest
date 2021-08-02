@@ -374,7 +374,7 @@ class ui_main(QMainWindow, Ui_Form):
                         
             ###  速度不为零        
             if self.setrotatespeed != 0:
-                
+                '''
                 # 在速度不为零时，双击设置按键，紧急停机
                 if getKeySta(KEY_SET):
                     #功能设置按键按下，进行相应的功能选择。
@@ -387,7 +387,7 @@ class ui_main(QMainWindow, Ui_Form):
                         speedstop()                           # 速度停止
                         self.setrotatespeed = 0
                         self.locospeed = 0
-                        
+                '''        
                 if getKeySta(KEY_SET) == 0:                   # 按键松开
                     if daemontime > setkeydowntime + 10:      # 松开间隔时间大于2秒
                         setkeytimes = 0

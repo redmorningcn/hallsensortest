@@ -234,7 +234,7 @@ class Ui_Form(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt; color:#00007f;\">1.2、“机车轮径”设置：单击调整按键，轮径变化1mm，按键长按，轮径持续变化；</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt; color:#00007f;\">1.3、“转速”设置：单击调整按键，转速变化1r/min，按键长按，转速持续变化；</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt; color:#00007f;\">1.4、“速度”设置：单击调整按键，速度变化0.5km/h，按键长按，速度持续变化。</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt; color:#00007f;\">2、速度值不为0，</span><span style=\" font-family:\'Arial\'; font-size:12pt; font-weight:600; color:#00007f;\">双击&quot;功能&quot;按键，速度急停</span><span style=\" font-family:\'Arial\'; font-size:12pt; color:#00007f;\">；速度为0时，长按“功能”按键5秒后，设置关机。</span></p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Arial\'; font-size:12pt; color:#00007f;\">2、速度为0时，长按“功能”按键5秒后，设备关机。倒计时，可按“速度+”取消关机</span></p></body></html>"))
         self.label_IP.setText(_translate("Form", "192.168.1.118"))
         self.label_2.setText(_translate("Form", "长沙楠车电气设备有限公司  redmorningcn"))
         self.label.setText(_translate("Form", "霍尔传感器便携式测试设备"))
