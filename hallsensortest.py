@@ -21,6 +21,7 @@ from    gitIP              import *
 from    websocketserver4   import *
 from    webprotocol        import *
 from    calcspeed          import *
+from    Logger             import *
 import  os,sys,time
 
 KEY_SUB    = 7              #速度-   （引脚号）
