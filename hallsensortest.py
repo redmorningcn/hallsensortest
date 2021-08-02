@@ -533,7 +533,8 @@ def initGPIO():
 if __name__ == "__main__":
     #time.sleep(0.5)
     sys.stdout = Logger(sys.stdout)  #  将输出记录到log
-    
+    sys.stderr = Logger(sys.stderr)  # 将错误信息记录到log
+
     initGPIO()              #脉冲检测及按键端口初始化
 
     app = QtWidgets.QApplication(sys.argv)
