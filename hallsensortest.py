@@ -135,7 +135,7 @@ class ui_main(QMainWindow, Ui_Form):
 
     def rotatesspeedsub(self):                         # 转速减少
         try:
-            print("# 转速减少")
+            print("# 转速减少",self.setrotatespeed)
             if self.setrotatespeed > 1:
                 self.setrotatespeed -= 1
             
@@ -166,6 +166,7 @@ class ui_main(QMainWindow, Ui_Form):
             self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
             
             self.ln_locolspeed.display(self.locospeed )    #显示速度
+
             
             if self.dir == 0:
                 dir = "right"
@@ -188,7 +189,8 @@ class ui_main(QMainWindow, Ui_Form):
             
             if self.shutdownflg == 0:     #关机，用该位置显示倒计时
                 self.label.setText("霍尔传感器便携式测试设备")
-            
+
+            QApplication.processEvents()                   #实时刷新
         except Exception as e:
             print("速度读取错误", e)
         
