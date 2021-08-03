@@ -161,6 +161,8 @@ class ui_main(QMainWindow, Ui_Form):
         dim2 = 1250                                # 机车轮径1250mm
         dim1 = 1050                                # 机车轮径1050mm
         try:
+            self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+            
             self.ln_locol.display( self.diameter ) # 显示机车轮径
             
             self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
