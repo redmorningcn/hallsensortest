@@ -18,12 +18,18 @@ def getrotaterate():
     
 # 速度计算
 def calclocospeed(rotate,diameter = 1050):
-    locospeed = (int)((rotate * 3.14 * diameter) *60 / (1000*1000))
+    try:
+        locospeed = (int)((rotate * 3.14 * diameter) *60 / (1000*1000))
+    except:
+        print("速度计算错误calclocospeed")
     return locospeed
 
 # 转速计算
 def calclocorotate(locospeed,diameter = 1050):
-    rotate = (int)((locospeed * 1000 * 1000) /(3.14 * diameter *60))
+    try:
+        rotate = (int)((locospeed * 1000 * 1000) /(3.14 * diameter *60))
+    except:
+        print("转速计算错误calclocorotate")
     return rotate
 
 
