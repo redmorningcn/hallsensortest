@@ -161,34 +161,32 @@ class ui_main(QMainWindow, Ui_Form):
         try:
             self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
             
-            self.ln_locol.display( self.diameter ) # 显示机车轮径
+            self.ln_locol.display( self.diameter )              # 显示机车轮径
             
-            self.ln_motorspeed.display(self.setrotatespeed ) #显示转速
+            self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
             
-            self.ln_locolspeed.display(self.locospeed )    #显示速度
+            self.ln_locolspeed.display(self.locospeed )         #显示速度
 
-            
-            if self.dir == 0:
+            if self.dir == 0:              # 机车方向
+                self.com_rotatedir.setCurrentIndex(0)
                 dir = "right"
             else:
+                self.com_rotatedir.setCurrentIndex(1)
                 dir = "left"
+            
+            if self.shutdownflg == 0:     #关机，用该位置显示倒计时
+                self.label.setText("霍尔传感器便携式测试设备")
 
             if (self.showtimes %2) == 0:
-                text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
                 try:
+                    text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
                     webSendMessage(text)
                 except:
                     print("webSendMessage(text):err!")
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
-            if self.dir == 0:              # 机车方向
-                self.com_rotatedir.setCurrentIndex(0)
-            else:
-                self.com_rotatedir.setCurrentIndex(1)
-            
-            if self.shutdownflg == 0:     #关机，用该位置显示倒计时
-                self.label.setText("霍尔传感器便携式测试设备")
+
 
             QApplication.processEvents()                   #实时刷新
         except Exception as e:
@@ -216,7 +214,7 @@ class ui_main(QMainWindow, Ui_Form):
                 if (daemontime % 2) ==0:
                     self.showSpeed()           #参数显示
             except:
-                print("显示异常！")
+                print("参数显示异常！")
             
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
