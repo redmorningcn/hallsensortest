@@ -122,14 +122,14 @@ class ui_main(QMainWindow, Ui_Form):
 
     def rotatesspeedadd(self):                         # 转速增加
         try:
-            print("# 转速增加")
+            print("# 转速增加",self.setrotatespeed)
             self.setrotatespeed += 1
             
             if  self.setrotatespeed > 500:
                 self.setrotatespeed = 500
             
             self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
-            #print("# 转速增加self.locospeed ",self.locospeed )
+            print("# 转速增加self.locospeed ",self.locospeed )
         except:
             print("转速计算错误add！")
 
@@ -143,6 +143,8 @@ class ui_main(QMainWindow, Ui_Form):
                 self.setrotatespeed = 0
                 
             self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+            print("# 转速减少self.locospeed ",self.locospeed )
+
         except:
             print("转速计算错误sub！")
     
@@ -151,11 +153,7 @@ class ui_main(QMainWindow, Ui_Form):
         return cls.d_speed
     
     def showSpeed(self):                               # 显示速度值
-        #shutdowntimes = 0
-        
-        #while True:
-            
-        #    time.sleep(0.5)
+
         self.showtimes+=1
 		
         dim2 = 1250                                # 机车轮径1250mm
@@ -213,7 +211,8 @@ class ui_main(QMainWindow, Ui_Form):
             daemontime +=1                                                      #时间变量
 
             try:
-                self.showSpeed()           #参数显示
+                if (daemontime % 2) ==0:
+                    self.showSpeed()           #参数显示
             except:
                 print("显示异常！")
             
