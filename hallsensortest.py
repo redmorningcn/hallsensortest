@@ -209,8 +209,11 @@ class ui_main(QMainWindow, Ui_Form):
         while True:
             time.sleep(0.2)
             daemontime +=1                                                      #时间变量
-            
-            self.showSpeed()           #参数显示
+
+            try:
+                self.showSpeed()           #参数显示
+            except:
+                print("显示异常！")
             
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
@@ -253,7 +256,7 @@ class ui_main(QMainWindow, Ui_Form):
                     ip = get_host_ip()
                     self.label_IP.setText(ip)
             except:
-                print("wifi 未连接")
+                print(" wifi未连接")
             
             ### 关机倒计时
             if self.shutdownflg == 1:
