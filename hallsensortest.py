@@ -155,7 +155,7 @@ class ui_main(QMainWindow, Ui_Form):
 
         #while True:
         if True:
-            time.sleep(0.25)
+            #time.sleep(0.25)
             self.showtimes+=1
 		
             dim2 = 1250                                     # 机车轮径1250mm
@@ -212,7 +212,6 @@ class ui_main(QMainWindow, Ui_Form):
             time.sleep(0.2)
             daemontime +=1                                                      #时间变量
 
-            
             try:
                 self.showSpeed()           #参数显示
             except:
@@ -256,8 +255,6 @@ class ui_main(QMainWindow, Ui_Form):
                 self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)   
-
-
                 
             ### 获取并显示IP值
             try:
