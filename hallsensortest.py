@@ -245,19 +245,23 @@ class ui_main(QMainWindow, Ui_Form):
                         self.com_rotatedir.setCurrentIndex(self.dir)
             else:
                 self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                print("daemontime",daemontime,self.setobj)
+                
                 if self.setobj == 0:       #转速
-                    if daemontime % 10 == 0:
+                    if daemontime % 5 == 0:
+                        print("daemontime ln_motorspeed out",daemontime,self.setobj)
                         self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                     else:
+                        print("daemontime ln_motorspeed",daemontime,self.setobj)
                         self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 else:
                     self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
                   
                 if self.setobj == 2:       #速度
-                    if daemontime % 10 == 0:
+                    if daemontime % 5 == 0:
+                        print("daemontime ln_locolspeed out",daemontime,self.setobj)
                         self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                     else:
+                        print("daemontime ln_locolspeed",daemontime,self.setobj)
                         self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
                 else:
                     self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
