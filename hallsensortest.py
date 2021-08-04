@@ -166,6 +166,7 @@ class ui_main(QMainWindow, Ui_Form):
             
             self.ln_locolspeed.display(self.locospeed )         #显示速度
 
+            print("self.showtimes",self.showtimes,self.setobj,self.setrotatespeed)
             if self.setrotatespeed !=0:                         #闪烁显示
                 if self.setobj == 0:       #转速
                     if self.showtimes % 5 == 0:
