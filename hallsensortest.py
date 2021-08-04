@@ -60,8 +60,8 @@ class ui_main(QMainWindow, Ui_Form):
         
         speedstop()                              #速度设置为0
         
-        #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
-        #self.thread1.start()
+        self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
+        self.thread1.start()
         #time.sleep(2.5)                          #
         self.thread2 = threading.Thread(target = self.daemon)           #守护线程
         self.thread2.start()
@@ -153,41 +153,43 @@ class ui_main(QMainWindow, Ui_Form):
     
     def showSpeed(self):                                # 显示速度值
 
-        self.showtimes+=1
+        while True:
+            time.sleep(0.25)
+            self.showtimes+=1
 		
-        dim2 = 1250                                     # 机车轮径1250mm
-        dim1 = 1050                                     # 机车轮径1050mm
-        try:
-            self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
-            
-            self.ln_locol.display( self.diameter )              # 显示机车轮径
-            
-            self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
-            
-            self.ln_locolspeed.display(self.locospeed )         #显示速度
+            dim2 = 1250                                     # 机车轮径1250mm
+            dim1 = 1050                                     # 机车轮径1050mm
+            try:
+                self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+                
+                self.ln_locol.display( self.diameter )              # 显示机车轮径
+                
+                self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
+                
+                self.ln_locolspeed.display(self.locospeed )         #显示速度
 
-            if self.dir == 0:              # 机车方向
-                self.com_rotatedir.setCurrentIndex(0)
-                dir = "right"
-            else:
-                self.com_rotatedir.setCurrentIndex(1)
-                dir = "left"
-            
-            if self.shutdownflg == 0:     #关机，用该位置显示倒计时
-                self.label.setText("霍尔传感器便携式测试设备")
+                if self.dir == 0:              # 机车方向
+                    self.com_rotatedir.setCurrentIndex(0)
+                    dir = "right"
+                else:
+                    self.com_rotatedir.setCurrentIndex(1)
+                    dir = "left"
+                
+                if self.shutdownflg == 0:     #关机，用该位置显示倒计时
+                    self.label.setText("霍尔传感器便携式测试设备")
 
-            if (self.showtimes %2) == 0:
-                try:
-                    text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
-                    webSendMessage(text)
-                except:
-                    print("webSendMessage(text):err!")
-            #ui_main.d_speed = self.locospeed
-            #print("ui_main.displaylocospeed",ui_main.d_speed)
-            
-            QApplication.processEvents()                   #实时刷新
-        except Exception as e:
-            print("速度读取错误", e)
+                if (self.showtimes %2) == 0:
+                    try:
+                        text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
+                        webSendMessage(text)
+                    except:
+                        print("webSendMessage(text):err!")
+                #ui_main.d_speed = self.locospeed
+                #print("ui_main.displaylocospeed",ui_main.d_speed)
+                
+                #QApplication.processEvents()                   #实时刷新
+            except Exception as e:
+                print("速度读取错误", e)
         
     #daemon，多线程
     def  daemon(self):
@@ -207,12 +209,13 @@ class ui_main(QMainWindow, Ui_Form):
             time.sleep(0.2)
             daemontime +=1                                                      #时间变量
 
+            '''
             try:
                 if (daemontime % 2) ==0:
                     self.showSpeed()           #参数显示
             except:
                 print("参数显示异常！")
-            
+            '''
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
             
@@ -249,7 +252,7 @@ class ui_main(QMainWindow, Ui_Form):
                         self.com_rotatedir.setCurrentIndex(self.dir)
             else:
                 self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                
+                '''
                 if self.setobj == 0:       #转速
                     if daemontime % 10 == 0:
                         #print("daemontime ln_motorspeed out",daemontime,self.setobj)
@@ -265,7 +268,7 @@ class ui_main(QMainWindow, Ui_Form):
                     else:
                         #print("daemontime ln_locolspeed",daemontime,self.setobj)
                         self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
-                    
+                '''  
 
                 
             ### 获取并显示IP值
