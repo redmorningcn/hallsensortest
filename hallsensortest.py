@@ -214,8 +214,7 @@ class ui_main(QMainWindow, Ui_Form):
 
             
             try:
-                if (daemontime % 2) ==0:
-                    self.showSpeed()           #参数显示
+                self.showSpeed()           #参数显示
             except:
                 print("参数显示异常！")
             
@@ -257,23 +256,7 @@ class ui_main(QMainWindow, Ui_Form):
                 self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)   
-                '''
-                if self.setobj == 0:       #转速
-                    if daemontime % 10 == 0:
-                        #print("daemontime ln_motorspeed out",daemontime,self.setobj)
-                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        #print("daemontime ln_motorspeed",daemontime,self.setobj)
-                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                  
-                if self.setobj == 2:       #速度
-                    if daemontime % 10 == 0:
-                        #print("daemontime ln_locolspeed out",daemontime,self.setobj)
-                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        #print("daemontime ln_locolspeed",daemontime,self.setobj)
-                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
-                '''  
+
 
                 
             ### 获取并显示IP值
@@ -304,6 +287,7 @@ class ui_main(QMainWindow, Ui_Form):
             webrotate = getwebsetrotate()
             webdim    = getwebsetdim()
 
+            
             #轮径800到1500
             if webdim <= 1500 and  webdim >= 800:
                 self.diameter = webdim
@@ -322,11 +306,12 @@ class ui_main(QMainWindow, Ui_Form):
                 lstrotate = calclocorotate(webspeed,self.diameter)+1  #转速值偏小，加1后速度值相同
                 if lstrotate == 1:     #消除要求设置为0的情况
                     lstrotate = 0
-                #print("lstrotate",lstrotate,webspeed)
+                print("lstrotate",lstrotate,webspeed)
                 webrotate   = -1
             
             if webrotate != -1:
                 lstrotate = webrotate
+                print("lstrotate webrotate ",lstrotate,webrotate)
                 webspeed = -1
 
             #缓慢加减速度
@@ -334,13 +319,13 @@ class ui_main(QMainWindow, Ui_Form):
                 if  lstrotate > self.setrotatespeed:
                     #速度+
                     self.rotatesspeedadd()
-                    #print("lstrotate add",lstrotate)
+                    print("lstrotate add",lstrotate)
                     #print("lstrotate add",self.setrotatespeed)
                     time.sleep(0.1)
                 elif lstrotate < self.setrotatespeed:
                     #速度-
                     self.rotatesspeedsub()
-                    #print("lstrotate sub",lstrotate)
+                    print("lstrotate sub",lstrotate)
                     time.sleep(0.1)
                 else:
                     lstrotate = -1
