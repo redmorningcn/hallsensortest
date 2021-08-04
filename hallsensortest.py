@@ -166,7 +166,7 @@ class ui_main(QMainWindow, Ui_Form):
             
             self.ln_locolspeed.display(self.locospeed )         #显示速度
 
-            print("self.showtimes",self.showtimes,self.setobj,self.setrotatespeed)
+            
             if self.setrotatespeed !=0:                         #闪烁显示
                 if self.setobj == 0:       #转速
                     if self.showtimes % 5 == 0:
@@ -258,9 +258,25 @@ class ui_main(QMainWindow, Ui_Form):
                     else:
                         self.com_rotatedir.setCurrentIndex(self.dir)
             else:
-                self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                 self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                
+                if self.setobj == 0:       #转速
+                    if daemontime % 10 == 0:
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                else:
+                    self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
+                  
+                if self.setobj == 2:       #速度
+                    if daemontime % 10 == 0:
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
+                else:
+                    self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                    
+
                 
             ### 获取并显示IP值
             try:
