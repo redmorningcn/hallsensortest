@@ -81,10 +81,8 @@ def webprotocol():
     global websetdir
     global websetdim
     
-    #times = 0
     while True:
-    #if True:
-        time.sleep(0.01)
+        time.sleep(0.1)
         '''
         times+=1
         if times > 100:     #1s
