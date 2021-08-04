@@ -182,6 +182,8 @@ class ui_main(QMainWindow, Ui_Form):
                     try:
                         text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
                         webSendMessage(text)
+                        print("self.showtimes",self.showtimes)
+                        QApplication.processEvents()  
                     except:
                         print("webSendMessage(text):err!")
                 #ui_main.d_speed = self.locospeed
