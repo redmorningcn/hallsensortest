@@ -166,20 +166,6 @@ class ui_main(QMainWindow, Ui_Form):
             
             self.ln_locolspeed.display(self.locospeed )         #显示速度
 
-            
-            if self.setrotatespeed !=0:                         #闪烁显示
-                if self.setobj == 0:       #转速
-                    if self.showtimes % 5 == 0:
-                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-  
-                if self.setobj == 2:       #速度
-                    if self.showtimes % 5 == 0:
-                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
-
             if self.dir == 0:              # 机车方向
                 self.com_rotatedir.setCurrentIndex(0)
                 dir = "right"
