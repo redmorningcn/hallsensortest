@@ -209,7 +209,7 @@ class ui_main(QMainWindow, Ui_Form):
         pwmrate           = getpwmrate()              #步进电机分频系数
         
         while True:
-            time.sleep(0.2)
+            time.sleep(0.25)
             daemontime +=1                                                      #时间变量
 
             try:
