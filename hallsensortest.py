@@ -221,6 +221,8 @@ class ui_main(QMainWindow, Ui_Form):
             ### 根据要设置的参数，闪烁提醒
             if self.setrotatespeed == 0:
                 if self.setobj == 0:       #转速
+                    self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
+
                     if daemontime % 5 == 0:
                         self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                     else:
@@ -233,6 +235,8 @@ class ui_main(QMainWindow, Ui_Form):
                         self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                         
                 if self.setobj == 2:       #速度
+                    self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+
                     if daemontime % 5 == 0:
                         self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                     else:
@@ -253,8 +257,6 @@ class ui_main(QMainWindow, Ui_Form):
                     else:
                         #print("daemontime ln_motorspeed",daemontime,self.setobj)
                         self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                else:
-                    self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
                   
                 if self.setobj == 2:       #速度
                     if daemontime % 2 == 0:
@@ -263,8 +265,6 @@ class ui_main(QMainWindow, Ui_Form):
                     else:
                         #print("daemontime ln_locolspeed",daemontime,self.setobj)
                         self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
-                else:
-                    self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                     
 
                 
