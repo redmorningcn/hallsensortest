@@ -10,7 +10,8 @@ import threading
 
 
 def startServer():
-    t = threading.Timer(10, Server.run)
+    #t = threading.Timer(60, Server.run)
+    t = threading.Thread(target = Server.run)
     t.start()
     
 def server_send(text):

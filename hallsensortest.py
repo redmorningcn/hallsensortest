@@ -306,12 +306,12 @@ class ui_main(QMainWindow, Ui_Form):
                 lstrotate = calclocorotate(webspeed,self.diameter)+1  #转速值偏小，加1后速度值相同
                 if lstrotate == 1:     #消除要求设置为0的情况
                     lstrotate = 0
-                print("lstrotate",lstrotate,webspeed)
+                #print("lstrotate webspeed",lstrotate,webspeed)
                 webrotate   = -1
             
             if webrotate != -1:
                 lstrotate = webrotate
-                print("lstrotate webrotate ",lstrotate,webrotate)
+                #print("lstrotate webrotate ",lstrotate,webrotate)
                 webspeed = -1
 
             #缓慢加减速度
@@ -319,13 +319,13 @@ class ui_main(QMainWindow, Ui_Form):
                 if  lstrotate > self.setrotatespeed:
                     #速度+
                     self.rotatesspeedadd()
-                    print("lstrotate add",lstrotate)
+                    #print("lstrotate add",lstrotate)
                     #print("lstrotate add",self.setrotatespeed)
                     time.sleep(0.1)
                 elif lstrotate < self.setrotatespeed:
                     #速度-
                     self.rotatesspeedsub()
-                    print("lstrotate sub",lstrotate)
+                    #print("lstrotate sub",lstrotate)
                     time.sleep(0.1)
                 else:
                     lstrotate = -1
