@@ -106,7 +106,6 @@ class ui_main(QMainWindow, Ui_Form):
         except:
             print("# 机车速度减少add")
 
-        
     def locospeedsub(self):                            # 机车速度减少
         try:
             print("# 机车速度减少")
@@ -152,12 +151,12 @@ class ui_main(QMainWindow, Ui_Form):
     def getSpeed(cls):
         return cls.d_speed
     
-    def showSpeed(self):                               # 显示速度值
+    def showSpeed(self):                                # 显示速度值
 
         self.showtimes+=1
 		
-        dim2 = 1250                                # 机车轮径1250mm
-        dim1 = 1050                                # 机车轮径1050mm
+        dim2 = 1250                                     # 机车轮径1250mm
+        dim1 = 1050                                     # 机车轮径1050mm
         try:
             self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
             
@@ -166,6 +165,19 @@ class ui_main(QMainWindow, Ui_Form):
             self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
             
             self.ln_locolspeed.display(self.locospeed )         #显示速度
+
+            if self.setrotatespeed !=0:                         #闪烁显示
+                if self.setobj == 0:       #转速
+                    if self.showtimes % 5 == 0:
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+  
+                if self.setobj == 2:       #速度
+                    if self.showtimes % 5 == 0:
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                    else:
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)            
 
             if self.dir == 0:              # 机车方向
                 self.com_rotatedir.setCurrentIndex(0)
@@ -186,8 +198,6 @@ class ui_main(QMainWindow, Ui_Form):
             #ui_main.d_speed = self.locospeed
             #print("ui_main.displaylocospeed",ui_main.d_speed)
             
-
-
             QApplication.processEvents()                   #实时刷新
         except Exception as e:
             print("速度读取错误", e)
@@ -406,105 +416,19 @@ class ui_main(QMainWindow, Ui_Form):
                         self.rotatesspeedadd()    
                     elif self.setobj == 2:        #速度
                         self.locospeedadd()
-                    #else:
+                    else:
+                        print("在非0时，按速度加")
                 elif   getKeySta(KEY_SUB) or getwebspeedsubflg():
                     if self.setobj == 0:
                         self.rotatesspeedsub()               
                     elif self.setobj == 2:       #速度
                         self.locospeedsub()
-                    #else:                    
-                                              
+                    else:                    
+                        print("在非0时，按速度减")                     
             
-            """
-            if getKeySta(KEY_SUB) |  getKeySta(KEY_ADD):     #有按键按下
-                if getKeySta(KEY_ADD) & getKeySta(KEY_SUB) : #同时有按键按下，在低速时，切换方向
-                    doublekeydowntims+=1
-                    if getpwnvalue() < 520:
-                        if doublekeydowntims > 5:
-                            if dirchangetimes == 0:
-                                changedirection()
-                                dirchangetimes = 1
-                elif getKeySta(KEY_ADD):
-                    dirchangetimes    = 0
-                    doublekeydowntims = 0
-                    speedadd()
-                else:
-                    speedsub()
-                    dirchangetimes    = 0
-                    doublekeydowntims = 0                    
-            """
-    #@pyqtSlot()
-    #def on_bt_speedadd_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        #speedadd()                                          #速度加
-       # TODO: not implemented yet
-        #  raise NotImplementedError
-    
-    #@pyqtSlot()
-    #def on_bt_speedsub_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        #speedsub()                                          #速度减
-        # TODO: not implemented yet
-        # raise NotImplementedError
-        
-    #@pyqtSlot()
-    #def on_bt_shutdown_clicked(self):           #关机查询
-        """
-        Slot documentation goes here.
-        """
-        
-        #speedstop()
-        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-        #if reply == QMessageBox.Yes:
-        #    os.system('shutdown -s -t 10' )      #关机
-        #else:
-        #    print("取消关机")
-        # TODO: not implemented yet
-        #raise NotImplementedError
-    #@pyqtSlot()
-    #def on_bt_shutdown_2_clicked(self):           #关机查询
-        """
-        Slot documentation goes here.
-        """
-        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-        #reply = MyMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-        '''
-        if self.shutdownflg == 1:
-            self.bt_shutdown_2.setText("关机")
-            self.shutdowntimeleft  = 50
-            self.shutdownflg = 0
-        else :
-            self.shutdownflg = 1
-        '''
-        #if reply == QMessageBox.Yes:
-        #    shutdown()
-        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-        #if reply == QMessageBox.Yes:
-        #    os.system('shutdown -s -t 10' )      #关机
-        #else:
-        #    print("取消关机")
-        # TODO: not implemented yet
-        #raise NotImplementedError
 
-    #@pyqtSlot()
-    #def on_bt_dir_clicked(self):           #关机查询
-        """
-        Slot documentation goes here.
-        """
-        #改变方向
-        #changedirection()
-        #reply = QMessageBox.question(self,'询问','是否关机！', QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
-        #if reply == QMessageBox.Yes:
-        #    os.system('shutdown -s -t 10' )      #关机
-        #else:
-        #    print("取消关机")
-        # TODO: not implemented yet
-        #raise NotImplementedError
-#按键及脉冲检测电路
+
+
 def initGPIO():
     
     initKey(KEY_SUB)                                                    #初始化 速度-按键
@@ -537,10 +461,10 @@ def initGPIO():
 
 if __name__ == "__main__":
     #time.sleep(0.5)
-    sys.stdout = Logger(sys.stdout)  #  将输出记录到log
-    sys.stderr = Logger(sys.stderr)  # 将错误信息记录到log
+    sys.stdout = Logger(sys.stdout) #将输出记录到log
+    sys.stderr = Logger(sys.stderr) #将错误信息记录到log
 
-    initGPIO()              #脉冲检测及按键端口初始化
+    initGPIO()                      #脉冲检测及按键端口初始化
 
     app = QtWidgets.QApplication(sys.argv)
     ui = ui_main()
