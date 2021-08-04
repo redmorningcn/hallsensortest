@@ -97,7 +97,7 @@ def webprotocol():
         '''
         txt =  server_recv()
         if txt:
-            pintf(txt)
+            print(txt)
             prorecv_list = txt.split(',')
             print(prorecv_list)
             i = 0
