@@ -39,7 +39,7 @@ class MyThread(QThread):  #重写线程类
         while True:
             self.timeout.emit()     # 发送timeout信号
             #time.sleep(1)
-            self.sleep(1)
+            self.sleep(0.2)
 
 #取显示速度值
 def getdisplaylocospeed():
@@ -75,8 +75,8 @@ class ui_main(QMainWindow, Ui_Form):
         self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.start() #开启线程不是调用run函数而是调用start函数
        
-        #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
-        #self.thread1.start()
+        self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
+        self.thread1.start()
         #time.sleep(2.5)                          #
         #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
         #self.thread2.start()
@@ -227,16 +227,17 @@ class ui_main(QMainWindow, Ui_Form):
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
         
-        #while True:
-        if True:            
+        while True:
+        #if True:            
             #time.sleep(0.25)
             daemontime +=1                                                      #时间变量
 
+            '''
             try:
                 self.showSpeed()           #参数显示
             except:
                 print("参数显示异常！")
-            
+            '''
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
             
