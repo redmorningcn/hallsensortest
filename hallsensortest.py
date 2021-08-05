@@ -35,7 +35,6 @@ KEY_SET    = 2              #设置按键 （引脚号）
 class MyThread(QThread):  #重写线程类
     timeout = pyqtSignal()          # 每隔一秒发送一个信号
     deamontime = pyqtSignal(int)    # 每隔一秒发送一个信号
-    deamontime = 0
     
     def __init__(self, parent=None):
         super(MyThread, self).__init__(parent)
@@ -414,7 +413,6 @@ class ui_main(QMainWindow, Ui_Form):
                     else:                    
                         print("在非0时，按速度减")                     
             
-
 
 
 def initGPIO():
