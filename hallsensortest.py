@@ -72,9 +72,9 @@ class ui_main(QMainWindow, Ui_Form):
         
         speedstop()                              #速度设置为0
 
-        self.mythread = MyThread()  # 实例化线程
-        self.mythread.signal.connect(self.daemon)  #连接线程类中自定义信号槽到本类的自定义槽函数
-        self.mythread.start() #开启线程不是调用run函数而是调用start函数
+        #self.mythread = MyThread()  # 实例化线程
+        #self.mythread.signal.connect(self.daemon)  #连接线程类中自定义信号槽到本类的自定义槽函数
+        #self.mythread.start() #开启线程不是调用run函数而是调用start函数
        
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
