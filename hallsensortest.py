@@ -63,8 +63,26 @@ class ui_main(QMainWindow, Ui_Form):
         @type QWidget
         """
         super(ui_main, self).__init__(parent)
+
+        self.shutdownflg = 0
+        self.shutdowntimeleft  = 50
+        
+        self.setrotatespeed    = 0                     # 设置的转速（如果装置没有反馈速度值，则以该值做速度有无的判断）
+        
+        self.setobj            = 0                     # 设置对象(0,转速;1,机车轮径;2,速度;3方向)
+        self.objnum            = 4
+        
+        self.diameter          = 1050                  # 机车轮径
+        self.locospeed         = 0                     # 机车速度
+        self.dir               = 0                     # 方向
+
+        self.showtimes          = 0
+            
         self.setupUi(self)
         self.showFullScreen()                   #全屏显示
+
+
+        
         #self.show()                              #全屏显示
         
         #time.sleep(1.5)                          #
@@ -81,20 +99,7 @@ class ui_main(QMainWindow, Ui_Form):
         #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
         #self.thread2.start()
         #关机daoji时
-        self.shutdownflg = 0
-        self.shutdowntimeleft  = 50
-        
-        self.setrotatespeed    = 0                     # 设置的转速（如果装置没有反馈速度值，则以该值做速度有无的判断）
-        
-        self.setobj            = 0                     # 设置对象(0,转速;1,机车轮径;2,速度;3方向)
-        self.objnum            = 4
-        
-        self.diameter          = 1050                  # 机车轮径
-        self.locospeed         = 0                     # 机车速度
-        self.dir               = 0                     # 方向
 
-        self.showtimes          = 0
-    
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
         self.diameter += 1
