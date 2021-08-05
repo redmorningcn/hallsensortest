@@ -88,9 +88,9 @@ class ui_main(QMainWindow, Ui_Form):
         
         speedstop()                              #速度设置为0
 
-        #self.mythread = MyThread()  # 实例化线程
-        #self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
-        #self.mythread.start() #开启线程不是调用run函数而是调用start函数
+        self.mythread = MyThread()  # 实例化线程
+        self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
+        self.mythread.start() #开启线程不是调用run函数而是调用start函数
        
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
@@ -234,12 +234,12 @@ class ui_main(QMainWindow, Ui_Form):
             time.sleep(0.25)
             daemontime +=1                                                      #时间变量
 
-            
+            '''
             try:
                 self.showSpeed()           #参数显示
             except:
                 print("参数显示异常！")
-            
+            '''
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
             
