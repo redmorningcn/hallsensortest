@@ -43,11 +43,14 @@ class MyThread(QThread):  #重写线程类
     def run(self):
         self.num = 0
         while True:
-            self.timeout.emit()     # 发送timeout信号
-            self.deamontime.emit(self.num)
-            time.sleep(0.2)
             self.num+=1
-            #self.sleep(0.2)
+            self.timeout.emit()     # 发送timeout信号
+
+            if(self.num %2) ==0:
+                self.deamontime.emit(self.num)
+
+            time.sleep(0.25)
+            #self.sleep(0.25)
 
 #取显示速度值
 def getdisplaylocospeed():
@@ -192,8 +195,6 @@ class ui_main(QMainWindow, Ui_Form):
             dim2 = 1250                                     # 机车轮径1250mm
             dim1 = 1050                                     # 机车轮径1050mm
             try:
-                #self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
-                
                 self.ln_locol.display( self.diameter )              # 显示机车轮径
                 
                 self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
