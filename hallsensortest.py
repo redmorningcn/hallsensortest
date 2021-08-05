@@ -33,13 +33,11 @@ KEY_SET    = 2              #设置按键 （引脚号）
 
 #采用多PYQT多线程
 class MyThread(QThread):  #重写线程类
-    signal = pyqtSignal(str)  #自定义一个pyqtSignal信号,信号参数是个字符串str类型
-    count = 0
-    def __init__(self):
-        super(MyThread, self).__init__()
+    timeout = pyqtSignal()          # 每隔一秒发送一个信号
+
     def run(self):
         while True:
-            self.signal.emit(str(self.count)) #发射信号
+            self.timeout.emit()     # 发送timeout信号
             #time.sleep(1)
             self.sleep(1)
 
