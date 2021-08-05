@@ -211,18 +211,18 @@ class ui_main(QMainWindow, Ui_Form):
         
     #daemon，多线程
 
-    setkeytimes       = 0
-    setkeydowntime    = 0
-    setkeystilltime   = 0
-        
-    #时间变量
-    daemontime        = 0     
-    lstrotate         = -1                         #设定转速
+
 
     
     def  daemon(self):
         #setkey按下时间
-
+        setkeytimes       = 0
+        setkeydowntime    = 0
+        setkeystilltime   = 0
+            
+        #时间变量
+        daemontime        = 0     
+        lstrotate         = -1                         #设定转速
         #电机参数
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
