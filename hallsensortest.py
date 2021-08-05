@@ -40,7 +40,8 @@ class MyThread(QThread):  #重写线程类
     def run(self):
         while True:
             self.signal.emit(str(self.count)) #发射信号
-            time.sleep(1)
+            #time.sleep(1)
+            self.sleep(1)
 
 #取显示速度值
 def getdisplaylocospeed():
