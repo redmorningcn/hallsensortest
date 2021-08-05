@@ -50,7 +50,7 @@ class MyThread(QThread):  #重写线程类
                 self.deamontime.emit(self.num)
 
             #time.sleep(0.2)
-            self.sleep(0.2)
+            self.sleep(1)
 
 #取显示速度值
 def getdisplaylocospeed():
