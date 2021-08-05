@@ -85,7 +85,6 @@ class ui_main(QMainWindow, Ui_Form):
         
         #self.show()                              #全屏显示
         
-        #time.sleep(1.5)                          #
         
         speedstop()                              #速度设置为0
 
@@ -93,12 +92,10 @@ class ui_main(QMainWindow, Ui_Form):
         #self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
         #self.mythread.start() #开启线程不是调用run函数而是调用start函数
        
-        self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
-        self.thread1.start()
-        #time.sleep(2.5)                          #
-        #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
-        #self.thread2.start()
-        #关机daoji时
+        #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
+        #self.thread1.start()
+        self.thread2 = threading.Thread(target = self.daemon)           #守护线程
+        self.thread2.start()
 
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
