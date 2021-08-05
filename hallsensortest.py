@@ -34,11 +34,20 @@ KEY_SET    = 2              #设置按键 （引脚号）
 #采用多PYQT多线程
 class MyThread(QThread):  #重写线程类
     timeout = pyqtSignal()          # 每隔一秒发送一个信号
-
+    deamontime = pyqtSignal(int)    # 每隔一秒发送一个信号
+    deamontime = 0
+    
+    def __init__(self, parent=None):
+        super(MyThread, self).__init__(parent)
+        self.num = 0
+    
     def run(self):
+        self.num = 0
         while True:
             self.timeout.emit()     # 发送timeout信号
+            self.deamontime.emit(self.num)
             time.sleep(0.2)
+            self.num+=1
             #self.sleep(0.2)
 
 #取显示速度值
@@ -63,9 +72,13 @@ class ui_main(QMainWindow, Ui_Form):
         @type QWidget
         """
         super(ui_main, self).__init__(parent)
-
+        
+        #setkey按下时间
         self.shutdownflg = 0
         self.shutdowntimeleft  = 50
+        self.setkeystilltime   =0
+        self.setkeydowntime    = 0
+
         
         self.setrotatespeed    = 0                     # 设置的转速（如果装置没有反馈速度值，则以该值做速度有无的判断）
         
@@ -77,6 +90,8 @@ class ui_main(QMainWindow, Ui_Form):
         self.dir               = 0                     # 方向
 
         self.showtimes          = 0
+
+        self.lstrotate         = -1                         #设定转速
             
         self.setupUi(self)
         self.showFullScreen()                   #全屏显示
@@ -87,13 +102,15 @@ class ui_main(QMainWindow, Ui_Form):
 
         self.mythread = MyThread()  # 实例化线程
         self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
+        self.mythread.deamontime.connect(self.daemon)  #连接线程类中自定义信号槽到本类的自定义槽函数
+
         self.mythread.start() #开启线程不是调用run函数而是调用start函数
        
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
 
-        self.thread2 = threading.Thread(target = self.daemon)           #守护线程
-        self.thread2.start()
+        #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
+        #self.thread2.start()
 
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
@@ -194,6 +211,50 @@ class ui_main(QMainWindow, Ui_Form):
                 if self.shutdownflg == 0:     #关机，用该位置显示倒计时
                     self.label.setText("霍尔传感器便携式测试设备")
 
+
+                ### 根据要设置的参数，闪烁提醒
+                if self.setrotatespeed == 0:
+                    if self.setobj == 0:       #转速
+                        #self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
+
+                        if self.showtimes % 5 == 0:
+                            self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                        else:
+                            self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                    
+                    if self.setobj == 1:       #轮径
+                        if self.showtimes % 5 == 0:
+                            self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                        else:
+                            self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                            
+                    if self.setobj == 2:       #速度
+                        #self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+
+                        if self.showtimes % 5 == 0:
+                            self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+                        else:
+                            self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                            
+                    if self.setobj == 3:       #方向
+                        if self.showtimes % 5 == 0:
+                            self.com_rotatedir.setCurrentIndex(2)
+                        else:
+                            self.com_rotatedir.setCurrentIndex(self.dir)
+                else:
+                    self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                    self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                    self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)   
+                    
+
+                ### 获取并显示IP值
+                try:
+                    if self.showtimes % 5 == 0:
+                        ip = get_host_ip()
+                        self.label_IP.setText(ip)
+                except:
+                    print(" wifi未连接")
+
                 if (self.showtimes %2) == 0:
                     try:
                         text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
@@ -202,89 +263,26 @@ class ui_main(QMainWindow, Ui_Form):
                         #QApplication.processEvents()  
                     except:
                         print("webSendMessage(text):err!")
-                #ui_main.d_speed = self.locospeed
-                #print("ui_main.displaylocospeed",ui_main.d_speed)
-                
-                #QApplication.processEvents()                   #实时刷新
+
             except Exception as e:
                 print("速度读取错误", e)
         
     #daemon，多线程
+    def  daemon(self,daemontime):
 
-
-
-
-    def  daemon(self):
-        #setkey按下时间
-        setkeytimes       = 0
-        setkeydowntime    = 0
-        setkeystilltime   = 0
-                
-        #时间变量
-        daemontime        = 0     
-        lstrotate         = -1                         #设定转速
         
         #电机参数
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
         
-        while True:
-        #if True:            
-            time.sleep(0.25)
-            daemontime +=1                                                      #时间变量
+        #while True:
+        if True:            
+            #time.sleep(0.25)
 
-            '''
-            try:
-                self.showSpeed()           #参数显示
-            except:
-                print("参数显示异常！")
-            '''
             pwmfre = (self.setrotatespeed * rotaterate * pwmrate) / 60;
             speedset(pwmfre)  #根据设置的转速值，设置频率
             
             self.dir = getChangeDircetion()                                     #读取方向信号
-            
-            ### 根据要设置的参数，闪烁提醒
-            if self.setrotatespeed == 0:
-                if self.setobj == 0:       #转速
-                    #self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
-
-                    if daemontime % 5 == 0:
-                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                
-                if self.setobj == 1:       #轮径
-                    if daemontime % 5 == 0:
-                        self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                        
-                if self.setobj == 2:       #速度
-                    #self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-
-                    if daemontime % 5 == 0:
-                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
-                    else:
-                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                        
-                if self.setobj == 3:       #方向
-                    if daemontime % 5 == 0:
-                        self.com_rotatedir.setCurrentIndex(2)
-                    else:
-                        self.com_rotatedir.setCurrentIndex(self.dir)
-            else:
-                self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-                self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)   
-                
-            ### 获取并显示IP值
-            try:
-                if daemontime % 5 == 0:
-                    ip = get_host_ip()
-                    self.label_IP.setText(ip)
-            except:
-                print(" wifi未连接")
             
             ### 关机倒计时
             if self.shutdownflg == 1:
@@ -293,7 +291,6 @@ class ui_main(QMainWindow, Ui_Form):
                     self.shutdowntimeleft-=1
                     times = self.shutdowntimeleft/5
                     tmp = "" + str(int(times))+"秒后关机！"
-                    #self.bt_shutdown_2.setText(tmp)
                     
                     self.label.setText(tmp)
                     #self.textEdit.setText(tmp)
@@ -322,34 +319,27 @@ class ui_main(QMainWindow, Ui_Form):
             #print("webspeed",webspeed)
             #速度和转速设置，互斥只能设置一个，且需要控制调整速率
             if webspeed != -1:
-                lstrotate = calclocorotate(webspeed,self.diameter)+1  #转速值偏小，加1后速度值相同
-                if lstrotate == 1:     #消除要求设置为0的情况
-                    lstrotate = 0
-                #print("lstrotate webspeed",lstrotate,webspeed)
+                self.lstrotate = calclocorotate(webspeed,self.diameter)+1  #转速值偏小，加1后速度值相同
+                if self.lstrotate == 1:     #消除要求设置为0的情况
+                    self.lstrotate = 0
                 webrotate   = -1
             
             if webrotate != -1:
-                lstrotate = webrotate
-                #print("lstrotate webrotate ",lstrotate,webrotate)
+                self.lstrotate = webrotate
                 webspeed = -1
 
             #缓慢加减速度
-            if lstrotate >= 0 and lstrotate <=500:
-                if  lstrotate > self.setrotatespeed:
+            if self.lstrotate >= 0 and self.lstrotate <=500:
+                if  self.lstrotate > self.setrotatespeed:
                     #速度+
                     self.rotatesspeedadd()
-                    #print("lstrotate add",lstrotate)
-                    #print("lstrotate add",self.setrotatespeed)
-                    time.sleep(0.1)
-                elif lstrotate < self.setrotatespeed:
+                elif self.lstrotate < self.setrotatespeed:
                     #速度-
                     self.rotatesspeedsub()
-                    #print("lstrotate sub",lstrotate)
-                    time.sleep(0.1)
                 else:
-                    lstrotate = -1
+                    self.lstrotate = -1
             else:
-                lstrotate = -1
+                self.lstrotate = -1
             
             
             ### 速度0时，可以选择 参数调整 功能
@@ -357,19 +347,17 @@ class ui_main(QMainWindow, Ui_Form):
 
                 if getKeySta(KEY_SET):
                     #功能设置按键按下，进行相应的功能选择。
-                    if daemontime != setkeydowntime +1:       # 不是长按状态（连续进入则认为是长按）
-                        #setkeytimes     += 1
-                        setkeystilltime  = 0                  # 按键长按计时开始
+                    if daemontime != self.setkeydowntime +1:       # 不是长按状态（连续进入则认为是长按）
+                        self.setkeystilltime  = 0             # 按键长按计时开始
                         
                         self.setobj += 1                      # 设置对象往下偏移
                         self.setobj %= self.objnum            # 范围限制                        
                     else:
-                        setkeystilltime += 1                  # 按键保持按下状态
-                        print("setkeystilltime",setkeystilltime)
-                        if setkeystilltime > 25:              # 5s #在速度为0情况下，长按设置按键5s，设备关机。
+                        self.setkeystilltime += 1             # 按键保持按下状态
+                        if self.setkeystilltime > 25:              # 5s #在速度为0情况下，长按设置按键5s，设备关机。
                             self.shutdownflg = 1
                             
-                    setkeydowntime = daemontime               # 记录设置按键按下时间（判断是长时间、短时间按键）。
+                    self.setkeydowntime = daemontime               # 记录设置按键按下时间（判断是长时间、短时间按键）。
                     
                 keysub = getKeySta(KEY_SUB) or getwebspeedsubflg()
                 keyadd = getKeySta(KEY_ADD) or getwebspeedaddflg()
@@ -377,7 +365,6 @@ class ui_main(QMainWindow, Ui_Form):
                 if  keysub or keyadd:                #有按键按下
                     
                     #有其他按键，设置按键清零
-                    setkeytimes = 0
                     
                     if self.shutdownflg == 1:            #如果是在关机倒计时，则只取消关机过程
                         self.shutdownflg = 0             #关机过程中，有其他按键按下，取消关机           
@@ -407,24 +394,6 @@ class ui_main(QMainWindow, Ui_Form):
                         
             ###  速度不为零        
             if self.setrotatespeed != 0:
-                '''
-                # 在速度不为零时，双击设置按键，紧急停机
-                if getKeySta(KEY_SET):
-                    #功能设置按键按下，进行相应的功能选择。
-                    if daemontime != setkeydowntime +1:       # 不是长按状态（连续进入则认为是长按）
-                        setkeytimes += 1
-                        
-                    setkeydowntime = daemontime               # 记录时间
-                    
-                    if setkeytimes > 1:                       # 连续按两次以上，表示急停
-                        speedstop()                           # 速度停止
-                        self.setrotatespeed = 0
-                        self.locospeed = 0
-                '''        
-                if getKeySta(KEY_SET) == 0:                   # 按键松开
-                    if daemontime > setkeydowntime + 10:      # 松开间隔时间大于2秒
-                        setkeytimes = 0
-                        
                 # 在速度不为零时，只能调整转速和速度值。默认设置为转速
                 if  self.setobj == 1 or self.setobj == 3:     # 轮径设置 或 方向设置
                     self.setobj =  0
