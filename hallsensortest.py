@@ -43,10 +43,11 @@ class MyThread(QThread):  #重写线程类
     def run(self):
         self.num = 0
         while True:
-            self.num+=1
+            
             self.timeout.emit()     # 发送timeout信号
 
             if(self.num %2) ==0:
+                self.num+=1
                 self.deamontime.emit(self.num)
 
             time.sleep(0.2)
