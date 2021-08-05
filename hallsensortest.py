@@ -229,7 +229,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         while True:
         #if True:            
-            #time.sleep(0.25)
+            time.sleep(0.25)
             daemontime +=1                                                      #时间变量
 
             '''
