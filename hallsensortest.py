@@ -5,10 +5,12 @@
 Module implementing ui_main.
 """
 
-from PyQt5.QtCore      import pyqtSlot
+from PyQt5.QtCore      import QThread, pyqtSlot
 from PyQt5.QtWidgets   import QMainWindow
 from PyQt5.QtWidgets   import QMessageBox
 from PyQt5             import QtCore, QtGui, QtWidgets
+
+
 #from Ui_hallsensortest import Ui_MainWindow
 from Ui_hallsensortest2 import Ui_Form
 #from speedCtrol import *
@@ -21,7 +23,7 @@ from    gitIP              import *
 from    websocketserver4   import *
 from    webprotocol        import *
 from    calcspeed          import *
-from    loger             import *
+from    loger              import *
 import  os,sys,time
 
 KEY_SUB    = 7              #速度-   （引脚号）
@@ -29,8 +31,18 @@ KEY_ADD    = 3              #速度+   （引脚号）
 KEY_SET    = 2              #设置按键 （引脚号）
 
 
-#displaylocospeed = 0
+#采用多PYQT多线程
+class MyThread(QThread):  #重写线程类
+    signal = pyqtSignal(str)  #自定义一个pyqtSignal信号,信号参数是个字符串str类型
+    count = 0
+    def __init__(self):
+        super(MyThread, self).__init__()
+    def run(self):
+        while True:
+            self.signal.emit(str(self.count)) #发射信号
+            time.sleep(0.25)
 
+#取显示速度值
 def getdisplaylocospeed():
     print("ui_main.displaylocospeed22  =",ui_main.getSpeed())
     #ui_main.getSpeed()
@@ -59,12 +71,16 @@ class ui_main(QMainWindow, Ui_Form):
         #time.sleep(1.5)                          #
         
         speedstop()                              #速度设置为0
-        
+
+        self.mythread = MyThread()  # 实例化线程
+        self.mythread.signal.connect(self.daemon)  #连接线程类中自定义信号槽到本类的自定义槽函数
+        self.mythread.start() #开启线程不是调用run函数而是调用start函数
+       
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
         #time.sleep(2.5)                          #
-        self.thread2 = threading.Thread(target = self.daemon)           #守护线程
-        self.thread2.start()
+        #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
+        #self.thread2.start()
         #关机daoji时
         self.shutdownflg = 0
         self.shutdowntimeleft  = 50
@@ -195,21 +211,26 @@ class ui_main(QMainWindow, Ui_Form):
                 print("速度读取错误", e)
         
     #daemon，多线程
+
+    setkeytimes       = 0
+    setkeydowntime    = 0
+    setkeystilltime   = 0
+        
+    #时间变量
+    daemontime        = 0     
+    lstrotate         = -1                         #设定转速
+
+    
     def  daemon(self):
         #setkey按下时间
-        setkeytimes       = 0
-        setkeydowntime    = 0
-        setkeystilltime   = 0
-        
-        #时间变量
-        daemontime        = 0     
-        lstrotate         = -1                         #设定转速
+
         #电机参数
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
         
-        while True:
-            time.sleep(0.25)
+        #while True:
+        if True:            
+            #time.sleep(0.25)
             daemontime +=1                                                      #时间变量
 
             try:
