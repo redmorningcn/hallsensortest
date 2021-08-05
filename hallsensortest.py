@@ -89,13 +89,15 @@ class ui_main(QMainWindow, Ui_Form):
         speedstop()                              #速度设置为0
 
         self.mythread = MyThread()  # 实例化线程
-        self.mythread.timeout.connect(self.self.daemon)  #连接线程类中自定义信号槽到本类的自定义槽函数
+        self.mythread.timeout.connect(self.self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.start() #开启线程不是调用run函数而是调用start函数
        
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
-        #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
-        #self.thread2.start()
+
+        self.thread2 = threading.Thread(target = self.daemon)           #守护线程
+
+        self.thread2.start()
 
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
@@ -215,16 +217,17 @@ class ui_main(QMainWindow, Ui_Form):
 
 
 
+    setkeytimes       = 0
+    setkeydowntime    = 0
+    setkeystilltime   = 0
+            
+    #时间变量
+    daemontime        = 0     
+    lstrotate         = -1                         #设定转速
     
     def  daemon(self):
         #setkey按下时间
-        setkeytimes       = 0
-        setkeydowntime    = 0
-        setkeystilltime   = 0
-            
-        #时间变量
-        daemontime        = 0     
-        lstrotate         = -1                         #设定转速
+
         #电机参数
         rotaterate        = getrotaterate()           #同步轮齿数比
         pwmrate           = getpwmrate()              #步进电机分频系数
