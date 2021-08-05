@@ -5,7 +5,7 @@
 Module implementing ui_main.
 """
 
-from PyQt5.QtCore      import QThread, pyqtSlot
+from PyQt5.QtCore      import QThread, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets   import QMainWindow
 from PyQt5.QtWidgets   import QMessageBox
 from PyQt5             import QtCore, QtGui, QtWidgets
