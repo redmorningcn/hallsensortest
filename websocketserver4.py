@@ -15,6 +15,7 @@ def startServer():
     t.start()
     
 def server_send(text):
+    print("Server.send_message",Server.serverflg,text)
     if Server.serverflg == 2:
         Server.send_message(text)
         
