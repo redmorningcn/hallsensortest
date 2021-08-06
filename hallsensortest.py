@@ -50,7 +50,7 @@ class MyThread(QThread):  #重写线程类
             self.num+=1
             self.deamontime.emit(self.num)
 
-            time.sleep(0.35)
+            time.sleep(0.25)
             #self.sleep(1)
 
 #取显示速度值
@@ -254,6 +254,8 @@ class ui_main(QMainWindow, Ui_Form):
                         ip = get_host_ip()
                         self.label_IP.setText(ip)
                 except:
+                    ip = '8.8.8.8'
+                    self.label_IP.setText(ip)
                     print(" wifi未连接")
 
                 if (self.showtimes %2) == 0:
