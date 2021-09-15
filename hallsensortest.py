@@ -79,8 +79,10 @@ class ui_main(QMainWindow, Ui_Form):
         #setkey按下时间
         self.shutdownflg = 0
         self.shutdowntimeleft  = 50
-        self.setkeystilltime   =0
+        self.setkeystilltime   = 0
         self.setkeydowntime    = 0
+        self.subkeydowntime    = 0
+        self.subkeystilltime   = 0
 
         
         self.setrotatespeed    = 0                     # 设置的转速（如果装置没有反馈速度值，则以该值做速度有无的判断）
@@ -94,14 +96,14 @@ class ui_main(QMainWindow, Ui_Form):
 
         self.showtimes          = 0
 
-        self.lstrotate         = -1                         #设定转速
+        self.lstrotate         = -1                     #设定转速
             
         self.setupUi(self)
-        self.showFullScreen()                   #全屏显示
-        #self.show()                              #全屏显示
+        self.showFullScreen()                           #全屏显示
+        #self.show()                                    #全屏显示
         
         
-        speedstop()                              #速度设置为0
+        speedstop()                                     #速度设置为0
 
         self.mythread = MyThread()  # 实例化线程
         self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
@@ -196,7 +198,7 @@ class ui_main(QMainWindow, Ui_Form):
             dim2 = 1250                                     # 机车轮径1250mm
             dim1 = 1050                                     # 机车轮径1050mm
             try:
-                self.ln_locol.display( self.diameter )              # 显示机车轮径
+                self.ln_locol.display( self.diameter )              #显示机车轮径
                 
                 self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
                 
@@ -350,17 +352,17 @@ class ui_main(QMainWindow, Ui_Form):
 
                 if getKeySta(KEY_SET):
                     #功能设置按键按下，进行相应的功能选择。
-                    if daemontime != self.setkeydowntime +1:       # 不是长按状态（连续进入则认为是长按）
-                        self.setkeystilltime  = 0             # 按键长按计时开始
+                    if daemontime != self.setkeydowntime +1:        # 不是长按状态（连续进入则认为是长按）
+                        self.setkeystilltime  = 0                   # 按键长按计时开始
                         
-                        self.setobj += 1                      # 设置对象往下偏移
-                        self.setobj %= self.objnum            # 范围限制                        
+                        self.setobj += 1                            # 设置对象往下偏移
+                        self.setobj %= self.objnum                  # 范围限制                        
                     else:
-                        self.setkeystilltime += 1             # 按键保持按下状态
-                        if self.setkeystilltime > 25:              # 5s #在速度为0情况下，长按设置按键5s，设备关机。
+                        self.setkeystilltime += 1                   # 按键保持按下状态
+                        if self.setkeystilltime > 25:               # 5s #在速度为0情况下，长按设置按键5s，设备关机。
                             self.shutdownflg = 1
                             
-                    self.setkeydowntime = daemontime               # 记录设置按键按下时间（判断是长时间、短时间按键）。
+                    self.setkeydowntime = daemontime                # 记录设置按键按下时间（判断是长时间、短时间按键）。
                     
                 keysub = getKeySta(KEY_SUB) or getwebspeedsubflg()
                 keyadd = getKeySta(KEY_ADD) or getwebspeedaddflg()
@@ -397,19 +399,53 @@ class ui_main(QMainWindow, Ui_Form):
                         
             ###  速度不为零        
             if self.setrotatespeed != 0:
+
+                
                 # 在速度不为零时，只能调整转速和速度值。默认设置为转速
                 if  self.setobj == 1 or self.setobj == 3:     # 轮径设置 或 方向设置
                     self.setobj =  0
 
+                key_add = getKeySta(KEY_ADD)
+                key_sub = getKeySta(KEY_SUB)
+
+                #判断速度减多击键
+                if key_sub:             #按键按下
+                    if daemontime != self.subkeydowntime +1:        # 不是长按状态（连续进入则认为是长按）
+                        self.subkeytimes +=1
+                        self.subkeystilltime = 0
+                    else:                                           # 长按状态
+                        self.subkeystilltime +=1
+   
+                        if subkeystilltime > 2                      # 持续按键
+                            self.subkeytimes = 0                    # 取消按键次数判断
+
+                    self.subkeydowntime = daemontime                # 记录按键按下时间（判断是长时间、短时间按键）。
+                else:
+                    self.subkeystilltime = 0
+                    if daemontime > self.subkeydowntime + 2:        #间隔时间过长，取消按键次数判断
+                        if self.subkeytimes == 3:                   #连续按3次，则速度降为0
+                            self.lstrotate = 0
+                        
+                        self.subkeytimes = 0                              
+                            
+  
+                    
+
                 # 按加、减按键，进行速度的增减
-                if  getKeySta(KEY_ADD ) or getwebspeedaddflg():
+                if key_add  or getwebspeedaddflg():
+                    self.lstrotate = -1           #有按键操作，取消预设值
+                    
                     if self.setobj == 0:
                         self.rotatesspeedadd()    
                     elif self.setobj == 2:        #速度
                         self.locospeedadd()
                     else:
                         print("在非0时，按速度加")
-                elif   getKeySta(KEY_SUB) or getwebspeedsubflg():
+
+                        
+                elif  key_sub  or getwebspeedsubflg():
+                    self.lstrotate = -1           #有按键操作，取消预设值
+                    
                     if self.setobj == 0:
                         self.rotatesspeedsub()               
                     elif self.setobj == 2:       #速度
