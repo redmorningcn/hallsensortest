@@ -420,7 +420,7 @@ class ui_main(QMainWindow, Ui_Form):
                             self.subkeytimes = 0                    # 取消按键次数判断
 
                     self.subkeydowntime = daemontime                # 记录按键按下时间（判断是长时间、短时间按键）。
-                    print("self.subkeytimes",self.subkeytimes)
+                    print("self.subkeytimes",self.subkeytimes,self.subkeystilltime,self.subkeydowntime)
                 else:
                     self.subkeystilltime = 0
                     if self.subkeytimes:
