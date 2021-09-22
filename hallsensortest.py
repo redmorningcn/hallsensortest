@@ -83,7 +83,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.setkeydowntime    = 0
         self.subkeydowntime    = 0
         self.subkeystilltime   = 0
-
+        self.subkeytimes       = 0
         
         self.setrotatespeed    = 0                     # 设置的转速（如果装置没有反馈速度值，则以该值做速度有无的判断）
         
@@ -416,7 +416,7 @@ class ui_main(QMainWindow, Ui_Form):
                     else:                                           # 长按状态
                         self.subkeystilltime +=1
    
-                        if subkeystilltime > 2                      # 持续按键
+                        if subkeystilltime > 2:                     # 持续按键
                             self.subkeytimes = 0                    # 取消按键次数判断
 
                     self.subkeydowntime = daemontime                # 记录按键按下时间（判断是长时间、短时间按键）。
@@ -428,8 +428,6 @@ class ui_main(QMainWindow, Ui_Form):
                         
                         self.subkeytimes = 0                              
                             
-  
-                    
 
                 # 按加、减按键，进行速度的增减
                 if key_add  or getwebspeedaddflg():
