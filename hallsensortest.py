@@ -416,16 +416,19 @@ class ui_main(QMainWindow, Ui_Form):
                     else:                                           # 长按状态
                         self.subkeystilltime +=1
    
-                        if self.subkeystilltime > 2:                     # 持续按键
+                        if self.subkeystilltime > 5:                # 持续按键
                             self.subkeytimes = 0                    # 取消按键次数判断
-
+                        #elif self.subkeystilltime==1:               # 快速按键
+                            #self.subkeytimes += 1
+                        
                     self.subkeydowntime = daemontime                # 记录按键按下时间（判断是长时间、短时间按键）。
                     print("self.subkeytimes",self.subkeytimes,self.subkeystilltime,self.subkeydowntime)
                 else:
                     self.subkeystilltime = 0
-                    if self.subkeytimes:
-                        print("IF Self.subkeytimes",self.subkeytimes)
-                        if daemontime > self.subkeydowntime + 2 :        #间隔时间过长，取消按键次数判断
+
+                    if daemontime > self.subkeydowntime + 1 :        #间隔时间过长，取消按键次数判断
+                        if self.subkeytimes:
+                            print("IF Self.subkeytimes",self.subkeytimes)
                             if self.subkeytimes == 3:                   #连续按3次，则速度降为0
                                 self.lstrotate = 0
                                 print("self.subkeytimes == 3")
