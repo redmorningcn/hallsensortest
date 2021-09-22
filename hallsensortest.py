@@ -426,7 +426,7 @@ class ui_main(QMainWindow, Ui_Form):
                 else:
                     self.subkeystilltime = 0
 
-                    if daemontime > self.subkeydowntime + 1 :        #间隔时间过长，取消按键次数判断
+                    if daemontime > self.subkeydowntime + 3 :        #间隔时间过长，取消按键次数判断
                         if self.subkeytimes:
                             print("IF Self.subkeytimes",self.subkeytimes)
                             if self.subkeytimes == 3:                   #连续按3次，则速度降为0
