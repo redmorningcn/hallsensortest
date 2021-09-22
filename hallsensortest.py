@@ -416,7 +416,7 @@ class ui_main(QMainWindow, Ui_Form):
                     else:                                           # 长按状态
                         self.subkeystilltime +=1
    
-                        if subkeystilltime > 2:                     # 持续按键
+                        if self.subkeystilltime > 2:                     # 持续按键
                             self.subkeytimes = 0                    # 取消按键次数判断
 
                     self.subkeydowntime = daemontime                # 记录按键按下时间（判断是长时间、短时间按键）。
