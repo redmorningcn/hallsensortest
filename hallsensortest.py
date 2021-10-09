@@ -159,7 +159,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         if  self.diameter > 1300:
             self.diameter = 1300
-        self.confile.WriteSpeed("diameter",str(self.setrotatespeed))
+        self.confile.WriteSpeed("diameter",str(self.diameter))
 
     def diameterSub(self):                             # 机车轮径减小
         print("# 机车轮径减小")
@@ -168,7 +168,7 @@ class ui_main(QMainWindow, Ui_Form):
         if  self.diameter < 800:
             self.diameter = 800
 
-        self.confile.WriteSpeed("diameter",str(self.setrotatespeed))
+        self.confile.WriteSpeed("diameter",str(self.diameter))
 
     def locospeedadd(self):                            # 机车速度增加
         try:

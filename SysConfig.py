@@ -44,6 +44,9 @@ if __name__ == '__main__':
     t = test.Speed("diameter")
     print(t)
 
+    t = test.Debug("Debug")
+    print(t)
+
     test.WriteSpeed("diameter","1000")
 
 
