@@ -38,7 +38,7 @@ class MyThread10ms(QThread):  #重写线程类
     time10ms = pyqtSignal()          # 每隔一秒发送一个信号
     
     def __init__(self, parent=None):
-        super(MyThread, self).__init__(parent)
+        super(MyThread10ms, self).__init__(parent)
         self.num = 0
     
     def run(self):
@@ -126,7 +126,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.modruntimes    = 0             #模拟运行次数标识
         self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
         self.modcurrent     = 0             #模拟运行当前值
-        #self.mythread10ms.start()           #开启线程不是调用run函数而是调用start函数
+        self.mythread10ms.start()           #开启线程不是调用run函数而是调用start函数
 
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
