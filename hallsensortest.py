@@ -126,7 +126,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.modruntimes    = 0             #模拟运行次数标识
         self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
         self.modcurrent     = 0             #模拟运行当前值
-        self.mythread10ms.start()           #开启线程不是调用run函数而是调用start函数
+        #self.mythread10ms.start()           #开启线程不是调用run函数而是调用start函数
 
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
