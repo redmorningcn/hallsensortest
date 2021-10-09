@@ -489,12 +489,13 @@ class ui_main(QMainWindow, Ui_Form):
                     self.modruntimes    = self.speedtalbe.getspeedline()
                     self.modcurrent     = 0
         else:
-            if self.modcurrent < self.modruntimes:      #开始模拟运行
+            if self.modcurrent < (self.modruntimes-1) and (self.modruntimes > 0):      #开始模拟运行
                 speed = self.speedtalbe.getmodspeed(self.modcurrent)
                 self.modcurrent+=1
                 
                 rotate =  calclocorotate(speed, self.diameter)  #计算转速
                 self.setrotatespeed = rotate /100
+                self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
         
             else:                                       #模拟运行结束
                 self.modrunflg      = 0
