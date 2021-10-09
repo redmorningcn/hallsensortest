@@ -31,10 +31,26 @@ KEY_ADD    = 3              #速度+   （引脚号）
 KEY_SET    = 2              #设置按键 （引脚号）
 
 
+
+
+#采用多PYQT多线程10ms处理 程序
+class MyThread10ms(QThread):  #重写线程类
+    time10ms = pyqtSignal()          # 每隔一秒发送一个信号
+    
+    def __init__(self, parent=None):
+        super(MyThread, self).__init__(parent)
+        self.num = 0
+    
+    def run(self):
+        while True:
+            self.time10ms.emit()     # 发送timeout信号
+            time.sleep(0.08)         # 80ms发送一次
+
+
 #采用多PYQT多线程
 class MyThread(QThread):  #重写线程类
-    timeout = pyqtSignal()          # 每隔一秒发送一个信号
-    deamontime = pyqtSignal(int)    # 每隔一秒发送一个信号
+    timeout     = pyqtSignal()      # 每隔一秒发送一个信号
+    deamontime  = pyqtSignal(int)   # 每隔一秒发送一个信号
     
     def __init__(self, parent=None):
         super(MyThread, self).__init__(parent)
@@ -102,14 +118,21 @@ class ui_main(QMainWindow, Ui_Form):
         self.showFullScreen()                           #全屏显示
         #self.show()                                    #全屏显示
         
-        
         speedstop()                                     #速度设置为0
 
-        self.mythread = MyThread()  # 实例化线程
-        self.mythread.timeout.connect(self.showSpeed)  #连接线程类中自定义信号槽到本类的自定义槽函数
-        self.mythread.deamontime.connect(self.daemon)  #连接线程类中自定义信号槽到本类的自定义槽函数
+        self.mythread10ms = MyThread10ms()
+        self.mythread.time10ms.connect(self.modSpeed)
+        self.modrunflg      = 0             #模拟曲线运行标识
+        self.modruntimes    = 0             #模拟运行次数标识
+        self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
+        self.modcurrent     = 0             #模拟运行当前值
+        self.mythread10ms.start()           #开启线程不是调用run函数而是调用start函数
 
-        self.mythread.start() #开启线程不是调用run函数而是调用start函数
+        self.mythread       = MyThread()    #实例化线程
+        self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
+        self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
+
+        self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
        
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
@@ -198,11 +221,11 @@ class ui_main(QMainWindow, Ui_Form):
             dim2 = 1250                                     # 机车轮径1250mm
             dim1 = 1050                                     # 机车轮径1050mm
             try:
-                self.ln_locol.display( self.diameter )              #显示机车轮径
+                self.ln_locol.display( self.diameter )              # 显示机车轮径
                 
-                self.ln_motorspeed.display(self.setrotatespeed )    #显示转速
-                
-                self.ln_locolspeed.display(self.locospeed )         #显示速度
+                self.ln_motorspeed.display(self.setrotatespeed )    # 显示转速
+                 
+                self.ln_locolspeed.display(self.locospeed )         # 显示速度
 
                 if self.dir == 0:              # 机车方向
                     self.com_rotatedir.setCurrentIndex(0)
@@ -213,7 +236,6 @@ class ui_main(QMainWindow, Ui_Form):
                 
                 if self.shutdownflg == 0:     #关机，用该位置显示倒计时
                     self.label.setText("霍尔传感器便携式测试设备")
-
 
                 ### 根据要设置的参数，闪烁提醒
                 if self.setrotatespeed == 0:
@@ -367,33 +389,33 @@ class ui_main(QMainWindow, Ui_Form):
                 keysub = getKeySta(KEY_SUB) or getwebspeedsubflg()
                 keyadd = getKeySta(KEY_ADD) or getwebspeedaddflg()
                 
-                if  keysub or keyadd:                #有按键按下
+                if  keysub or keyadd:                       #有按键按下
                     
                     #有其他按键，设置按键清零
                     
-                    if self.shutdownflg == 1:            #如果是在关机倒计时，则只取消关机过程
-                        self.shutdownflg = 0             #关机过程中，有其他按键按下，取消关机           
-                        self.shutdowntimeleft = 50       #重新赋值
+                    if self.shutdownflg == 1:               #如果是在关机倒计时，则只取消关机过程
+                        self.shutdownflg = 0                #关机过程中，有其他按键按下，取消关机           
+                        self.shutdowntimeleft = 50          #重新赋值
                     else:
-                        if keyadd:                       #按键+
-                            if   self.setobj == 0:       #转速
+                        if keyadd:                          #按键+
+                            if   self.setobj == 0:          #转速
                                 self.rotatesspeedadd()               
-                            elif self.setobj == 1:       #轮径
+                            elif self.setobj == 1:          #轮径
                                 self.diameterAdd()
-                            elif self.setobj == 2:       #速度    
+                            elif self.setobj == 2:          #速度    
                                 self.locospeedadd()
-                            else:                        #改变方向
+                            else:                           #改变方向
 
                                 print("keysub,keyadd1",keyadd,keysub)
                                 changedirection()                        
-                        else:                            #按键-
-                            if   self.setobj == 0:       #转速
+                        else:                               #按键-
+                            if   self.setobj == 0:          #转速
                                 self.rotatesspeedsub()               
-                            elif self.setobj == 1:       #轮径
+                            elif self.setobj == 1:          #轮径
                                 self.diameterSub()
-                            elif self.setobj == 2:       #速度    
+                            elif self.setobj == 2:          #速度    
                                 self.locospeedsub()
-                            else:                        #改变方向
+                            else:                           #改变方向
                                 print("keysub,keyadd2",keyadd,keysub)
                                 changedirection()
                         
@@ -418,7 +440,7 @@ class ui_main(QMainWindow, Ui_Form):
    
                         if self.subkeystilltime > 5:                # 持续按键
                             self.subkeytimes = 0                    # 取消按键次数判断
-                        #elif self.subkeystilltime==1:               # 快速按键
+                        #elif self.subkeystilltime==1:              # 快速按键
                             #self.subkeytimes += 1
                         
                     self.subkeydowntime = daemontime                # 记录按键按下时间（判断是长时间、短时间按键）。
@@ -426,10 +448,10 @@ class ui_main(QMainWindow, Ui_Form):
                 else:
                     self.subkeystilltime = 0
 
-                    if daemontime > self.subkeydowntime + 3 :        #间隔时间过长，取消按键次数判断
+                    if daemontime > self.subkeydowntime + 3 :       #间隔时间过长，取消按键次数判断
                         if self.subkeytimes:
                             print("IF Self.subkeytimes",self.subkeytimes)
-                            if self.subkeytimes == 3:                   #连续按3次，则速度降为0
+                            if self.subkeytimes == 3:               #连续按3次，则速度降为0
                                 self.lstrotate = 0
                                 print("self.subkeytimes == 3")
                         
@@ -438,26 +460,46 @@ class ui_main(QMainWindow, Ui_Form):
 
                 # 按加、减按键，进行速度的增减
                 if key_add  or getwebspeedaddflg():
-                    self.lstrotate = -1           #有按键操作，取消预设值
+                    self.lstrotate = -1             #有按键操作，取消预设值
                     
                     if self.setobj == 0:
                         self.rotatesspeedadd()    
-                    elif self.setobj == 2:        #速度
+                    elif self.setobj == 2:          #速度
                         self.locospeedadd()
                     else:
                         print("在非0时，按速度加")
 
                         
                 elif  key_sub  or getwebspeedsubflg():
-                    self.lstrotate = -1           #有按键操作，取消预设值
+                    self.lstrotate = -1             #有按键操作，取消预设值
                     
                     if self.setobj == 0:
                         self.rotatesspeedsub()               
-                    elif self.setobj == 2:       #速度
+                    elif self.setobj == 2:          #速度
                         self.locospeedsub()
                     else:                    
                         print("在非0时，按速度减")                     
             
+    def modSpeed(self):                                 #模拟速度运行
+        if self.modrunflg = 0:
+            if self.setrotatespeed == 0 :               #当前速度为零
+                if getKeySta(KEY_SET):                  #按设置按键，开始启动
+                    self.modrunflg      = 1
+                    self.modruntimes    = self.speedtalbe.getspeedline()
+                    self.modcurrent     = 0
+        else:
+            if self.modcurrent < self.modruntimes:      #开始模拟运行
+                speed = self.speedtalbe.getmodspeed(self.modcurrent)
+                self.modcurrent+=1
+                
+                rotate =  calclocorotate(speed, self.diameter)  #计算转速
+                self.setrotatespeed = rotate /100
+        
+            else:                                       #模拟运行结束
+                self.modrunflg      = 0
+                self.modruntimes    = 0
+                self.modcurrent     = 0                
+        
 
 
 def initGPIO():

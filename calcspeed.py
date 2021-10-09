@@ -1,5 +1,5 @@
 import  ctypes
-from    SetPWM             import *
+#from    SetPWM             import *
 
 l_pwmrate       = 1600            # 步进电机分频系数 
 l_rotaterate    = 4.5               # 设置齿轮传动比(4)
@@ -27,7 +27,8 @@ def calclocospeed(rotate,diameter = 1050):
 # 转速计算
 def calclocorotate(locospeed,diameter = 1050):
     try:
-        rotate = (int)((locospeed * 1000 * 1000) /(3.14 * diameter *60))
+        rotate = (int)((locospeed * 1000 * 1000 ) /( 3.14 * diameter *60 ))
+        #print("计算转速值：",rotate)
     except:
         print("转速计算错误calclocorotate")
     return rotate

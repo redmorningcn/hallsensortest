@@ -37,16 +37,17 @@ def   daemonfrqSet():
                 if l_lstfrq + stepum < l_setfrq:
                     l_lstfrq += stepum
                 else:
-                    l_lstfrq += 1
+                    #l_lstfrq += 1
+                    l_lstfrq = l_setfrq     # 小于最小步进值，直接到设置值
             
-            if l_lstfrq > l_setfrq:       #设置值小，速度减
+            if l_lstfrq > l_setfrq:         # 设置值小，速度减
                 if l_lstfrq - stepum > l_setfrq:
                     l_lstfrq -= stepum
                 else:
-                    l_lstfrq -= 1
-
+                    #l_lstfrq -= 1
+                    l_lstfrq = l_setfrq     # 小于最小步进值，直接到设置值
             try:
-                PWM.SetFrq(l_lstfrq)          #设置速度值
+                PWM.SetFrq(l_lstfrq)        # 设置速度值
             except:
                 print("PWM.SetFrq(l_lstfrq) ERR!")
                 
