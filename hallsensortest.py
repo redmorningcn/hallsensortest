@@ -494,9 +494,10 @@ class ui_main(QMainWindow, Ui_Form):
                 self.modcurrent+=1
                 
                 rotate =  calclocorotate(speed, self.diameter)  #计算转速
-                locospeed = calclocospeed(self.setrotatespeed,self.diameter )
-                self.locospeed = locospeed/100
+
                 self.setrotatespeed = rotate /100
+                locospeed = calclocospeed(rotate,self.diameter )
+                self.locospeed = locospeed /100               
         
             else:                                       #模拟运行结束
                 self.modrunflg      = 0
