@@ -41,7 +41,7 @@ def readspeedInfoFromFile(path):
     return linenum
 
 class SpeedTable(object):
-    def __init__(self,path = r"F:\eric\hallsensortest\locospeedfile.csv"):
+    def __init__(self,path = r"locospeedfile.csv"):
         try:
             self.line = readspeedInfoFromFile(path)
 
