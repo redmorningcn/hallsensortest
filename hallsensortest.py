@@ -111,7 +111,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.objnum            = 4
 
         self.confile = ReadConfig()                    #读取配置文件
-        debug = int(self.confile.Debug("debug"))       #配置运行模式
+        debug = int(self.confile.Debug("Debug"))       #配置运行模式
         
         #self.diameter          = 840                  # 机车轮径
         self.diameter          = int(self.confile.Speed("diameter"))                   # 读配置文件中的机车轮径
