@@ -15,6 +15,7 @@ from PyQt5             import QtCore, QtGui, QtWidgets
 from Ui_hallsensortest2 import Ui_Form
 #from speedCtrol import *
 import  threading
+
 from    SetPWM             import *
 from    GetMotorSpeed      import *
 from    keyer              import *
@@ -25,6 +26,8 @@ from    webprotocol        import *
 from    calcspeed          import *
 from    loger              import *
 from    ReadModSpeed       import *
+from    SysConfig          import *
+
 import  os,sys,time
 
 KEY_SUB    = 7              #速度-   （引脚号）
@@ -106,12 +109,16 @@ class ui_main(QMainWindow, Ui_Form):
         
         self.setobj            = 0                     # 设置对象(0,转速;1,机车轮径;2,速度;3方向)
         self.objnum            = 4
+
+        self.confile = ReadConfig()                    #读取配置文件
+        debug = int(self.confile.Debug("debug"))       #配置运行模式
         
-        self.diameter          = 840                  # 机车轮径
+        #self.diameter          = 840                  # 机车轮径
+        self.diameter          = int(self.confile.Speed("diameter"))                   # 读配置文件中的机车轮径
         self.locospeed         = 0                     # 机车速度
         self.dir               = 0                     # 方向
 
-        self.showtimes          = 0
+        self.showtimes         = 0
 
         self.lstrotate         = -1                     #设定转速
             
@@ -127,14 +134,19 @@ class ui_main(QMainWindow, Ui_Form):
         self.modruntimes    = 0             #模拟运行次数标识
         self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
         self.modcurrent     = 0             #模拟运行当前值
-        self.mythread10ms.start()           #开启线程不是调用run函数而是调用start函数
+
+        #模式选择
+        if debug == 1:                      #如果是调试模式，则启动模拟运行进行
+            self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
 
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
 
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
-       
+
+        
+        
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
 
@@ -164,6 +176,9 @@ class ui_main(QMainWindow, Ui_Form):
                 self.locospeed = 100
             
             self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速
+
+            self.confile.WriteSpeed("diameter",str(self.setrotatespeed))
+            
         except:
             print("# 机车速度减少add")
 
@@ -177,6 +192,8 @@ class ui_main(QMainWindow, Ui_Form):
                 self.locospeed = 0
             
             self.setrotatespeed = calclocorotate(self.locospeed, self.diameter)  #计算转速
+            self.confile.WriteSpeed("diameter",str(self.setrotatespeed))
+            
         except:
             print("# 机车速度减少sub")
 
@@ -331,11 +348,11 @@ class ui_main(QMainWindow, Ui_Form):
             webrotate = getwebsetrotate()
             webdim    = getwebsetdim()
 
-            
             #轮径800到1500
             if webdim <= 1500 and  webdim >= 800:
-                self.diameter = webdim
+                self.diameter  = webdim
                 self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+                
             #速度为零，设置方向
             webdir    = getwebsetdir()
             if self.locospeed <= 2 and webdir !=-1:
