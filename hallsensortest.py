@@ -107,7 +107,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.setobj            = 0                     # 设置对象(0,转速;1,机车轮径;2,速度;3方向)
         self.objnum            = 4
         
-        self.diameter          = 1050                  # 机车轮径
+        self.diameter          = 840                  # 机车轮径
         self.locospeed         = 0                     # 机车速度
         self.dir               = 0                     # 方向
 
@@ -494,8 +494,9 @@ class ui_main(QMainWindow, Ui_Form):
                 self.modcurrent+=1
                 
                 rotate =  calclocorotate(speed, self.diameter)  #计算转速
+                locospeed = calclocospeed(self.setrotatespeed,self.diameter )
+                self.locospeed = locospeed/100
                 self.setrotatespeed = rotate /100
-                self.locospeed = calclocospeed(self.setrotatespeed,self.diameter )
         
             else:                                       #模拟运行结束
                 self.modrunflg      = 0
