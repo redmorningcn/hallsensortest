@@ -481,7 +481,7 @@ class ui_main(QMainWindow, Ui_Form):
                         print("在非0时，按速度减")                     
             
     def modSpeed(self):                                 #模拟速度运行
-        if self.modrunflg = 0:
+        if self.modrunflg == 0:
             if self.setrotatespeed == 0 :               #当前速度为零
                 if getKeySta(KEY_SET):                  #按设置按键，开始启动
                     self.modrunflg      = 1
