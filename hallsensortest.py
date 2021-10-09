@@ -121,7 +121,7 @@ class ui_main(QMainWindow, Ui_Form):
         speedstop()                                     #速度设置为0
 
         self.mythread10ms = MyThread10ms()
-        self.mythread.time10ms.connect(self.modSpeed)
+        self.mythread10ms.time10ms.connect(self.modSpeed)
         self.modrunflg      = 0             #模拟曲线运行标识
         self.modruntimes    = 0             #模拟运行次数标识
         self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
