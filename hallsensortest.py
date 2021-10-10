@@ -151,20 +151,13 @@ class ui_main(QMainWindow, Ui_Form):
 
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
         
-'''
+        '''
         #模式选择
         if debug == 1:                      #如果是调试模式，则启动模拟运行进行
             #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
             self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
             self.mythread.time10msout.connect(self.modSpeed)
-'''
-
-                
-        #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
-        #self.thread1.start()
-
-        #self.thread2 = threading.Thread(target = self.daemon)           #守护线程
-        #self.thread2.start()
+        '''
 
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
