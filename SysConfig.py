@@ -39,11 +39,9 @@ confile = ReadConfig()          #读取配置文件
 
 def getDebugInfo():
     global confile
+        
+    return 1
 
-    return int(confile.Speed("diameter"))
-
-    
-    
 if __name__ == '__main__':
     test = ReadConfig()
     #print(test.sections)
