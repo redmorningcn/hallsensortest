@@ -140,7 +140,7 @@ class ui_main(QMainWindow, Ui_Form):
         #debug = int(confile.Debug("Debug"))       #配置运行模式
         
         self.diameter          = 840                  # 机车轮径
-        self.diameter          = int(confile.Speed("diameter")) 
+        #self.diameter          = int(confile.Speed("diameter")) #不能读配置文件，读取配置问价，界面不能运行
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识

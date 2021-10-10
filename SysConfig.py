@@ -35,7 +35,15 @@ class ReadConfig:
         with open(self.path,'w') as f:
             self.cf.write(f)
         
+confile = ReadConfig()          #读取配置文件
 
+def getDebugInfo():
+    global confile
+
+    return int(confile.Speed("diameter"))
+
+    
+    
 if __name__ == '__main__':
     test = ReadConfig()
     #print(test.sections)
