@@ -36,7 +36,7 @@ KEY_SET    = 2              #设置按键 （引脚号）
 
 
 
-
+'''
 #采用多PYQT多线程10ms处理 程序
 class MyThread10ms(QThread):  #重写线程类
     time10ms = pyqtSignal()          # 每隔一秒发送一个信号
@@ -49,11 +49,13 @@ class MyThread10ms(QThread):  #重写线程类
         while True:
             self.time10ms.emit()     # 发送timeout信号
             time.sleep(0.08)         # 80ms发送一次
-
+'''
 
 #采用多PYQT多线程
 class MyThread(QThread):  #重写线程类
     timeout     = pyqtSignal()      # 每隔一秒发送一个信号
+    time10msout     = pyqtSignal()      # 每隔一秒发送一个信号
+
     deamontime  = pyqtSignal(int)   # 每隔一秒发送一个信号
     
     def __init__(self, parent=None):
@@ -64,13 +66,20 @@ class MyThread(QThread):  #重写线程类
         self.num = 0
         while True:
     
-            self.timeout.emit()     # 发送timeout信号
 
             #if(self.num %2) ==0:
             self.num+=1
-            self.deamontime.emit(self.num)
+            if self.num %25 == 0:
+                self.timeout.emit()     # 发送timeout信号
 
-            time.sleep(0.25)
+            if self.num % 25 == 0:
+                self.deamontime.emit(int(self.num/25))
+
+            if self.num % 8 == 0:
+                self.time10msout.emit()     # 发送timeout信号
+
+            time.sleep(0.01)
+            #time.sleep(0.25)
             #self.sleep(1)
 
 #取显示速度值
@@ -128,20 +137,23 @@ class ui_main(QMainWindow, Ui_Form):
         
         speedstop()                                     #速度设置为0
 
-        self.mythread10ms = MyThread10ms()
-        self.mythread10ms.time10ms.connect(self.modSpeed)
+        #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
         self.modruntimes    = 0             #模拟运行次数标识
-        self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
         self.modcurrent     = 0             #模拟运行当前值
 
-        #模式选择
-        if debug == 1:                      #如果是调试模式，则启动模拟运行进行
-            self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
+
 
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
+
+
+        #模式选择
+        if debug == 1:                      #如果是调试模式，则启动模拟运行进行
+            #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
+            self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
+            self.mythread.time10ms.connect(self.modSpeed)
 
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
 
