@@ -134,11 +134,8 @@ class ui_main(QMainWindow, Ui_Form):
         speedstop()                                     #速度设置为0
 
 
-        self.confile = ReadConfig()                    #读取配置文件
-        debug = int(self.confile.Debug("Debug"))       #配置运行模式
-        
         self.diameter          = 840                  # 机车轮径
-        #self.diameter          = int(self.confile.Speed("diameter")) 
+        
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
@@ -237,11 +234,15 @@ class ui_main(QMainWindow, Ui_Form):
         return cls.d_speed
     
     def showSpeed(self):                                # 显示速度值
-
         #while True:
         if True:
             #time.sleep(0.25)
             self.showtimes+=1
+
+            if self.showtime == 2:
+                self.confile = ReadConfig()                    #读取配置文件
+                debug = int(self.confile.Debug("Debug"))       #配置运行模式
+                self.diameter          = int(self.confile.Speed("diameter")) 
 		
             dim2 = 1250                                     # 机车轮径1250mm
             dim1 = 1050                                     # 机车轮径1050mm
