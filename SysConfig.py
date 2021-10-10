@@ -15,7 +15,7 @@ class ReadConfig:
         self.cf = configparser.ConfigParser()
         self.cf.read(configpath)
         self.path = configpath
-        print(self.cf.sections())
+        #print(self.cf.sections())
 
     def File(self, param):
         root_dir = os.getcwd()
