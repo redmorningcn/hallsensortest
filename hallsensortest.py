@@ -127,7 +127,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.lstrotate         = -1                     #设定转速
             
         self.setupUi(self)
-        self.show()                                    #全屏显示
+        #self.show()                                    #全屏显示
         self.showFullScreen()                           #全屏显示
         
         
