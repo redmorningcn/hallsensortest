@@ -39,7 +39,7 @@ confile = ReadConfig()          #读取配置文件
 
 def getDebugInfo():
     global confile
-    tmp = int(confile.Debug("Debug"))    
+    tmp = confile.Debug("Debug")    
     return 1
 
 if __name__ == '__main__':
