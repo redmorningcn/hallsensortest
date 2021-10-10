@@ -78,8 +78,8 @@ class MyThread(QThread):  #重写线程类
             if self.num % 8 == 7:
                 self.time10msout.emit()     # 发送timeout信号
 
-            #time.sleep(0.01)
-            time.sleep(0.25)
+            time.sleep(0.01)
+            #time.sleep(0.25)
             #self.sleep(1)
 
 #取显示速度值
