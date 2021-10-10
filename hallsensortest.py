@@ -134,11 +134,11 @@ class ui_main(QMainWindow, Ui_Form):
         speedstop()                                     #速度设置为0
 
 
-        self.confile = ReadConfig()                    #读取配置文件
-        debug = int(self.confile.Debug("Debug"))       #配置运行模式
+        #self.confile = ReadConfig()                    #读取配置文件
+        #debug = int(self.confile.Debug("Debug"))       #配置运行模式
         
-        #self.diameter          = 840                  # 机车轮径
-        self.diameter          = int(self.confile.Speed("diameter")) 
+        self.diameter          = 840                  # 机车轮径
+        #self.diameter          = int(self.confile.Speed("diameter")) 
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
@@ -165,7 +165,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         if  self.diameter > 1300:
             self.diameter = 1300
-        self.confile.WriteSpeed("diameter",str(self.diameter))
+        #self.confile.WriteSpeed("diameter",str(self.diameter))
 
     def diameterSub(self):                             # 机车轮径减小
         print("# 机车轮径减小")
@@ -174,7 +174,7 @@ class ui_main(QMainWindow, Ui_Form):
         if  self.diameter < 800:
             self.diameter = 800
 
-        self.confile.WriteSpeed("diameter",str(self.diameter))
+        #self.confile.WriteSpeed("diameter",str(self.diameter))
 
     def locospeedadd(self):                            # 机车速度增加
         try:
