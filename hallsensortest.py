@@ -88,6 +88,8 @@ def getdisplaylocospeed():
     #ui_main.getSpeed()
     return ui_main.d_speed
 
+confile = ReadConfig()          #读取配置文件
+
 #class ui_main(QMainWindow, Ui_MainWindow):
 class ui_main(QMainWindow, Ui_Form):
     """
@@ -559,14 +561,11 @@ def initGPIO():
     startServer()           #启动服务
     startWebProtocol()      #启动通讯协议
     
-confile = 0
+
 if __name__ == "__main__":
     #time.sleep(0.5)
-    global confile
     sys.stdout = Logger(sys.stdout) #将输出记录到log
     sys.stderr = Logger(sys.stderr) #将错误信息记录到log
-
-    confile = ReadConfig()          #读取配置文件
 
 
     initGPIO()                      #脉冲检测及按键端口初始化
