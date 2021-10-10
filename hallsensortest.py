@@ -148,6 +148,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
+        
 '''
         #模式选择
         if debug == 1:                      #如果是调试模式，则启动模拟运行进行
