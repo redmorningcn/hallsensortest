@@ -148,6 +148,8 @@ class ui_main(QMainWindow, Ui_Form):
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
+
+        self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
         
 '''
         #模式选择
@@ -156,7 +158,6 @@ class ui_main(QMainWindow, Ui_Form):
             self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
             self.mythread.time10msout.connect(self.modSpeed)
 '''
-        self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
 
                 
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
