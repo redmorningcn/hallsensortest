@@ -137,7 +137,7 @@ class ui_main(QMainWindow, Ui_Form):
         speedstop()                                     #速度设置为0
 
 
-        debug = int(confile.Debug("Debug"))       #配置运行模式
+        #debug = int(confile.Debug("Debug"))       #配置运行模式
         
         self.diameter          = 840                  # 机车轮径
         #self.diameter          = int(confile.Speed("diameter")) 
