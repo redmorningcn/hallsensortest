@@ -93,6 +93,7 @@ class ui_main(QMainWindow, Ui_Form):
     """
     Class documentation goes here.
     """
+    global confile
     d_speed = 10
     
     
@@ -134,8 +135,10 @@ class ui_main(QMainWindow, Ui_Form):
         speedstop()                                     #速度设置为0
 
 
-        self.diameter          = 840                  # 机车轮径
+        debug = int(confile.Debug("Debug"))       #配置运行模式
         
+        self.diameter          = 840                  # 机车轮径
+        #self.diameter          = int(confile.Speed("diameter")) 
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
@@ -234,15 +237,11 @@ class ui_main(QMainWindow, Ui_Form):
         return cls.d_speed
     
     def showSpeed(self):                                # 显示速度值
+
         #while True:
         if True:
             #time.sleep(0.25)
             self.showtimes+=1
-
-            if self.showtime == 2:
-                self.confile = ReadConfig()                    #读取配置文件
-                debug = int(self.confile.Debug("Debug"))       #配置运行模式
-                self.diameter          = int(self.confile.Speed("diameter")) 
 		
             dim2 = 1250                                     # 机车轮径1250mm
             dim1 = 1050                                     # 机车轮径1050mm
@@ -560,11 +559,15 @@ def initGPIO():
     startServer()           #启动服务
     startWebProtocol()      #启动通讯协议
     
-
+confile = 0
 if __name__ == "__main__":
     #time.sleep(0.5)
+    global confile
     sys.stdout = Logger(sys.stdout) #将输出记录到log
     sys.stderr = Logger(sys.stderr) #将错误信息记录到log
+
+    confile = ReadConfig()          #读取配置文件
+
 
     initGPIO()                      #脉冲检测及按键端口初始化
 
