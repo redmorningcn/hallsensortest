@@ -72,14 +72,14 @@ class MyThread(QThread):  #重写线程类
             if self.num %25 == 0:
                 self.timeout.emit()     # 发送timeout信号
 
-            if self.num % 25 == 0:
+            if self.num % 25 == 12:
                 self.deamontime.emit(int(self.num/25))
 
-            if self.num % 8 == 0:
+            if self.num % 8 == 7:
                 self.time10msout.emit()     # 发送timeout信号
 
-            time.sleep(0.01)
-            #time.sleep(0.25)
+            #time.sleep(0.01)
+            time.sleep(0.25)
             #self.sleep(1)
 
 #取显示速度值
@@ -127,8 +127,9 @@ class ui_main(QMainWindow, Ui_Form):
         self.lstrotate         = -1                     #设定转速
             
         self.setupUi(self)
+        self.show()                                    #全屏显示
         self.showFullScreen()                           #全屏显示
-        #self.show()                                    #全屏显示
+        
         
         speedstop()                                     #速度设置为0
 
@@ -144,12 +145,9 @@ class ui_main(QMainWindow, Ui_Form):
         self.modruntimes    = 0             #模拟运行次数标识
         self.modcurrent     = 0             #模拟运行当前值
 
-
-
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
-
 
         #模式选择
         if debug == 1:                      #如果是调试模式，则启动模拟运行进行
@@ -159,8 +157,7 @@ class ui_main(QMainWindow, Ui_Form):
 
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
 
-        
-        
+                
         #self.thread1 = threading.Thread(target = self.showSpeed)        #显示速度值
         #self.thread1.start()
 
