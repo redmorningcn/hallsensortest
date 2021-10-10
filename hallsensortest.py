@@ -118,12 +118,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         self.setobj            = 0                     # 设置对象(0,转速;1,机车轮径;2,速度;3方向)
         self.objnum            = 4
-
-        self.confile = ReadConfig()                    #读取配置文件
-        debug = int(self.confile.Debug("Debug"))       #配置运行模式
-        
-        #self.diameter          = 840                  # 机车轮径
-        self.diameter          = int(self.confile.Speed("diameter"))                   # 读配置文件中的机车轮径
+                  # 读配置文件中的机车轮径
         self.locospeed         = 0                     # 机车速度
         self.dir               = 0                     # 方向
 
@@ -136,6 +131,13 @@ class ui_main(QMainWindow, Ui_Form):
         #self.show()                                    #全屏显示
         
         speedstop()                                     #速度设置为0
+
+
+        self.confile = ReadConfig()                    #读取配置文件
+        debug = int(self.confile.Debug("Debug"))       #配置运行模式
+        
+        #self.diameter          = 840                  # 机车轮径
+        self.diameter          = int(self.confile.Speed("diameter")) 
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
