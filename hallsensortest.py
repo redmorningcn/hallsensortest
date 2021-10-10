@@ -138,7 +138,7 @@ class ui_main(QMainWindow, Ui_Form):
         debug = int(self.confile.Debug("Debug"))       #配置运行模式
         
         self.diameter          = 840                  # 机车轮径
-        self.diameter          = int(self.confile.Speed("diameter")) 
+        #self.diameter          = int(self.confile.Speed("diameter")) 
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
