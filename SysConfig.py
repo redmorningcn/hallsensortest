@@ -35,10 +35,9 @@ class ReadConfig:
         with open(self.path,'w') as f:
             self.cf.write(f)
         
-confile = ReadConfig()          #读取配置文件
 
 def getDebugInfo():
-    global confile
+    confile = ReadConfig()          #读取配置文件
     tmp = confile.Debug("Debug")    
     return 1
 
