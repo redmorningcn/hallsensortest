@@ -10,8 +10,11 @@ class ReadConfig:
             configpath = filepath
         else:
             #root_dir = os.path.dirname(os.path.abspath('.'))
-            root_dir = os.getcwd()
-            configpath = os.path.join(root_dir, "config.ini")
+            
+            #root_dir = os.getcwd()
+            #configpath = os.path.join(root_dir, "/home/pi/pycode/hallsensortest/config.ini")
+            
+            configpath = "/home/pi/pycode/hallsensortest/config.ini"
         self.cf = configparser.ConfigParser()
         self.cf.read(configpath)
         self.path = configpath
@@ -35,12 +38,6 @@ class ReadConfig:
         with open(self.path,'w') as f:
             self.cf.write(f)
         
-
-def getDebugInfo():
-    confile = ReadConfig()          #读取配置文件
-    tmp = confile.Debug("Debug")    
-    return 1
-
 if __name__ == '__main__':
     test = ReadConfig()
     #print(test.sections)

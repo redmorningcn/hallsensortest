@@ -136,11 +136,10 @@ class ui_main(QMainWindow, Ui_Form):
         
         speedstop()                                     #速度设置为0
 
-
-        #debug = getDebugInfo()       #配置运行模式
+        self.confile = ReadConfig()                     #读取配置文件
         
         self.diameter          = 840                  # 机车轮径
-        #self.diameter          = int(confile.Speed("diameter")) #不能读配置文件，读取配置问价，界面不能运行
+        self.diameter          = int(self.confile.Speed("diameter")) #不能读配置文件，读取配置问价，界面不能运行
 
         #self.mythread10ms = MyThread10ms()
         self.modrunflg      = 0             #模拟曲线运行标识
@@ -150,7 +149,16 @@ class ui_main(QMainWindow, Ui_Form):
         self.mythread       = MyThread()    #实例化线程
         self.mythread.timeout.connect(self.showSpeed)   #连接线程类中自定义信号槽到本类的自定义槽函数
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
-
+        try:
+                        #模式选择
+            debug = int(self.confile.Debug("Debug"))
+            if debug == 1:                      #如果是调试模式，则启动模拟运行进行
+                #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
+                self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
+                self.mythread.time10msout.connect(self.modSpeed)
+                        
+            except:
+                print("# 打开运行曲线实列失败add")
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
         
 
@@ -160,7 +168,7 @@ class ui_main(QMainWindow, Ui_Form):
         
         if  self.diameter > 1300:
             self.diameter = 1300
-        #self.confile.WriteSpeed("diameter",str(self.diameter))
+        self.confile.WriteSpeed("diameter",str(self.diameter))
 
     def diameterSub(self):                             # 机车轮径减小
         print("# 机车轮径减小")
@@ -169,7 +177,7 @@ class ui_main(QMainWindow, Ui_Form):
         if  self.diameter < 800:
             self.diameter = 800
 
-        #self.confile.WriteSpeed("diameter",str(self.diameter))
+        self.confile.WriteSpeed("diameter",str(self.diameter))
 
     def locospeedadd(self):                            # 机车速度增加
         try:
@@ -238,20 +246,6 @@ class ui_main(QMainWindow, Ui_Form):
             #time.sleep(0.25)
             self.showtimes+=1
 
-            if self.showtimes == 10:                    #延时打开
-                print("self.showtimes 10 is ",self.showtimes )
-            
-                try:
-                    #模式选择
-                    debug = 1
-                    if debug == 1:                      #如果是调试模式，则启动模拟运行进行
-                        #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
-                        self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
-                        self.mythread.time10msout.connect(self.modSpeed)
-                    
-                except:
-                    print("# 打开运行曲线实列失败add")
-            
             try:
                 self.ln_locol.display( self.diameter )              # 显示机车轮径
                 
@@ -315,7 +309,7 @@ class ui_main(QMainWindow, Ui_Form):
                     print(" wifi未连接")
 
                 if (self.showtimes %2) == 0:
-                    try:
+                    try:    
                         text = ("%s,%s,%s,%s,%s,%s")%("none",dir,"none",str(self.locospeed),str(self.setrotatespeed),str(self.diameter))
                         webSendMessage(text)
                         #print("self.showtimes",self.showtimes)

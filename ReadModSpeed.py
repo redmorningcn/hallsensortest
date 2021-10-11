@@ -24,7 +24,7 @@ def readspeedInfoFromFile(path):
             #print("line is:",line)
             str = line.split(',')           #分割line
             #print(str)
-            dict = {}
+            dict = {}   
             dict['no']  = int(str[0])       #序号
             dict['period']   = int(str[1])  #周期
             dict['speed']   = int(str[2])   #速度值
