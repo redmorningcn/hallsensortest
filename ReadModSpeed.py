@@ -5,7 +5,7 @@
 #包初始化：配置文件路径，例如：r"F:\cvi\app\NC208\NC208measureconfig.csv"
 #方法：getConfig(self,num)，根据传感器编号num，获取配置信息列表。
 
-import fileinput
+import  fileinput
 from    calcspeed             import *
 
 #配置文件路径
