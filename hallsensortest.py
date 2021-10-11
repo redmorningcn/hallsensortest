@@ -269,13 +269,16 @@ class ui_main(QMainWindow, Ui_Form):
                 if self.setrotatespeed == 0:
                     if self.setobj == 0:       #转速
                         #self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)    
-
+                        self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)   
                         if self.showtimes % 5 == 0:
                             self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                         else:
                             self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                     
                     if self.setobj == 1:       #轮径
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                        self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)                           
                         if self.showtimes % 5 == 0:
                             self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                         else:
@@ -283,7 +286,8 @@ class ui_main(QMainWindow, Ui_Form):
                             
                     if self.setobj == 2:       #速度
                         #self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-
+                        self.ln_locol.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+                        self.ln_motorspeed.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
                         if self.showtimes % 5 == 0:
                             self.ln_locolspeed.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
                         else:
