@@ -12,7 +12,7 @@ class ReadConfig:
             #root_dir = os.path.dirname(os.path.abspath('.'))
             
             #root_dir = os.getcwd()
-            #configpath = os.path.join(root_dir, "/home/pi/pycode/hallsensortest/config.ini")
+            #configpath = os.path.join(root_dir, "config.ini")
             
             configpath = "/home/pi/pycode/hallsensortest/config.ini"
         self.cf = configparser.ConfigParser()
