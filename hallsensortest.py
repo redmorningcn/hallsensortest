@@ -155,14 +155,14 @@ class ui_main(QMainWindow, Ui_Form):
 
         try:
             
-        #'''
-        #模式选择
-        debug = 1
-        if debug == 1:                      #如果是调试模式，则启动模拟运行进行
-            #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
-            self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
-            self.mythread.time10msout.connect(self.modSpeed)
-        #'''
+            #'''
+            #模式选择
+            debug = 1
+            if debug == 1:                      #如果是调试模式，则启动模拟运行进行
+                #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
+                self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
+                self.mythread.time10msout.connect(self.modSpeed)
+            #'''
         except:
             print("# 机车速度减少add")
             
