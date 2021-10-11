@@ -157,7 +157,7 @@ class ui_main(QMainWindow, Ui_Form):
                 self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
                 self.mythread.time10msout.connect(self.modSpeed)
                         
-            except:
+        except:
                 print("# 打开运行曲线实列失败add")
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
         
