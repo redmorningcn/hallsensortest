@@ -153,19 +153,7 @@ class ui_main(QMainWindow, Ui_Form):
 
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
         
-        try:
-            
-            
-            #模式选择
-            debug = 1
-            if debug == 1:                      #如果是调试模式，则启动模拟运行进行
-                #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
-                self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
-                self.mythread.time10msout.connect(self.modSpeed)
-            
-        except:
-            print("# 机车速度减少add")
-            
+
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
         self.diameter += 1
@@ -249,9 +237,21 @@ class ui_main(QMainWindow, Ui_Form):
         if True:
             #time.sleep(0.25)
             self.showtimes+=1
-		
-            dim2 = 1250                                     # 机车轮径1250mm
-            dim1 = 1050                                     # 机车轮径1050mm
+
+            if self.showtimes == 10:                    #延时打开
+                print("self.showtimes 10 is ",self.showtimes )
+            
+                try:
+                    #模式选择
+                    debug = 1
+                    if debug == 1:                      #如果是调试模式，则启动模拟运行进行
+                        #self.mythread10ms.start()       #开启线程不是调用run函数而是调用start函数
+                        self.speedtalbe     = SpeedTable()  #模拟运行曲线实列
+                        self.mythread.time10msout.connect(self.modSpeed)
+                    
+                except:
+                    print("# 打开运行曲线实列失败add")
+            
             try:
                 self.ln_locol.display( self.diameter )              # 显示机车轮径
                 
