@@ -152,7 +152,7 @@ class ui_main(QMainWindow, Ui_Form):
         self.mythread.deamontime.connect(self.daemon)   #连接线程类中自定义信号槽到本类的自定义槽函数
 
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
-        '''
+        
         try:
             
             
@@ -165,7 +165,7 @@ class ui_main(QMainWindow, Ui_Form):
             
         except:
             print("# 机车速度减少add")
-        '''    
+            
     def diameterAdd(self):                             # 机车轮径增加
         print("#机车轮径增加")
         self.diameter += 1
