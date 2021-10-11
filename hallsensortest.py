@@ -135,9 +135,11 @@ class ui_main(QMainWindow, Ui_Form):
         
         
         speedstop()                                     #速度设置为0
-
-        self.confile = ReadConfig()                     #读取配置文件
-        
+       # try:
+       #     self.confile = ReadConfig()                     #读取配置文件
+       # except:
+       #     print("# 打开运行曲线实列失败add")
+            
         self.diameter          = 840                  # 机车轮径
         self.diameter          = int(self.confile.Speed("diameter")) #不能读配置文件，读取配置问价，界面不能运行
 
@@ -158,7 +160,7 @@ class ui_main(QMainWindow, Ui_Form):
                 self.mythread.time10msout.connect(self.modSpeed)
                         
         except:
-                print("# 打开运行曲线实列失败add")
+            print("# 打开运行曲线实列失败add")
         self.mythread.start()                           #开启线程不是调用run函数而是调用start函数
         
 
